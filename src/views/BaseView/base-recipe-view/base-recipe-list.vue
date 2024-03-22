@@ -14,7 +14,7 @@
 								<Button
 									class="button-class"
 									type="button"
-									label=" Pokaż przepis "
+									label=" Pokaż przepis! "
 									icon="pi pi-chevron-down" />
 							</div>
 							<div class="set-time">
