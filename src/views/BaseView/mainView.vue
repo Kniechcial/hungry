@@ -7,7 +7,7 @@
 					<p>
 						Dzięki tej stronie jesteś w stanie stworzyć listę swoich ulubionych
 						potraw. Edytować jej składniki, dodawać kaloryczność, pochawalić się
-						zdjęciem swojego dania oraz wiele więcej.
+						zdjęciem swojego dania oraz wiele więcej!
 					</p>
 					<div class="next-btn">
 						<Button
