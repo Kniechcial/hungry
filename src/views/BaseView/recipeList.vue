@@ -1,7 +1,5 @@
 <template>
-	<div
-		v-for="recipe in recipeStore.fetchedRecipes"
-		:key="recipe.name">
+	<div>
 		<ul>
 			<li>
 				<div class="container">
@@ -19,7 +17,7 @@
 							</div>
 							<div class="set-time">
 								<p class="time">
-									<strong>CZAS: {{ recipe.Time }} min</strong>
+									<strong>CZAS: {{ recipe.Time || 'No data'}} min</strong>
 									<!-- 
 										Jak mogę zareagować w przypadku gdy dana wartość nie jest podana z API. Np. Nie dostaję informacji z API o czasie przygotowania dania. Chciał bym mieć możliwość wyświetlić jakąś informację dla użytkownika, a nie zostawiać puste okno.
 									 -->
@@ -110,7 +108,11 @@ import { ref } from "vue";
 import Button from "primevue/button";
 
 import { useRecipeStore } from "../../stores/recipes.js";
-const recipeStore = useRecipeStore();
+
+const props =  defineProps({
+    recipe: Object,
+})
+
 
 const showIngridients = ref(false);
 const hiddenButton = ref(false);

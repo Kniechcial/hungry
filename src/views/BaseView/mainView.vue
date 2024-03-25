@@ -9,11 +9,6 @@
 						potraw. Edytować jej składniki, dodawać kaloryczność, pochawalić się
 						zdjęciem swojego dania oraz wiele więcej!
 					</p>
-					<div class="next-btn">
-						<Button
-							@click="getRecipe()"
-							label="Next" />
-					</div>
 				</div>
 			</div>
 
@@ -70,20 +65,6 @@ main {
 	gap: 1rem;
 }
 
-.about-us-box {
-	display: flex;
-	height: 300px;
-	background-attachment: fixed;
-	background-position: center;
-	border-top-left-radius: 50px;
-	border-bottom-right-radius: 50px;
-	overflow: hidden;
-	box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
-		rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
-
-	transition: filter 0.3s, transform 0.3s;
-	z-index: 0;
-}
 .about-us-text {
 	padding: 20px 40px;
 	text-align: center;
@@ -109,8 +90,20 @@ main {
 	margin-top: 1rem;
 }
 
-.first {
+.first::before {
+	content: "";
 	background-image: url("../../assets/icon/bg/pizza.jpg");
+	background-attachment: fixed;
+	background-position: center;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	transition: 0.3s filter;
+}
+.first:hover::before {
+	filter: brightness(0.6);
 }
 
 .second {
@@ -128,11 +121,30 @@ main {
 	background-image: url("../../assets/icon/bg/loock.png");
 }
 
-.about-us-box:hover {
-	filter: brightness(0.6);
-	transform: scale(1.05);
-	cursor: pointer;
+.about-us-box {
+	position: relative;
+	display: flex;
+	height: 300px;
+	background-attachment: fixed;
+	background-position: center;
+	border-top-left-radius: 50px;
+	border-bottom-right-radius: 50px;
+	overflow: hidden;
+	box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
+		rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+
+	transition: 0.3s all;
 }
+.about-us-box:hover {
+	cursor: pointer;
+	height: 360px;
+}
+/* .about-us-box:hover {
+	filter: brightness(0.6);
+	height: 350px;
+	cursor: pointer;
+	background-position: center;
+} */
 .next-btn {
 	position: absolute;
 	top: 7rem;
@@ -146,7 +158,6 @@ main {
 	cursor: pointer;
 	opacity: 0;
 	transition: opacity 0.3s ease;
-	z-index: 2;
 }
 .about-us-box:hover .next-btn {
 	opacity: 1;
