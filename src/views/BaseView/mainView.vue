@@ -1,7 +1,6 @@
 <template>
 	<main>
 		<div class="default-box">
-			<div class="about-us-box lock"></div>
 			<div class="about-us-box first">
 				<div class="about-us-text">
 					<h3>Stwórz listę swoich ulubionych potraw</h3>
