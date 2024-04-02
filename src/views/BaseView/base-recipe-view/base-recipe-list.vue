@@ -1,4 +1,9 @@
 <template>
+	<Dialog
+		v-model:visible="recipeVisible"
+		modal>
+		<recipeList :recipe="activeRecipe"></recipeList>
+	</Dialog>
 	<div
 		v-for="recipe in recipeStore.fetchedRecipes"
 		:key="recipe.name">
@@ -8,18 +13,22 @@
 					<div class="recipe-box">
 						<div class="top-row">
 							<div class="recipe-name">
-								<strong>{{ recipe.name }}</strong>
+								<strong>{{ recipe.name || "no data" }}</strong>
 							</div>
 							<div class="button-location">
 								<Button
+									@click="showRecipe(recipe)"
 									class="button-class"
 									type="button"
-									label=" Pokaż przepis! "
+									label="Show recipe"
 									icon="pi pi-chevron-down" />
 							</div>
 							<div class="set-time">
 								<p class="time">
-									<strong>CZAS: {{ recipe.Time }} min</strong>
+									<strong
+										>Time: {{ recipe.Time || "no data" }}
+										<strong>min</strong></strong
+									>
 								</p>
 							</div>
 						</div>
@@ -34,8 +43,16 @@
 import { ref } from "vue";
 import Button from "primevue/button";
 import { useRecipeStore } from "../../../stores/recipes.js";
+import Dialog from "primevue/dialog";
+import recipeList from "../recipeList.vue";
 const recipeStore = useRecipeStore();
 
+const recipeVisible = ref(false);
+const activeRecipe = ref(null);
+const showRecipe = (recipe) => {
+	recipeVisible.value = true;
+	activeRecipe.value = recipe;
+};
 </script>
 
 <style scoped>

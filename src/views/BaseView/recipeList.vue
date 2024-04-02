@@ -1,7 +1,5 @@
 <template>
-	<div
-		v-for="recipe in recipeStore.fetchedRecipes"
-		:key="recipe.name">
+	<div>
 		<ul>
 			<li>
 				<div class="container">
@@ -10,7 +8,7 @@
 							<div class="recipe-name">
 								<ul>
 									<li>
-										<strong>{{ recipe.name }}</strong>
+										<strong>{{ recipe.name || "no data" }}</strong>
 										<!-- 
 											Jak mogę zrobić coś takiego jak w wordzie "zawijanie tekstu"? Chodzi mi o coś takiego że nazwa mojego dania jest na tyle długa że wychodzi poza box. Chciał bym w takim przypadku żeby tekst się w jakiś sposób podzielił i wyświetlił w 2 linijkach.
 										 -->
@@ -19,7 +17,7 @@
 							</div>
 							<div class="set-time">
 								<p class="time">
-									<strong>CZAS: {{ recipe.Time }} min</strong>
+									<strong>TIME: {{ recipe.Time || "no data" }} min</strong>
 									<!-- 
 										Jak mogę zareagować w przypadku gdy dana wartość nie jest podana z API. Np. Nie dostaję informacji z API o czasie przygotowania dania. Chciał bym mieć możliwość wyświetlić jakąś informację dla użytkownika, a nie zostawiać puste okno.
 									 -->
@@ -38,20 +36,23 @@
 								<div class="left-part-description-recipe">
 									<div class="calories-recipe">
 										<strong>
-											Kalorie: {{ recipe.calories.calories }} kcal</strong
+											Kalorie:
+											{{ recipe.calories.calories || "no data" }} kcal</strong
 										>
 										<ul class="calories-specific">
 											<li>
-												<strong>Tłuszcze:</strong>
-												<p>{{ recipe.calories.fat }} kcal</p>
+												<strong>Fat:</strong>
+												<p>{{ recipe.calories.fat || "no data" }} kcal</p>
 											</li>
 											<li>
-												<strong>Cukry:</strong>
-												<p>{{ recipe.calories.sugar }} kcal</p>
+												<strong>Sugar:</strong>
+												<p>{{ recipe.calories.sugar || "no data" }} kcal</p>
 											</li>
 											<li>
-												<strong>Węglowodany:</strong>
-												<p>{{ recipe.calories.carbohydrates }} kcal</p>
+												<strong>Carbohydrates:</strong>
+												<p>
+													{{ recipe.calories.carbohydrates || "no data" }} kcal
+												</p>
 											</li>
 										</ul>
 									</div>
@@ -61,19 +62,20 @@
 											class="card flex justify-content-center mt-4 pl-5 cursor-pointer">
 											<Button
 												@click="displayIngridients"
-												label="Pokaż składniki" />
+												label="Show Ingridiens" />
 										</div>
 										<ul
 											class="ingredients-specific"
 											v-if="showIngridients">
-											<strong>Składniki:</strong>
+											<strong>Ingridients:</strong>
 											<div
 												v-for="(name, value, unit) in recipe.ingridients"
 												:key="name">
 												<li>
-													{{ name.name }}
+													{{ name.name || "no data" }}
 													<p>
-														{{ name.value }} <strong>{{ name.unit }}</strong>
+														{{ name.value || "no data" }}
+														<strong>{{ name.unit || "-" }}</strong>
 													</p>
 												</li>
 											</div>
@@ -82,12 +84,12 @@
 								</div>
 								<div class="right-part-description-recipe">
 									<div class="description-recipe">
-										<Strong class="description-topic">Opis:</Strong>
+										<Strong class="description-topic">Description:</Strong>
 										<div
 											v-for="(step, index) in recipe.instructions"
 											:key="index">
 											<ul>
-												<strong>Krok: {{ getIndexInArray(index) }}</strong>
+												<strong>Step: {{ getIndexInArray(index) }}</strong>
 												<li class="description-step">
 													{{ step.step }}
 												</li>
@@ -106,11 +108,13 @@
 
 <script setup>
 import { ref } from "vue";
-// import image from "@/assets/icon/bg/pizza.jpg";
 import Button from "primevue/button";
 
 import { useRecipeStore } from "../../stores/recipes.js";
 const recipeStore = useRecipeStore();
+const props = defineProps({
+	recipe: Object,
+});
 
 const showIngridients = ref(false);
 const hiddenButton = ref(false);
