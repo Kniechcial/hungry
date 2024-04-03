@@ -2,50 +2,58 @@
 	<main>
 		<div class="default-box">
 			<div class="about-us-box first">
+				<div class="disable"></div>
 				<div class="about-us-text">
-					<h3>Stwórz listę swoich ulubionych potraw</h3>
+					<h3>Create a list of your favorite dishes</h3>
 					<p>
-						Dzięki tej stronie jesteś w stanie stworzyć listę swoich ulubionych
-						potraw. Edytować jej składniki, dodawać kaloryczność, pochawalić się
-						zdjęciem swojego dania oraz wiele więcej!
+						Thanks to this website, you are able to create a list of your
+						favorite dishes. Edit their ingredients, add calories, showcase a
+						photo of your dish, and much more!
 					</p>
-					<div class="next-btn">
-						<Button
-							@click="getRecipe()"
-							label="Next" />
-					</div>
 				</div>
 			</div>
 
 			<div class="about-us-box second">
 				<div class="about-us-text">
-					<h3>Nie masz pomysłu na obiad? To już nie problem</h3>
+					<h3>
+						If you don't have an idea for dinner? That's no longer a problem
+					</h3>
 					<p>
-						Hungry pozwoli Ci znaleźć przepis na to na co właśnie masz ochotę.
-						Pizza, pasta, ramen? Skorzystaj z gotowych przepisów używając
-						wbudowanej funkcji wyszukiwania tego na co wałśnie masz ochotę.
+						Hungry will help you find a recipe for whatever you're craving right
+						now. Pizza, pasta, ramen? Use the built-in search function to find
+						exactly what you're in the mood for
 					</p>
+					<div class="next-btn">
+						<Button
+							@click="getRecipe()"
+							label="Find recipe" />
+					</div>
 				</div>
 			</div>
 			<div class="about-us-box third">
+				<div class="disable"></div>
 				<div class="about-us-text">
-					<h3>Stwórz własny przepis</h3>
+					<h3>Create your own recipe</h3>
 					<p>
-						Jeśli masz już gotowy przepis na ulubioną potrawę możesz go
-						wprowadzić i mieć pod ręką zawsze kiedy będziesz chciał z niego
-						skorzystać.
+						If you already have a recipe for your favorite dish, you can input
+						it and have it on hand whenever you want to use it
 					</p>
 				</div>
 			</div>
 			<div class="about-us-box fourth">
 				<div class="about-us-text">
-					<h3>Znajdź przepis z tego co akurat masz pod ręką</h3>
+					<h3>Find a recipe using what you have on hand</h3>
 					<p>
-						Masz w lodówce składniki, które chciał byś wykorzystać, ale nie
-						wiesz jak je połączyć? Skorzystaj z przeglądarki podając składniki
-						jakich chcesz użyć, a Hungry stworzy dla Ciebie listę potraw jakie
-						możesz z nich przygotować.
+						"Do you have ingredients in your fridge that you'd like to use, but
+						you're not sure how to combine them? Use the browser by providing
+						the ingredients you want to use, and Hungry will create a list of
+						dishes you can prepare with them
 					</p>
+					<div class="next-btn">
+						<Button
+							@click="getRecipe()"
+							label="Use your ingridients" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -55,8 +63,9 @@
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
 const router = useRouter();
-// const panelSingIn = () => router.push({ name: "singIn" });
-// const panelLogIn = () => router.push({ name: "LogInView" });
+const getRecipe = () => {
+	router.push({ name: "recipe" });
+};
 </script>
 <style scoped>
 main {
@@ -138,9 +147,11 @@ main {
 	bottom: 0px;
 	left: 0px;
 	transition: 0.3s filter;
+	cursor: auto;
 }
 .third:hover::before {
 	filter: brightness(0.6);
+	cursor: auto;
 }
 
 .fourth::before {
@@ -178,14 +189,14 @@ main {
 	transition: 0.3s all;
 }
 .about-us-box:hover {
-	cursor: pointer;
+	/* cursor: pointer; */
 	height: 360px;
 }
 /* .about-us-box:hover {
 	filter: brightness(0.6);
 	height: 350px;
 	cursor: pointer;
-	background-position: center;
+	
 } */
 .next-btn {
 	position: absolute;
@@ -204,5 +215,28 @@ main {
 
 .about-us-box:hover .next-btn {
 	opacity: 1;
+}
+.disable {
+	height: 230px;
+	width: 150px;
+	display: none;
+	background-image: url("../../assets/icon/bg/loock.png");
+	background-position: center;
+	position: absolute;
+	top: 2rem;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 1;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.third:hover .disable {
+	display: flex;
+	cursor: auto;
+}
+.first:hover .disable {
+	display: flex;
+	cursor: auto;
 }
 </style>
