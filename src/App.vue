@@ -15,52 +15,9 @@ import TopBarMenu from "./views/BaseView/topBarMenu.vue";
 components: {
 	HeaderView, FooterView, TopBarMenu;
 }
-
-const recipes = [
-	{
-		id: 1,
-		name: "Pomidorowa",
-		allergy: ["laktoza", "gluten"],
-		tags: ["kurczak", "makraon", "zupa", "obiad"],
-		ingridiens: [
-			"pomidory",
-			"śmietana",
-			"sól",
-			"makaron",
-			"woda",
-			"koncentrat pomidorowy",
-		],
-		descroiption: [
-			"Zagotuj wodę",
-			"Dodaj sól i pomidory",
-			"Gotuj 15 min",
-			"Dodaj śmietanę i makaron",
-		],
-		time: "30 min",
-		calories: ["19", "24", "135"],
-	},
-	{
-		id: 2,
-		name: "Ogórkowa",
-		allergy: ["laktoza", "gluten"],
-		tags: ["kurczak", "makraon", "zupa", "obiad"],
-		ingridiens: [
-			"pomidory",
-			"śmietana",
-			"sól",
-			"makaron",
-			"woda",
-			"koncentrat pomidorowy",
-		],
-		descroiption: [
-			"Zagotuj wodę",
-			"Dodaj sól i pomidory",
-			"Gotuj 15 min",
-			"Dodaj śmietanę i makaron",
-		],
-		time: "30 min",
-		calories: ["19", "24", "135"],
-	},
-];
 </script>
-<style></style>
+<style>
+body {
+	min-height: 87vh;
+}
+</style>

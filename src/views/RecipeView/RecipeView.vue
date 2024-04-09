@@ -1,4 +1,10 @@
 <template>
+	<div class="carrot-box">
+		<carrotDialog
+			class="carrot"
+			v-if="isLoading"></carrotDialog>
+	</div>
+
 	<div class="content">
 		<div class="card flex justify-content-center">
 			<div class="flex flex-column gap-2">
@@ -19,11 +25,8 @@
 				label="Find recipe" />
 		</div>
 	</div>
-	<!-- <div>{{ recipeStore.recipe.nutrition }}</div> -->
-	<div>
-		<!-- {{ recipeStore.recipe?.results.name }} -->
-	</div>
-	<div v-if="recipesLoading">
+
+	<!-- <div v-if="recipesLoading">
 		<ProgressSpinner />
 	</div>
 	<div v-else>
@@ -33,7 +36,7 @@
 			:key="recipe.name">
 			{{ recipe.name }}
 		</div>
-	</div>
+	</div> -->
 </template>
 
 <script setup>
@@ -41,32 +44,59 @@ import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { useRecipeStore } from "../../stores/recipes.js";
-import ProgressSpinner from "primevue/progressspinner";
+import carrotDialog from "../RecipeView/New-recipe/carrotDialog.vue";
 const foodName = ref(null);
 const value = ref(null);
 const recipeStore = useRecipeStore();
 const recipesLoading = ref(false);
 import { useRouter } from "vue-router";
 const router = useRouter();
-const RecipeList = () => router.push({ name: "RecipeList" });
 const BaseRecipeList = () => router.push({ name: "BaseRecipeList" });
 
+const isLoading = ref(false);
+
 async function getRecipe() {
-	recipesLoading.value = true;
+	isLoading.value = true;
 	await recipeStore.getRecipes(0, 2, foodName.value);
 	console.log(recipeStore.fetchedRecipes);
 	recipesLoading.value = false;
-	// RecipeList();
 	BaseRecipeList();
 }
 </script>
 
 <style scoped>
 .content {
-	margin-top: 15rem;
+	position: relative;
+	border: 1px solid black;
+	border-radius: 10px;
+	background-color: #faf8f7;
+	padding: 1rem;
+	margin-top: 10rem;
+	width: max-content;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 22px;
 }
 .button-box {
-	margin-top: 2rem;
 	margin-left: 7rem;
+}
+.carrot {
+	position: relative;
+	left: 60%; /* Ustawienie odległości od lewej krawędzi na 50% */
+	transform: translate(-50%, -50%);
+	z-index: 1;
+}
+.carrot-box {
+	position: relative;
+	animation: moveUpDown 0.7s infinite alternate;
+}
+
+@keyframes moveUpDown {
+	from {
+		top: 0;
+	}
+	to {
+		top: 20px;
+	}
 }
 </style>
