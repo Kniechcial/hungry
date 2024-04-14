@@ -8,7 +8,7 @@
 	<div class="content">
 		<div class="card flex justify-content-center">
 			<div class="flex flex-column gap-2">
-				<label for="recipe">Name dish</label>
+				<label for="recipe">Dish name</label>
 				<InputText
 					id="recipe"
 					v-model="foodName"
@@ -60,6 +60,7 @@ async function getRecipe() {
 	await recipeStore.getRecipes(0, 2, foodName.value);
 	console.log(recipeStore.fetchedRecipes);
 	recipesLoading.value = false;
+
 	BaseRecipeList();
 }
 </script>

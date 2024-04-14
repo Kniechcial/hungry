@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 export const useRecipeStore = defineStore("recipe", () => {
 	const fetchedRecipes = ref(null);
 	async function getRecipes(from, size, q) {
-		const url = `https://tasty.p.rapidapi.com/recipes/list?from=${from}&size=${size}&q=${q}`;
+		const url = `https://tasty.p.rapidapi.com/tag/list?from=${from}&size=${size}&q=${q}`;
 		const options = {
 			method: "GET",
 			headers: {

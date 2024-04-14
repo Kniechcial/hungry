@@ -15,6 +15,7 @@ import BaseRecipeView from "../views/BaseView/base-recipe-view/baseRecipe.vue";
 import BaseRecipeList from "../views/BaseView/base-recipe-view/base-recipe-list.vue";
 import AddRecipe from "../views/RecipeView/addRecipe.vue";
 import NewRecipe2 from "../views/RecipeView/New-recipe/NewRecipe-2.vue";
+import getTag from "../components/tag/getTag.vue";
 import RecipeList from "../views/BaseView/recipeList.vue";
 
 const router = createRouter({
@@ -104,6 +105,11 @@ const router = createRouter({
 			path: "/BaseRecipeList",
 			name: "BaseRecipeList",
 			component: BaseRecipeList,
+		},
+		{
+			path: "/getTag",
+			name: "getTag",
+			component: getTag,
 		},
 	],
 });
