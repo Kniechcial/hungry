@@ -46,13 +46,6 @@ const items = ref([
 		},
 	},
 	{
-		label: "BaseRecipeList",
-		icon: "pi pi-book",
-		command: () => {
-			router.push({ name: "BaseRecipeList" });
-		},
-	},
-	{
 		label: "Recipes",
 		icon: "pi pi-sitemap",
 		items: [
@@ -107,9 +100,9 @@ const items = ref([
 			{
 				label: "By Tags",
 				icon: "pi pi-angle-right",
-				// command: () => {
-				// 	router.push({ name: "newRecipe" });
-				// },
+				command: () => {
+					router.push({ name: "getTag" });
+				},
 			},
 		],
 	},
