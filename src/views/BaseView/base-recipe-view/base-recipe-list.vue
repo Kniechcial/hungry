@@ -1,7 +1,9 @@
 <template>
 	<Dialog
 		v-model:visible="recipeVisible"
-		modal>
+		modal
+		:closable="false"
+		:dismissableMask="true">
 		<recipeList :recipe="activeRecipe"></recipeList>
 	</Dialog>
 	<div
