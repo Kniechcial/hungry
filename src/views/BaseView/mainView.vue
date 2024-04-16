@@ -13,7 +13,10 @@
 				</div>
 			</div>
 
-			<div class="about-us-box second">
+			<div
+				@click="getRecipe()"
+				class="about-us-box second">
+				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
 					<h3>
 						If you don't have an idea for dinner? That's no longer a problem
@@ -23,11 +26,11 @@
 						now. Pizza, pasta, ramen? Use the built-in search function to find
 						exactly what you're in the mood for
 					</p>
-					<div class="next-btn">
+					<!-- <div class="next-btn">
 						<Button
 							@click="getRecipe()"
 							label="Find recipe" />
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="about-us-box third">
@@ -40,7 +43,10 @@
 					</p>
 				</div>
 			</div>
-			<div class="about-us-box fourth">
+			<div
+				@click="getRecipe()"
+				class="about-us-box fourth">
+				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
 					<h3>Find a recipe using what you have on hand</h3>
 					<p>
@@ -49,11 +55,11 @@
 						the ingredients you want to use, and Hungry will create a list of
 						dishes you can prepare with them
 					</p>
-					<div class="next-btn">
+					<!-- <div class="next-btn">
 						<Button
 							@click="getRecipe()"
 							label="Use your ingridients" />
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
@@ -130,15 +136,16 @@ main {
 	bottom: 0px;
 	left: 0px;
 	transition: 0.3s filter;
+	cursor: pointer;
 }
 
-.second:hover::before {
+/* .second:hover::before {
 	filter: brightness(0.6);
-}
+} */
 
 .third::before {
 	content: "";
-	background-image: url("../../assets/icon/bg/sushi.jpg");
+	background-image: url("../../assets/icon/bg/soup.jpg");
 	background-attachment: fixed;
 	background-position: center;
 	position: absolute;
@@ -156,7 +163,7 @@ main {
 
 .fourth::before {
 	content: "";
-	background-image: url("../../assets/icon/bg/soup.jpg");
+	background-image: url("../../assets/icon/bg/sushi.jpg");
 	background-attachment: fixed;
 	background-position: center;
 	position: absolute;
@@ -165,13 +172,7 @@ main {
 	bottom: 0px;
 	left: 0px;
 	transition: 0.3s filter;
-}
-
-.fourth:hover::before {
-	filter: brightness(0.6);
-}
-.lock {
-	background-image: url("../../assets/icon/bg/loock.png");
+	cursor: pointer;
 }
 
 .about-us-box {
@@ -185,37 +186,13 @@ main {
 	overflow: hidden;
 	box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
 		rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
-
 	transition: 0.3s all;
 }
 .about-us-box:hover {
 	/* cursor: pointer; */
 	height: 360px;
 }
-/* .about-us-box:hover {
-	filter: brightness(0.6);
-	height: 350px;
-	cursor: pointer;
-	
-} */
-.next-btn {
-	position: absolute;
-	top: 7rem;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 10px 20px;
-	/* color: #333;
-	border: 2px solid #333; */
-	/* border-radius: 5px; */
-	/* font-size: 16px; */
-	cursor: pointer;
-	opacity: 0;
-	transition: opacity 0.3s ease;
-}
 
-.about-us-box:hover .next-btn {
-	opacity: 1;
-}
 .disable {
 	height: 230px;
 	width: 150px;
@@ -231,12 +208,42 @@ main {
 	background-position: center;
 	background-repeat: no-repeat;
 }
+
+.lets-go-try {
+	position: absolute;
+	display: none;
+	margin-top: 4rem;
+	left: 50%;
+	z-index: 1;
+	transform: translateX(-50%);
+	font-size: 50px;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.first:hover .disable {
+	display: flex;
+	cursor: auto;
+}
+
+.second:hover {
+	cursor: pointer;
+}
+
+.second:hover .lets-go-try {
+	display: flex;
+}
+
 .third:hover .disable {
 	display: flex;
 	cursor: auto;
 }
-.first:hover .disable {
+
+.fourth:hover {
+	cursor: pointer;
+}
+
+.fourth:hover .lets-go-try {
 	display: flex;
-	cursor: auto;
 }
 </style>
