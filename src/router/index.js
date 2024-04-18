@@ -1,21 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
-import HomeView from "../views/Home/HomeView.vue";
-import ByNameTag from "../components/FindRecipe/ByNameTag.vue";
-
-import RecipeList from "../components/FindRecipe/RecipeList.vue";
 import CreateRecipeStepTwo from "../components/CreateRecipe/CreateRecipeStepTwo.vue";
-import CreateNewRecipe from "../views/CreateRecipe/CreateNewRecipeView.vue";
-
+import ByNameTag from "../components/FindRecipe/ByNameTag.vue";
+import RecipeList from "../components/FindRecipe/RecipeList.vue";
+import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
 import LogIn from "../components/User/LogIn/LogIn.vue";
 import SingIn from "../components/User/CreateNewUser/SingIn.vue";
-
 import UserPanel from "../components/User/UserPanel/UserPanel.vue";
 import EditPassword from "../components/User/CreateNewUser/EditPassword.vue";
 import RestorePassword from "../components/User/LogIn/RestorePassword.vue";
 import ConfirmRerstorePassword from "../components/User/LogIn/ConfirmRestorePassword.vue";
+
 import BaseRecipeView from "../views/BaseRecipe/baseRecipe.vue";
+import CreateNewRecipe from "../views/CreateRecipe/CreateNewRecipeView.vue";
+import HomeView from "../views/Home/HomeView.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
