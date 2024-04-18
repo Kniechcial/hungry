@@ -5,6 +5,7 @@
 		</div>
 	</header>
 </template>
+
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Bungee&family=Comfortaa:wght@500&family=Nunito:wght@300;400&family=Open+Sans:wght@400;600&family=Raleway:wght@100;400;700&family=Titillium+Web:wght@200&display=swap");
 

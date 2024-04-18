@@ -1,60 +1,49 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import LogInView from "../views/userView/LogInView.vue";
-import TestView from "../views/RecipeView/TestView.vue";
-import UserPanelView from "../views/userView/UserPanelView.vue";
-import RecipeView from "../views/RecipeView/RecipeView.vue";
-import TopBarMenu from "../views/BaseView/topBarMenu.vue";
-import SingIn from "../views/userView/SingInView.vue";
-import EditPassword from "../views/userView/EditPasswordView.vue";
-import RestorePassword from "../views/userView/RestorePasswordView.vue";
-import ConfirmPassword from "../views/userView/confirmPasswordView.vue";
-import MainView from "../views/BaseView/mainView.vue";
-import ConfirmRerstorePassword from "../views/userView/confirmRestorePassword.vue";
-import BaseRecipeView from "../views/BaseView/base-recipe-view/baseRecipe.vue";
-import BaseRecipeList from "../views/BaseView/base-recipe-view/base-recipe-list.vue";
-import AddRecipe from "../views/RecipeView/addRecipe.vue";
-import NewRecipe2 from "../views/RecipeView/New-recipe/NewRecipe-2.vue";
-import getTag from "../components/tag/getTag.vue";
-import RecipeList from "../views/BaseView/recipeList.vue";
+import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
+import HomeView from "../views/Home/HomeView.vue";
+import ByNameTag from "../components/FindRecipe/ByNameTag.vue";
+
+import RecipeList from "../components/FindRecipe/RecipeList.vue";
+import CreateRecipeStepTwo from "../components/CreateRecipe/CreateRecipeStepTwo.vue";
+import CreateNewRecipe from "../views/CreateRecipe/CreateNewRecipeView.vue";
+
+import LogIn from "../components/User/LogIn/LogIn.vue";
+import SingIn from "../components/User/CreateNewUser/SingIn.vue";
+
+import UserPanel from "../components/User/UserPanel/UserPanel.vue";
+import EditPassword from "../components/User/CreateNewUser/EditPassword.vue";
+import RestorePassword from "../components/User/LogIn/RestorePassword.vue";
+import ConfirmRerstorePassword from "../components/User/LogIn/ConfirmRestorePassword.vue";
+import BaseRecipeView from "../views/BaseRecipe/baseRecipe.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{
 			path: "/",
-			name: "MainView",
-			component: MainView,
+			name: "HomeView",
+			component: HomeView,
 		},
 		{
-			path: "/LogInView",
-			name: "LogInView",
-			component: LogInView,
+			path: "/LogIn",
+			name: "LogIn",
+			component: LogIn,
 		},
 		{
-			path: "/test",
-			name: "test",
-			component: TestView,
+			path: "/UserPanel",
+			name: "UserPanel",
+			component: UserPanel,
 		},
 		{
-			path: "/user",
-			name: "user",
-			component: UserPanelView,
-		},
-		{
-			path: "/addRecipe",
-			name: "addRecipe",
-			component: AddRecipe,
+			path: "/CreateNewRecipe",
+			name: "CreateNewRecipe",
+			component: CreateNewRecipe,
 		},
 		{
 			path: "/TopBarMenu",
 			name: "TopBarMenu",
 			component: TopBarMenu,
-		},
-		{
-			path: "/recipe",
-			name: "recipe",
-			component: RecipeView,
 		},
 		{
 			path: "/singIn",
@@ -72,14 +61,9 @@ const router = createRouter({
 			component: RestorePassword,
 		},
 		{
-			path: "/confirmpassword",
-			name: "confirmpassword",
-			component: ConfirmPassword,
-		},
-		{
-			path: "/mainView",
-			name: "mainView",
-			component: MainView,
+			path: "/",
+			name: "HomeView",
+			component: HomeView,
 		},
 		{
 			path: "/confirmRestorePassword",
@@ -92,24 +76,19 @@ const router = createRouter({
 			component: BaseRecipeView,
 		},
 		{
-			path: "/newRecipe2",
-			name: "newRecipe2",
-			component: NewRecipe2,
+			path: "/CreateRecipeStepTwo",
+			name: "CreateRecipeStepTwo",
+			component: CreateRecipeStepTwo,
+		},
+		{
+			path: "/ByNameTag",
+			name: "ByNameTag",
+			component: ByNameTag,
 		},
 		{
 			path: "/RecipeList",
 			name: "RecipeList",
 			component: RecipeList,
-		},
-		{
-			path: "/BaseRecipeList",
-			name: "BaseRecipeList",
-			component: BaseRecipeList,
-		},
-		{
-			path: "/getTag",
-			name: "getTag",
-			component: getTag,
 		},
 	],
 });

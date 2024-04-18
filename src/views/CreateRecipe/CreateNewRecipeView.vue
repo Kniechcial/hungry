@@ -14,12 +14,12 @@
 			dania.
 		</p>
 	</div>
-	<new-recipe></new-recipe>
+	<CreateRecipeStepOne></CreateRecipeStepOne>
 </template>
 <script>
-import NewRecipe from "./New-recipe/NewRecipe-1.vue";
+import CreateRecipeStepOne from "../../components/CreateRecipe/CreateRecipeStepOne.vue";
 export default {
-	components: { "new-recipe": NewRecipe },
+	components: { CreateRecipeStepOne: CreateRecipeStepOne },
 };
 </script>
 

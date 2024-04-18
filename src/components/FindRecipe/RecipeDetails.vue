@@ -69,7 +69,7 @@
 											v-if="showIngridients">
 											<strong>Ingridients:</strong>
 											<div
-												v-for="(name, value, unit) in recipe.ingridients"
+												v-for="name in recipe.ingridients"
 												:key="name">
 												<li>
 													{{ name.name || "no data" }}
@@ -109,9 +109,6 @@
 <script setup>
 import { ref } from "vue";
 import Button from "primevue/button";
-
-import { useRecipeStore } from "../../stores/recipes.js";
-const recipeStore = useRecipeStore();
 const props = defineProps({
 	recipe: Object,
 });
@@ -124,8 +121,7 @@ const displayIngridients = () => {
 	hiddenButton.value = true;
 };
 const getIndexInArray = (index) => {
-	// Funkcja zwracająca miejsce w tablicy
-	return index + 1; // Dodaj 1, aby uzyskać indeksowanie od 1, jeśli to jest preferowane
+	return index + 1;
 };
 </script>
 
@@ -196,8 +192,6 @@ img {
 	float: left;
 	padding: 2rem;
 	padding-right: 1rem;
-	/* border: 3px solid black;
-	border-radius: 10px; */
 	overflow: hidden;
 	width: 400px;
 	height: 400px;
@@ -214,12 +208,8 @@ img {
 	font-size: 20px;
 	margin-top: 2rem;
 	overflow: hidden;
-	/* border: 3px solid black;
-	border-radius: 10px; */
 }
 .ingridiens-recipe {
-	/* border: 3px solid red;
-	border-radius: 10px; */
 	max-width: 20rem;
 }
 .description-recipe {
@@ -232,7 +222,6 @@ img {
 	display: block;
 	max-width: 20rem;
 	font-size: 16px;
-	/* border: 3px solid gold; */
 }
 
 .left-part-description-recipe {

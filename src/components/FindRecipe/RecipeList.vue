@@ -4,7 +4,7 @@
 		modal
 		:closable="false"
 		:dismissableMask="true">
-		<recipeList :recipe="activeRecipe"></recipeList>
+		<RecipeDetails :recipe="activeRecipe"></RecipeDetails>
 	</Dialog>
 	<div
 		v-for="recipe in recipeStore.fetchedRecipes"
@@ -44,9 +44,9 @@
 <script setup>
 import { ref } from "vue";
 import Button from "primevue/button";
-import { useRecipeStore } from "../../../stores/recipes.js";
+import { useRecipeStore } from "../../stores/recipes.js";
 import Dialog from "primevue/dialog";
-import recipeList from "../recipeList.vue";
+import RecipeDetails from "./RecipeDetails.vue";
 const recipeStore = useRecipeStore();
 
 const recipeVisible = ref(false);
@@ -122,7 +122,6 @@ const showRecipe = (recipe) => {
 	display: block;
 	float: right;
 	height: 100%;
-	/* border: 1px solid black; */
 	border-radius: 10px;
 	padding: 1rem;
 	margin-right: 0.5rem;

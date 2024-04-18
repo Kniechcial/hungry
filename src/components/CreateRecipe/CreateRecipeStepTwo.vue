@@ -200,7 +200,7 @@
 
 <script setup>
 import { ref } from "vue";
-import image from "../../../assets/icon/bg2.jpg";
+import image from "../../assets/icon/bg2.jpg";
 
 import Button from "primevue/button";
 import Toast from "primevue/toast";

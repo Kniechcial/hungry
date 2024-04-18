@@ -1,7 +1,7 @@
 <template>
 	<div class="image-style">
 		<img
-			src="../../../assets/icon/carrot.png"
+			src="../../assets/icon/carrot.png"
 			alt="carrot" />
 	</div>
 </template>

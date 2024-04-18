@@ -1,19 +1,19 @@
 <template>
 	<body>
-		<header-view></header-view>
-		<top-bar-menu></top-bar-menu>
+		<Header></Header>
+		<NavigateMainBar></NavigateMainBar>
 		<router-view></router-view>
 	</body>
-	<footer><footer-view></footer-view></footer>
+	<Footer></Footer>
 </template>
 
 <script setup>
-import HeaderView from "./views/BaseView/headerView.vue";
-import FooterView from "./views/BaseView/footerView.vue";
-import TopBarMenu from "./views/BaseView/topBarMenu.vue";
+import Header from "./components/Reusable/Header.vue";
+import Footer from "./components/Reusable/Footer.vue";
+import NavigateMainBar from "./components/Reusable/NavigateMainBar.vue";
 
 components: {
-	HeaderView, FooterView, TopBarMenu;
+	Header, Footer, NavigateMainBar;
 }
 </script>
 <style>

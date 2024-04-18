@@ -133,7 +133,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const toast = useToast();
-const NewRecipe2 = () => router.push({ name: "newRecipe2" });
+const CreateRecipeStepTwo = () => router.push({ name: "CreateRecipeStepTwo" });
 const dishName = ref(null);
 const adresURL = ref(null);
 const description = ref();
@@ -204,7 +204,7 @@ const load = () => {
 			url: adresURL.value,
 		};
 		console.log(newRecipe.value);
-		NewRecipe2();
+		CreateRecipeStepTwo();
 	} else {
 		showError();
 	}

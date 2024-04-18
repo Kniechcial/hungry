@@ -3,7 +3,9 @@
 		<div class="card firstObject">
 			<Menubar :model="items" />
 		</div>
-		<div class="avatar">
+		<div
+			class="avatar"
+			@click="checkUser()">
 			<Avatar
 				:model="userItems"
 				icon="pi pi-user"
@@ -20,20 +22,37 @@ import Avatar from "primevue/avatar";
 
 import Menubar from "primevue/menubar";
 import { useRouter } from "vue-router";
+
+const isUser = ref(false);
+
+const logInView = () => {
+	router.push({ name: "LogIn" });
+};
+const userPanel = () => {
+	router.push({ name: "UserPanel" });
+};
+
+const checkUser = () => {
+	if (isUser.value != true) {
+		logInView();
+	} else {
+		userPanel();
+	}
+};
 const router = useRouter();
 const userItems = ref([
 	{
 		label: "Home",
 		icon: "pi pi-home",
 		command: () => {
-			router.push({ name: "MainView" });
+			router.push({ name: "HomeView" });
 		},
 	},
 	{
-		label: "BaseRecipeList",
+		label: "RecipeList",
 		icon: "pi pi-book",
 		command: () => {
-			router.push({ name: "BaseRecipeList" });
+			router.push({ name: "RecipeList" });
 		},
 	},
 ]);
@@ -42,7 +61,7 @@ const items = ref([
 		label: "Home",
 		icon: "pi pi-home",
 		command: () => {
-			router.push({ name: "MainView" });
+			router.push({ name: "HomeView" });
 		},
 	},
 	{
@@ -60,7 +79,7 @@ const items = ref([
 				label: "Add Recipe",
 				icon: "pi pi-file-import",
 				command: () => {
-					router.push({ name: "addRecipe" });
+					router.push({ name: "CreateNewRecipe" });
 				},
 			},
 			{
@@ -84,10 +103,10 @@ const items = ref([
 		icon: "pi pi-search",
 		items: [
 			{
-				label: "By Name",
+				label: "By Name or Tag",
 				icon: "pi pi-angle-right",
 				command: () => {
-					router.push({ name: "recipe" });
+					router.push({ name: "ByNameTag" });
 				},
 			},
 			{
@@ -97,20 +116,13 @@ const items = ref([
 				// 	router.push({ name: "newRecipe" });
 				// },
 			},
-			{
-				label: "By Tags",
-				icon: "pi pi-angle-right",
-				command: () => {
-					router.push({ name: "getTag" });
-				},
-			},
 		],
 	},
 	{
 		label: "Setting",
 		icon: "pi pi-cog",
 		command: () => {
-			router.push({ name: "user" });
+			router.push({ name: "UserPanel" });
 		},
 	},
 ]);

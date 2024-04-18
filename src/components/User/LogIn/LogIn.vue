@@ -59,7 +59,7 @@ import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
 import { useRouter } from "vue-router";
-import logIcon from "../../assets/icon/log-icon.png";
+import logIcon from "../../../assets/icon/log-icon.png";
 
 const router = useRouter();
 const panelSingIn = () => router.push({ name: "singIn" });

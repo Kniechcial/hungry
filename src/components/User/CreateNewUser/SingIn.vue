@@ -62,34 +62,22 @@
 				@click="requireConditions"
 				label="Dodaj użytkownika" />
 		</div>
-		<!-- <div>
-			<ul>
-				<li
-					v-for="user in userList"
-					:key="userList.id">
-					<span>{{ user.name }}</span>
-				</li>
-			</ul>
-		</div> -->
 	</body>
 </template>
 
 <script setup>
-import { inject, ref, watch } from "vue";
+import { ref } from "vue";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import { useRouter } from "vue-router";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
-import logIcon from "../../assets/icon/log-icon.png";
+import logIcon from "../../../assets/icon/log-icon.png";
 
 const router = useRouter();
 const toast = useToast();
 
-// import { useUserStore } from "../../stores/users";
-
-// const userBase = useUserStore();
 const displayPasswordError = ref(false);
 const displayEmailError = ref(false);
 let inputEmail = ref("");
@@ -164,8 +152,6 @@ const addUser = () => {
 		password: inputPassword.value,
 	};
 	userList.value.push(newUser);
-	// userList.value.push(userBase.usersBaseStore);
-	// console.log(userBase.usersBaseStore);
 };
 
 const requireConditions = () => {

@@ -12,9 +12,8 @@
 					</p>
 				</div>
 			</div>
-
 			<div
-				@click="getRecipe()"
+				@click="navigateToFindByNameTag()"
 				class="about-us-box second">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
@@ -26,11 +25,6 @@
 						now. Pizza, pasta, ramen? Use the built-in search function to find
 						exactly what you're in the mood for
 					</p>
-					<!-- <div class="next-btn">
-						<Button
-							@click="getRecipe()"
-							label="Find recipe" />
-					</div> -->
 				</div>
 			</div>
 			<div class="about-us-box third">
@@ -44,7 +38,7 @@
 				</div>
 			</div>
 			<div
-				@click="getRecipe()"
+				@click="navigateToFindByNameTag()"
 				class="about-us-box fourth">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
@@ -55,11 +49,6 @@
 						the ingredients you want to use, and Hungry will create a list of
 						dishes you can prepare with them
 					</p>
-					<!-- <div class="next-btn">
-						<Button
-							@click="getRecipe()"
-							label="Use your ingridients" />
-					</div> -->
 				</div>
 			</div>
 		</div>
@@ -67,10 +56,9 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
-import Button from "primevue/button";
 const router = useRouter();
-const getRecipe = () => {
-	router.push({ name: "recipe" });
+const navigateToFindByNameTag = () => {
+	router.push({ name: "ByNameTag" });
 };
 </script>
 <style scoped>
@@ -104,7 +92,6 @@ main {
 }
 
 .butons-log-in-sing-in {
-	/* position: fixed; */
 	margin-inline-start: 80%;
 	margin-top: 1rem;
 }
@@ -138,10 +125,6 @@ main {
 	transition: 0.3s filter;
 	cursor: pointer;
 }
-
-/* .second:hover::before {
-	filter: brightness(0.6);
-} */
 
 .third::before {
 	content: "";
@@ -189,7 +172,6 @@ main {
 	transition: 0.3s all;
 }
 .about-us-box:hover {
-	/* cursor: pointer; */
 	height: 360px;
 }
 

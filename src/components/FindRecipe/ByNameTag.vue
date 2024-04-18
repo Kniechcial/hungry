@@ -18,6 +18,7 @@
 			</div>
 		</div>
 	</div>
+	<Toast />
 	<div class="button-box">
 		<div class="card flex justify-content-center">
 			<Button
@@ -25,18 +26,6 @@
 				label="Find recipe" />
 		</div>
 	</div>
-
-	<!-- <div v-if="recipesLoading">
-		<ProgressSpinner />
-	</div>
-	<div v-else>
-		<p>Nazwa Dania :</p>
-		<div
-			v-for="recipe in recipeStore.fetchedRecipes"
-			:key="recipe.name">
-			{{ recipe.name }}
-		</div>
-	</div> -->
 </template>
 
 <script setup>
@@ -44,25 +33,41 @@ import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { useRecipeStore } from "../../stores/recipes.js";
-import carrotDialog from "../RecipeView/New-recipe/carrotDialog.vue";
-const foodName = ref(null);
-const value = ref(null);
-const recipeStore = useRecipeStore();
-const recipesLoading = ref(false);
+import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
-const router = useRouter();
-const BaseRecipeList = () => router.push({ name: "BaseRecipeList" });
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
+const recipeStore = useRecipeStore();
+const router = useRouter();
+const foodName = ref(null);
 const isLoading = ref(false);
+const recipesLoading = ref(false);
+const toast = useToast();
+
+const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
 async function getRecipe() {
 	isLoading.value = true;
 	await recipeStore.getRecipes(0, 2, foodName.value);
 	console.log(recipeStore.fetchedRecipes);
 	recipesLoading.value = false;
-
-	BaseRecipeList();
+	if (recipeStore.fetchedRecipes.length === 0) {
+		showError();
+		isLoading.value = !isLoading.value;
+	} else {
+		BaseRecipeList();
+	}
 }
+
+const showError = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "Sorry, no results found. Try again ",
+		life: 3000,
+	});
+};
 </script>
 
 <style scoped>
@@ -83,7 +88,7 @@ async function getRecipe() {
 }
 .carrot {
 	position: relative;
-	left: 60%; /* Ustawienie odległości od lewej krawędzi na 50% */
+	left: 60%;
 	transform: translate(-50%, -50%);
 	z-index: 1;
 }
