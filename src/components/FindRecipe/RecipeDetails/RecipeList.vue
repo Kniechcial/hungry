@@ -44,7 +44,7 @@
 <script setup>
 import { ref } from "vue";
 import Button from "primevue/button";
-import { useRecipeStore } from "../../stores/recipes.js";
+import { useRecipeStore } from "../../../stores/recipes.js";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "./RecipeDetails.vue";
 const recipeStore = useRecipeStore();

@@ -101,22 +101,9 @@ const items = ref([
 	{
 		label: "Find New Recipe",
 		icon: "pi pi-search",
-		items: [
-			{
-				label: "By Name or Tag",
-				icon: "pi pi-angle-right",
-				command: () => {
-					router.push({ name: "ByNameTag" });
-				},
-			},
-			{
-				label: "By Ingridients",
-				icon: "pi pi-angle-right",
-				// command: () => {
-				// 	router.push({ name: "newRecipe" });
-				// },
-			},
-		],
+		command: () => {
+			router.push({ name: "FindRecipe" });
+		},
 	},
 	{
 		label: "Setting",

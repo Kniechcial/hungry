@@ -38,7 +38,7 @@
 				</div>
 			</div>
 			<div
-				@click="navigateToFindByNameTag()"
+				@click="navigateToFindByIngridients()"
 				class="about-us-box fourth">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
@@ -56,9 +56,13 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 const navigateToFindByNameTag = () => {
 	router.push({ name: "ByNameTag" });
+};
+const navigateToFindByIngridients = () => {
+	router.push({ name: "ByIngridients" });
 };
 </script>
 <style scoped>

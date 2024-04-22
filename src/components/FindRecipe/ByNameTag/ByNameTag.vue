@@ -4,7 +4,6 @@
 			class="carrot"
 			v-if="isLoading"></carrotDialog>
 	</div>
-
 	<div class="content">
 		<div class="card flex justify-content-center">
 			<div class="flex flex-column gap-2">
@@ -16,6 +15,16 @@
 					aria-describedby="recipe-help" />
 				<small id="recipe-help">Enter name dish to find recipe.</small>
 			</div>
+		</div>
+		<div class="card flex justify-content-center p-3">
+			<MultiSelect
+				v-model="selectedTags"
+				:options="Tags"
+				filter
+				optionLabel="name"
+				placeholder="Select Tags..."
+				:maxSelectedLabels="3"
+				class="w-full md:w-20rem" />
 		</div>
 	</div>
 	<Toast />
@@ -32,11 +41,12 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import { useRecipeStore } from "../../stores/recipes.js";
+import { useRecipeStore } from "../../../stores/recipes.js";
 import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
+import MultiSelect from "primevue/multiselect";
 
 const recipeStore = useRecipeStore();
 const router = useRouter();
@@ -68,6 +78,15 @@ const showError = () => {
 		life: 3000,
 	});
 };
+
+const selectedTags = ref();
+const Tags = ref([
+	{ name: "British" },
+	{ name: "chicken soup" },
+	{ name: "London" },
+	{ name: "Istanbul" },
+	{ name: "Paris" },
+]);
 </script>
 
 <style scoped>
@@ -82,6 +101,7 @@ const showError = () => {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-size: 22px;
+	box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
 }
 .button-box {
 	margin-left: 7rem;
