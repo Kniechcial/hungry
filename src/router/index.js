@@ -1,9 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import CreateRecipeStepTwo from "../components/CreateRecipe/CreateRecipeStepTwo.vue";
-import ByNameTag from "../components/FindRecipe/ByNameTag.vue";
-import RecipeList from "../components/FindRecipe/RecipeList.vue";
+
+import ByIngridients from "@/components/FindRecipe/ByIngridients/ByIngridients.vue";
+import ByNameTag from "../components/FindRecipe/ByNameTag/ByNameTag.vue";
+import RecipeList from "../components/FindRecipe/RecipeDetails/RecipeList.vue";
+
 import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
+
 import LogIn from "../components/User/LogIn/LogIn.vue";
 import SingIn from "../components/User/CreateNewUser/SingIn.vue";
 import UserPanel from "../components/User/UserPanel/UserPanel.vue";
@@ -13,6 +17,7 @@ import ConfirmRerstorePassword from "../components/User/LogIn/ConfirmRestorePass
 
 import BaseRecipeView from "../views/BaseRecipe/baseRecipe.vue";
 import CreateNewRecipe from "../views/CreateRecipe/CreateNewRecipeView.vue";
+import FindRecipe from "../views/FindRecipe/FindRecipe.vue";
 import HomeView from "../views/Home/HomeView.vue";
 
 const router = createRouter({
@@ -87,6 +92,16 @@ const router = createRouter({
 			path: "/RecipeList",
 			name: "RecipeList",
 			component: RecipeList,
+		},
+		{
+			path: "/ByIngridients",
+			name: "ByIngridients",
+			component: ByIngridients,
+		},
+		{
+			path: "/FindRecipe",
+			name: "FindRecipe",
+			component: FindRecipe,
 		},
 	],
 });
