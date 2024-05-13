@@ -16,16 +16,6 @@
 				<small id="recipe-help">Enter name dish to find recipe.</small>
 			</div>
 		</div>
-		<div class="card flex justify-content-center p-3">
-			<MultiSelect
-				v-model="selectedTags"
-				:options="Tags"
-				filter
-				optionLabel="name"
-				placeholder="Select Tags..."
-				:maxSelectedLabels="3"
-				class="w-full md:w-20rem" />
-		</div>
 	</div>
 	<Toast />
 	<div class="button-box">
@@ -41,12 +31,11 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import { useRecipeStore } from "../../../stores/recipes.js";
 import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
-import MultiSelect from "primevue/multiselect";
+import { useRecipeStore } from "../../../stores/recipes.js";
 
 const recipeStore = useRecipeStore();
 const router = useRouter();
@@ -78,15 +67,6 @@ const showError = () => {
 		life: 3000,
 	});
 };
-
-const selectedTags = ref();
-const Tags = ref([
-	{ name: "British" },
-	{ name: "chicken soup" },
-	{ name: "London" },
-	{ name: "Istanbul" },
-	{ name: "Paris" },
-]);
 </script>
 
 <style scoped>
@@ -116,7 +96,6 @@ const Tags = ref([
 	position: relative;
 	animation: moveUpDown 0.7s infinite alternate;
 }
-
 @keyframes moveUpDown {
 	from {
 		top: 0;
