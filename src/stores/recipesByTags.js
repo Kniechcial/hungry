@@ -1,10 +1,10 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 
-export const useRecipeStore = defineStore("recipe", () => {
+export const useRecipeStoreByTags = defineStore("recipe", () => {
 	const fetchedRecipes = ref(null);
-	async function getRecipes(from, size, q) {
-		const url = `https://tasty.p.rapidapi.com/recipes/list?from=${from}&size=${size}&q=${q}`;
+	async function getRecipes(from, size, q0, q1, q2, q3, q4) {
+		const url = `https://tasty.p.rapidapi.com/recipes/list?from=${from}&size=${size}&q=${q0},${q1},${q2},${q3},${q4}`;
 		const options = {
 			method: "GET",
 			headers: {

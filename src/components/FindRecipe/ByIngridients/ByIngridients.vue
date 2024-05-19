@@ -4,80 +4,115 @@
 			class="carrot"
 			v-if="isLoading"></carrotDialog>
 	</div>
-	<!-- <div class="content">
-		<div class="card flex justify-content-center p-3">
-			<MultiSelect
-				v-model="selectedTags"
-				:options="tagListStore.fetchedTags"
-				filter
-				optionValue="name"
-				optionLabel="display_name"
-				placeholder="Select Tags..."
-				:maxSelectedLabels="3"
-				class="w-full md:w-20rem" />
-		</div>
-	</div> -->
-	<div class="box-property">
+	<div class="get-user-chose">
 		<div>
-			<p>Get Your Tags:</p>
-			<div class="get-tags">
-				<button
-					class="button-chose"
-					v-for="(item, index) in displayedItems"
-					:key="index">
-					{{ item.display_name }}
-				</button>
-				<button
-					class="button-chose show-less"
-					@click="toggleShow">
-					{{ showAll ? "Pokaż mniej" : "Pokaż więcej" }}
-				</button>
+			<p>
+				<strong class="paragraph">Your selected tags: </strong>
+			</p>
+			<div v-if="userChosed.length === 0">
+				<p class="description">
+					You haven't selected any tag yet. Click on the tag you are interested
+					in to add it to your search. You can select a maximum of five tags at
+					a time.
+				</p>
 			</div>
 		</div>
-		<div>
-			<p>Get Your Ingridients:</p>
-			<div class="get-ingridients">
-				<p class="secect-property">Obiekt 1</p>
-				<p class="secect-property">Obiekt 2</p>
-				<p class="secect-property">Obiekt 3</p>
-				<p class="secect-property">Obiekt 1</p>
-				<p class="secect-property">Obiekt 2</p>
-				<p class="secect-property">Obiekt 3</p>
+		<div v-if="userChosed">
+			<button
+				class="button-chose show-less"
+				v-for="(item, index) in userChosed"
+				:key="index"
+				@click="deleteSelectedTag(index)">
+				{{ item.display_name }}
+			</button>
+		</div>
+		<Toast />
+		<div class="button-box">
+			<div class="card flex justify-content-center">
+				<Button
+					@click="toggleToGetRecipes()"
+					label="Find recipe" />
 			</div>
 		</div>
 	</div>
+	<div class="box-property">
+		<div class="get-tags">
+			<div>
+				<strong class="paragraph"
+					>Select the tags you would like to choose to describe the dish</strong
+				>
+			</div>
+			<button
+				class="button-chose"
+				v-for="(item, index) in displayedItems"
+				:key="index"
+				@click="getChosedTag(item)">
+				{{ item.display_name }}
+			</button>
+			<button
+				class="button-chose show-less"
+				@click="toggleShow">
+				{{ showAll ? "Pokaż mniej" : "Pokaż więcej" }}
+			</button>
+		</div>
+	</div>
 
-	<Toast />
+	<!-- <Toast />
 	<div class="button-box">
 		<div class="card flex justify-content-center">
 			<Button
 				@click="getRecipe()"
 				label="Find recipe" />
 		</div>
-	</div>
+	</div> -->
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { computed } from "vue";
 import Button from "primevue/button";
-// import { useRecipeStore } from "../../../stores/recipes.js";
+import { useRecipeStore } from "../../../stores/recipes.js";
 import { useTagsListStore } from "../../../stores/tags.js";
+import { useRecipeStoreByTags } from "../../../stores/recipesByTags.js";
 import Toast from "primevue/toast";
 import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
-// const recipeStore = useRecipeStore();
+const recipeStore = useRecipeStore();
 const tagListStore = useTagsListStore();
+const recipeStoreByTags = useRecipeStoreByTags();
 const router = useRouter();
 const isLoading = ref(false);
 const recipesLoading = ref(false);
-// const selectedTags = ref();
+
 const toast = useToast();
 
 const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
+const userChosed = ref([]);
+
+const getChosedTag = (item) => {
+	if (userChosed.value.length < 5) {
+		const checkDuplicate = userChosed.value.some(
+			(tag) => tag.display_name === item.display_name
+		);
+		if (!checkDuplicate) {
+			userChosed.value.push(item);
+			console.log(userChosed.value);
+		} else {
+			console.log("Ten element już istnieje w tabeli.");
+		}
+	} else {
+		console.log("Tabela zawiera już 5 elementów");
+	}
+};
+
+const deleteSelectedTag = (index) => {
+	userChosed.value.splice(index, 1);
+};
+
+watch(userChosed);
 
 const toggleShow = () => {
 	showAll.value = !showAll.value;
@@ -98,18 +133,39 @@ const showMoreTags = () => {
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
+const checkNuberChosedTags = () => {
+	while (userChosed.value.length < 5) {
+		userChosed.value.push({ display_name: "-" });
+	}
+};
+//
+const toggleToGetRecipes = () => {
+	checkNuberChosedTags();
+	getRecipe();
+};
+
+//
 async function getRecipe() {
 	isLoading.value = true;
-	await recipeStore.getRecipes(0, 2, selectedTags.value);
-	console.log(recipeStore.fetchedRecipes);
+	await recipeStoreByTags.getRecipes(
+		0,
+		5,
+		userChosed.value[0].display_name,
+		userChosed.value[1].display_name,
+		userChosed.value[2].display_name,
+		userChosed.value[3].display_name,
+		userChosed.value[4].display_name
+	);
+	console.log(recipeStoreByTags.fetchedRecipes);
 	recipesLoading.value = false;
-	if (recipeStore.fetchedRecipes.length === 0) {
+	if (recipeStoreByTags.fetchedRecipes.length === 0) {
 		showError();
 		isLoading.value = !isLoading.value;
 	} else {
 		BaseRecipeList();
 	}
 }
+//
 
 const showError = () => {
 	toast.add({
@@ -122,25 +178,27 @@ const showError = () => {
 </script>
 
 <style scoped>
-/* .content {
-	position: relative;
-	border: 1px solid black;
-	border-radius: 10px;
-	background-color: #faf8f7;
-	padding: 1rem;
-	margin-top: 10rem;
-	width: max-content;
-	left: 50%;
-	transform: translate(-50%, -50%);
+.description {
+	font-size: 18px;
+	margin-left: auto;
+	margin-right: auto;
+}
+p {
+	margin-top: 1rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+.paragraph {
 	font-size: 22px;
-} */
+}
 
 .button-box {
+	margin-top: 1rem;
 	margin-left: 7rem;
 }
 .carrot {
 	position: relative;
-	left: 60%;
+	left: 50%;
 	transform: translate(-50%, -50%);
 	z-index: 1;
 }
@@ -150,26 +208,16 @@ const showError = () => {
 }
 
 .box-property {
-	display: flex;
-	justify-content: space-between;
-}
-.get-tags {
-	order: 1;
-	margin-left: 10%;
-	margin-right: 50%;
-}
-
-.get-tags,
-.get-ingridients {
-	display: flex;
-	flex-wrap: wrap;
-	padding: 1rem;
-	border-radius: 10px;
+	width: 35%;
+	margin: 3% 3%;
 	/* border: 1px solid black; */
+	box-sizing: border-box;
+	/* display: flex; */
 }
-.get-ingridients {
-	order: 2;
-	margin-right: 10%;
+.get-user-chose {
+	float: right;
+	width: 30%;
+	margin: 3% 5%;
 }
 
 .button-chose {

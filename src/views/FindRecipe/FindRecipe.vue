@@ -1,5 +1,4 @@
 <template>
-	<Toast />
 	<div class="carrot-box">
 		<carrotDialog
 			class="carrot"
@@ -34,15 +33,7 @@ import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import TabMenu from "primevue/tabmenu";
 import ByIngridients from "../../components/FindRecipe/ByIngridients/ByIngridients.vue";
 import ByNameOrTag from "../../components/FindRecipe/ByNameTag/ByNameTag.vue";
-import { onMounted } from "vue";
-import { useRecipeStore } from "../../stores/recipes.js";
-import { useTagsListStore } from "../../stores/tags.js";
-import { useToast } from "primevue/usetoast";
-import Toast from "primevue/toast";
 
-const recipeStore = useRecipeStore();
-const tagListStore = useTagsListStore();
-const toast = useToast();
 const isLoading = ref(false);
 const displayByIngridients = ref(false);
 const displayByNameOrTag = ref(false);
@@ -54,29 +45,6 @@ defineComponent({
 		ByNameOrTag,
 	},
 });
-
-onMounted(() => {
-	getTags();
-});
-
-async function getTags() {
-	await tagListStore.getTags();
-	isLoading.value = false;
-	if (recipeStore.fetchedRecipes.length === 0) {
-		showError();
-	} else {
-		BaseRecipeList();
-	}
-}
-
-const showError = () => {
-	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: "Sorry, no results found. Try again ",
-		life: 3000,
-	});
-};
 
 const items = ref([
 	{
