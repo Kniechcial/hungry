@@ -51,6 +51,18 @@
 					</p>
 				</div>
 			</div>
+			<div
+				@click="navigateToRandomRecipe()"
+				class="about-us-box five">
+				<div class="lets-go-try">Let's go try!</div>
+				<div class="about-us-text">
+					<h3>Randomly choose a recipe for a delicious dish</h3>
+					<p>
+						You don't have any idea for a dish? Longer than that is no longer a
+						problem. Just click and draw a recipe for a delicious dish."
+					</p>
+				</div>
+			</div>
 		</div>
 	</main>
 </template>
@@ -63,6 +75,9 @@ const navigateToFindByName = () => {
 };
 const navigateToFindByTags = () => {
 	router.push({ name: "ByTags" });
+};
+const navigateToRandomRecipe = () => {
+	router.push({ name: "RandomRecipe" });
 };
 </script>
 <style scoped>
@@ -162,6 +177,20 @@ main {
 	cursor: pointer;
 }
 
+.five::before {
+	content: "";
+	background-image: url("../../assets/icon/bg/kanapka_z_jajkiem.png");
+	background-attachment: fixed;
+	background-position: center;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	transition: 0.3s filter;
+	cursor: pointer;
+}
+
 .about-us-box {
 	position: relative;
 	display: flex;
@@ -230,6 +259,13 @@ main {
 }
 
 .fourth:hover .lets-go-try {
+	display: flex;
+}
+.five:hover {
+	cursor: pointer;
+}
+
+.five:hover .lets-go-try {
 	display: flex;
 }
 </style>

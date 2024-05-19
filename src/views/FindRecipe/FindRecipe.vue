@@ -12,6 +12,8 @@
 	</div>
 	<ByTags v-if="displayByTags"></ByTags>
 	<ByName v-if="displayByName"></ByName>
+	<Random v-if="displayRandom"></Random>
+
 	<div
 		v-if="displayBaseDescription"
 		class="base-description">
@@ -33,11 +35,13 @@ import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import TabMenu from "primevue/tabmenu";
 import ByTags from "../../components/FindRecipe/ByTags/ByTags.vue";
 import ByName from "../../components/FindRecipe/ByName/ByName.vue";
+import Random from "../../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
 
 const isLoading = ref(false);
 const displayByTags = ref(false);
 const displayByName = ref(false);
 const displayBaseDescription = ref(true);
+const displayRandom = ref(false);
 
 defineComponent({
 	components: {
@@ -54,15 +58,27 @@ const items = ref([
 			displayByName.value = true;
 			displayByTags.value = false;
 			displayBaseDescription.value = false;
+			displayRandom.value = false;
 		},
 	},
 	{
-		label: "Ingridients",
+		label: "Tags",
 		icon: "pi pi-list",
 		command: () => {
 			displayByName.value = false;
 			displayByTags.value = true;
 			displayBaseDescription.value = false;
+			displayRandom.value = false;
+		},
+	},
+	{
+		label: "Random",
+		icon: "pi pi-list",
+		command: () => {
+			displayByName.value = false;
+			displayByTags.value = false;
+			displayBaseDescription.value = false;
+			displayRandom.value = true;
 		},
 	},
 ]);
