@@ -13,7 +13,7 @@
 				</div>
 			</div>
 			<div
-				@click="navigateToFindByNameTag()"
+				@click="navigateToFindByName()"
 				class="about-us-box second">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
@@ -38,7 +38,7 @@
 				</div>
 			</div>
 			<div
-				@click="navigateToFindByIngridients()"
+				@click="navigateToFindByTags()"
 				class="about-us-box fourth">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
@@ -58,11 +58,11 @@
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const navigateToFindByNameTag = () => {
-	router.push({ name: "ByNameTag" });
+const navigateToFindByName = () => {
+	router.push({ name: "ByName" });
 };
-const navigateToFindByIngridients = () => {
-	router.push({ name: "ByIngridients" });
+const navigateToFindByTags = () => {
+	router.push({ name: "ByTags" });
 };
 </script>
 <style scoped>

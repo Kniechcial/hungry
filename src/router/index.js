@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import CreateRecipeStepTwo from "../components/CreateRecipe/CreateRecipeStepTwo.vue";
 
-import ByIngridients from "@/components/FindRecipe/ByIngridients/ByIngridients.vue";
-import ByNameTag from "../components/FindRecipe/ByNameTag/ByNameTag.vue";
+import ByTags from "@/components/FindRecipe/ByTags/ByTags.vue";
+import ByName from "../components/FindRecipe/ByName/ByName.vue";
 import RecipeList from "../components/FindRecipe/RecipeDetails/RecipeList.vue";
 
 import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
@@ -84,9 +84,9 @@ const router = createRouter({
 			component: CreateRecipeStepTwo,
 		},
 		{
-			path: "/ByNameTag",
-			name: "ByNameTag",
-			component: ByNameTag,
+			path: "/ByName",
+			name: "ByName",
+			component: ByName,
 		},
 		{
 			path: "/RecipeList",
@@ -94,9 +94,9 @@ const router = createRouter({
 			component: RecipeList,
 		},
 		{
-			path: "/ByIngridients",
-			name: "ByIngridients",
-			component: ByIngridients,
+			path: "/ByTags",
+			name: "ByTags",
+			component: ByTags,
 		},
 		{
 			path: "/FindRecipe",

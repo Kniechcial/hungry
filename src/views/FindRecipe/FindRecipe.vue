@@ -10,8 +10,8 @@
 			:model="items"
 			class="card flex" />
 	</div>
-	<ByIngridients v-if="displayByIngridients"></ByIngridients>
-	<ByNameOrTag v-if="displayByNameOrTag"></ByNameOrTag>
+	<ByTags v-if="displayByTags"></ByTags>
+	<ByName v-if="displayByName"></ByName>
 	<div
 		v-if="displayBaseDescription"
 		class="base-description">
@@ -31,28 +31,28 @@
 import { ref, defineComponent } from "vue";
 import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import TabMenu from "primevue/tabmenu";
-import ByIngridients from "../../components/FindRecipe/ByIngridients/ByIngridients.vue";
-import ByNameOrTag from "../../components/FindRecipe/ByNameTag/ByNameTag.vue";
+import ByTags from "../../components/FindRecipe/ByTags/ByTags.vue";
+import ByName from "../../components/FindRecipe/ByName/ByName.vue";
 
 const isLoading = ref(false);
-const displayByIngridients = ref(false);
-const displayByNameOrTag = ref(false);
+const displayByTags = ref(false);
+const displayByName = ref(false);
 const displayBaseDescription = ref(true);
 
 defineComponent({
 	components: {
-		ByIngridients,
-		ByNameOrTag,
+		ByTags,
+		ByName,
 	},
 });
 
 const items = ref([
 	{
-		label: "Name or tag",
+		label: "Name",
 		icon: "pi pi-tags",
 		command: () => {
-			displayByNameOrTag.value = true;
-			displayByIngridients.value = false;
+			displayByName.value = true;
+			displayByTags.value = false;
 			displayBaseDescription.value = false;
 		},
 	},
@@ -60,8 +60,8 @@ const items = ref([
 		label: "Ingridients",
 		icon: "pi pi-list",
 		command: () => {
-			displayByNameOrTag.value = false;
-			displayByIngridients.value = true;
+			displayByName.value = false;
+			displayByTags.value = true;
 			displayBaseDescription.value = false;
 		},
 	},
