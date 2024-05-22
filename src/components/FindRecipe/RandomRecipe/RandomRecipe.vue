@@ -38,6 +38,7 @@ const recipesLoading = ref(false);
 const toast = useToast();
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
+// const RecipeDetails = () => router.push({ name: "RecipeDetails" });
 
 async function getRecipe() {
 	isLoading.value = true;
@@ -50,6 +51,7 @@ async function getRecipe() {
 		isLoading.value = !isLoading.value;
 	} else {
 		BaseRecipeList();
+		// RecipeDetails();
 	}
 }
 

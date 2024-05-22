@@ -13,6 +13,7 @@
 	<ByTags v-if="displayByTags"></ByTags>
 	<ByName v-if="displayByName"></ByName>
 	<Random v-if="displayRandom"></Random>
+	<ByIngredients v-if="displayByIngredients"></ByIngredients>
 
 	<div
 		v-if="displayBaseDescription"
@@ -33,20 +34,24 @@
 import { ref, defineComponent } from "vue";
 import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import TabMenu from "primevue/tabmenu";
-import ByTags from "../../components/FindRecipe/ByTags/ByTags.vue";
 import ByName from "../../components/FindRecipe/ByName/ByName.vue";
+import ByIngredients from "../../components/FindRecipe/ByIngredients/ByIngredients.vue";
+import ByTags from "../../components/FindRecipe/ByTags/ByTags.vue";
 import Random from "../../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
 
 const isLoading = ref(false);
-const displayByTags = ref(false);
 const displayByName = ref(false);
-const displayBaseDescription = ref(true);
+const displayByIngredients = ref(false);
+const displayByTags = ref(false);
 const displayRandom = ref(false);
+const displayBaseDescription = ref(true);
 
 defineComponent({
 	components: {
 		ByTags,
 		ByName,
+		ByIngredients,
+		Random,
 	},
 });
 
@@ -56,9 +61,21 @@ const items = ref([
 		icon: "pi pi-tags",
 		command: () => {
 			displayByName.value = true;
+			displayByIngredients.value = false;
 			displayByTags.value = false;
-			displayBaseDescription.value = false;
 			displayRandom.value = false;
+			displayBaseDescription.value = false;
+		},
+	},
+	{
+		label: "Ingredients",
+		icon: "pi pi-list",
+		command: () => {
+			displayByName.value = false;
+			displayByIngredients.value = true;
+			displayByTags.value = false;
+			displayRandom.value = false;
+			displayBaseDescription.value = false;
 		},
 	},
 	{
@@ -66,9 +83,10 @@ const items = ref([
 		icon: "pi pi-list",
 		command: () => {
 			displayByName.value = false;
+			displayByIngredients.value = false;
 			displayByTags.value = true;
-			displayBaseDescription.value = false;
 			displayRandom.value = false;
+			displayBaseDescription.value = false;
 		},
 	},
 	{
@@ -76,9 +94,10 @@ const items = ref([
 		icon: "pi pi-list",
 		command: () => {
 			displayByName.value = false;
+			displayByIngredients.value = false;
 			displayByTags.value = false;
-			displayBaseDescription.value = false;
 			displayRandom.value = true;
+			displayBaseDescription.value = false;
 		},
 	},
 ]);

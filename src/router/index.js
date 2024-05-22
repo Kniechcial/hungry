@@ -5,6 +5,8 @@ import CreateRecipeStepTwo from "../components/CreateRecipe/CreateRecipeStepTwo.
 import ByTags from "@/components/FindRecipe/ByTags/ByTags.vue";
 import ByName from "../components/FindRecipe/ByName/ByName.vue";
 import RandomRecipe from "../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
+import ByIngredients from "@/components/FindRecipe/ByIngredients/ByIngredients.vue";
+import RecipeDetails from "../components/FindRecipe/RecipeDetails/RecipeDetails.vue";
 import RecipeList from "../components/FindRecipe/RecipeDetails/RecipeList.vue";
 
 import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
@@ -90,6 +92,11 @@ const router = createRouter({
 			component: ByName,
 		},
 		{
+			path: "/RecipeDetails",
+			name: "RecipeDetails",
+			component: RecipeDetails,
+		},
+		{
 			path: "/RecipeList",
 			name: "RecipeList",
 			component: RecipeList,
@@ -103,6 +110,11 @@ const router = createRouter({
 			path: "/RandomRecipe",
 			name: "RandomRecipe",
 			component: RandomRecipe,
+		},
+		{
+			path: "/ByIngredients",
+			name: "ByIngredients",
+			component: ByIngredients,
 		},
 		{
 			path: "/FindRecipe",
