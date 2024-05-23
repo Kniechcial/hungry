@@ -1,5 +1,13 @@
 <template>
 	<footer>
+		<img
+			class="image-small"
+			src="../../assets/icon/carrot-leaves-medium.png"
+			alt="carrot" />
+		<img
+			class="image-medium"
+			src="../../assets/icon/carrot-leaves-medium.png"
+			alt="carrot" />
 		<p>
 			@2024 Niechciał Karol Hungry
 			<span class="icon-box">
@@ -9,23 +17,28 @@
 				<a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a>
 			</span>
 		</p>
-		<div class="icon-box">
-			<div class="image-style small">
-				<img
-					src="../../assets/icon/carrot-leaves.png"
-					alt="carrot" />
-			</div>
-		</div>
-		<div class="icon-box">
-			<div class="image-style medium">
-				<img
-					src="../../assets/icon/carrot-leaves-medium.png"
-					alt="carrot" />
-			</div>
-		</div>
 	</footer>
 </template>
 <style scoped>
+.image-small {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	top: -90px;
+	left: 86%;
+	transform: translateX(-50%);
+	z-index: -1;
+}
+.image-medium {
+	width: 200px;
+	height: 200px;
+	position: absolute;
+	top: -200px;
+	left: 93%;
+	transform: translateX(-50%);
+	z-index: -1;
+}
+
 footer {
 	bottom: 0;
 	height: 80px;
@@ -35,6 +48,7 @@ footer {
 	color: white;
 	text-align: center;
 	margin-top: 2rem;
+	position: relative;
 }
 
 .icon-box {
@@ -47,26 +61,15 @@ footer {
 	color: white;
 	transition: color 0.5s;
 }
+.icon-box div {
+	margin: 0 5px;
+	font-size: 20px;
+	color: white;
+	transition: color 0.5s;
+}
 
 .icon-box a:hover {
 	font-size: 25px;
 	color: black;
-}
-
-.image-style {
-	position: absolute;
-	height: 100px;
-	width: 100px;
-	z-index: -1;
-}
-.small {
-	scale: 0.2;
-	left: 78%;
-	bottom: -122vh;
-}
-.medium {
-	scale: 0.4;
-	left: 83%;
-	bottom: -110vh;
 }
 </style>
