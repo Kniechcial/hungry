@@ -9,6 +9,20 @@
 				<a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a>
 			</span>
 		</p>
+		<div class="icon-box">
+			<div class="image-style small">
+				<img
+					src="../../assets/icon/carrot-leaves.png"
+					alt="carrot" />
+			</div>
+		</div>
+		<div class="icon-box">
+			<div class="image-style medium">
+				<img
+					src="../../assets/icon/carrot-leaves-medium.png"
+					alt="carrot" />
+			</div>
+		</div>
 	</footer>
 </template>
 <style scoped>
@@ -37,5 +51,22 @@ footer {
 .icon-box a:hover {
 	font-size: 25px;
 	color: black;
+}
+
+.image-style {
+	position: absolute;
+	height: 100px;
+	width: 100px;
+	z-index: -1;
+}
+.small {
+	scale: 0.2;
+	left: 78%;
+	bottom: -122vh;
+}
+.medium {
+	scale: 0.4;
+	left: 83%;
+	bottom: -110vh;
 }
 </style>

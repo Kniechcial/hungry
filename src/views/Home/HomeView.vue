@@ -204,9 +204,6 @@ main {
 		rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 	transition: 0.3s all;
 }
-.about-us-box:hover {
-	height: 360px;
-}
 
 .disable {
 	height: 230px;
@@ -234,6 +231,9 @@ main {
 	font-size: 50px;
 	font-weight: bold;
 	font-style: italic;
+}
+.about-us-box:hover {
+	height: 360px;
 }
 
 .first:hover .disable {
