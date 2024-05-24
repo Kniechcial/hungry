@@ -8,7 +8,7 @@ export const useIngridientsListStore = defineStore("ingridientsList", () => {
 		const options = {
 			method: "GET",
 			headers: {
-				"X-RapidAPI-Key": "63d16e91a9msh80a19d032bea021p17ca6cjsnc680b1561233",
+				"X-RapidAPI-Key": "3ada471c34mshdbee7bcbd2861dep1bddaajsn8e32b406c05b",
 				"X-RapidAPI-Host": "tasty.p.rapidapi.com",
 			},
 		};
