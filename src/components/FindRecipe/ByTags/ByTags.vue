@@ -56,15 +56,6 @@
 			</button>
 		</div>
 	</div>
-
-	<!-- <Toast />
-	<div class="button-box">
-		<div class="card flex justify-content-center">
-			<Button
-				@click="getRecipe()"
-				label="Find recipe" />
-		</div>
-	</div> -->
 </template>
 
 <script setup>
@@ -133,28 +124,20 @@ const showMoreTags = () => {
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
-const checkNuberChosedTags = () => {
-	while (userChosed.value.length < 5) {
-		userChosed.value.push({ display_name: "-" });
-	}
-};
-//
 const toggleToGetRecipes = () => {
-	checkNuberChosedTags();
 	getRecipe();
 };
 
 //
 async function getRecipe() {
 	isLoading.value = true;
+	const selectedTags = userChosed.value
+		.map((tag) => tag.display_name)
+		.join(",");
 	await recipeStoreByTags.getRecipes(
 		0,
 		5,
-		userChosed.value[0].display_name,
-		userChosed.value[1].display_name,
-		userChosed.value[2].display_name,
-		userChosed.value[3].display_name,
-		userChosed.value[4].display_name
+		selectedTags
 	);
 	console.log(recipeStoreByTags.fetchedRecipes);
 	recipesLoading.value = false;

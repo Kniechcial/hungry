@@ -144,14 +144,16 @@ const toggleToGetRecipes = () => {
 
 async function getRecipe() {
 	isLoading.value = true;
+	const selectedIngredients = userChosed.value.join(",");
 	await recipeStoreByTags.getRecipes(
 		0,
 		5,
-		userChosed.value[0],
-		userChosed.value[1],
-		userChosed.value[2],
-		userChosed.value[3],
-		userChosed.value[4]
+		selectedIngredients
+		// userChosed.value[0],
+		// userChosed.value[1],
+		// userChosed.value[2],
+		// userChosed.value[3],
+		// userChosed.value[4]
 	);
 	console.log(recipeStoreByTags.fetchedRecipes);
 	recipesLoading.value = false;
