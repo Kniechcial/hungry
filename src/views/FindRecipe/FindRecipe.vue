@@ -107,14 +107,16 @@ const items = ref([
 .base-description {
 	position: relative;
 	padding: 1rem;
-	border: 1px solid black;
+	border: 1px solid;
+	border-color: aliceblue;
 	color: #261474;
 	max-width: 55rem;
-	margin-top: 3rem;
+	margin-top: 4rem;
 	margin-left: auto;
 	margin-right: auto;
 	border-radius: 10px;
-	background-color: #faf8f7;
+	background-color: #fcffff;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .description {
 	font-size: 22px;

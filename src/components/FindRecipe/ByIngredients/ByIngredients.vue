@@ -4,8 +4,36 @@
 			class="carrot"
 			v-if="isLoading"></carrotDialog>
 	</div>
-	<div class="get-user-chose">
-		<div>
+	<div class="left-box box-content">
+		<div class="box-property-left">
+			<strong class="paragraph">
+				Enter the name of the ingredient from which you want to create a dish
+			</strong>
+		</div>
+		<div class="content">
+			<div class="card flex justify-content-center">
+				<div class="flex flex-column gap-2">
+					<label for="ingredient">Ingredient name:</label>
+					<InputText
+						id="ingredient"
+						style="width: 350px"
+						v-model="ingredientName"
+						:feedback="false"
+						aria-describedby="recipe-help" />
+					<small id="recipe-help">Enter the ingredient</small>
+				</div>
+			</div>
+			<div class="button-box-right">
+				<div class="card flex justify-content-center">
+					<Button
+						@click="getChosedIngredient()"
+						label="Add ingredient" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="right-box box-content">
+		<div class="box-property-right">
 			<p>
 				<strong class="paragraph">Your selected ingredients: </strong>
 			</p>
@@ -16,55 +44,26 @@
 					ingredients at a time.
 				</p>
 			</div>
-		</div>
-		<Toast />
-		<div v-if="userChosed">
-			<button
-				class="button-chose show-less"
-				v-for="(ingredient, index) in userChosed"
-				:key="index"
-				@click="deleteSelectedTag(index)">
-				{{ ingredient }}
-			</button>
-		</div>
-		<div class="button-box">
-			<div class="card flex justify-content-center">
-				<Button
-					@click="toggleToGetRecipes()"
-					label="Find recipe" />
+
+			<div v-if="userChosed">
+				<button
+					class="button-chose show-less"
+					v-for="(ingredient, index) in userChosed"
+					:key="index"
+					@click="deleteSelectedTag(index)">
+					{{ ingredient }}
+				</button>
+			</div>
+			<div class="button-box-left">
+				<div class="card flex">
+					<Button
+						@click="toggleToGetRecipes()"
+						label="Find recipe" />
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="box-property">
-		<div class="get-tags">
-			<div>
-				<strong class="paragraph"
-					>Enter the name of the ingredient from which you want to create a
-					dish</strong
-				>
-			</div>
-		</div>
-	</div>
-	<div class="content">
-		<div class="card flex justify-content-center">
-			<div class="flex flex-column gap-2">
-				<label for="ingredient">Ingredient name:</label>
-				<InputText
-					id="ingredient"
-					v-model="ingredientName"
-					:feedback="false"
-					aria-describedby="recipe-help" />
-				<small id="recipe-help">Enter the ingredient</small>
-			</div>
-		</div>
-		<div class="button-box">
-			<div class="card flex justify-content-center">
-				<Button
-					@click="getChosedIngredient()"
-					label="Add ingredient" />
-			</div>
-		</div>
-	</div>
+	<Toast />
 </template>
 
 <script setup>
@@ -94,23 +93,25 @@ const userChosed = ref([]);
 let ingredientName = ref(null);
 
 const getChosedIngredient = () => {
-	if (userChosed.value.length < 5) {
-		const checkDuplicate = userChosed.value.some(
-			(ingredient) => ingredient === ingredientName.value
-		);
-		if (!checkDuplicate) {
-			userChosed.value.push(ingredientName.value);
-			console.log(userChosed.value);
+	if (ingredientName.value) {
+		if (userChosed.value.length < 5) {
+			const checkDuplicate = userChosed.value.some(
+				(ingredient) => ingredient === ingredientName.value
+			);
+			if (!checkDuplicate) {
+				userChosed.value.push(ingredientName.value);
+				console.log(userChosed.value);
+			} else {
+				console.log("Ten element już istnieje w tabeli.");
+				showErrorItemExist();
+			}
 		} else {
-			console.log("Ten element już istnieje w tabeli.");
+			console.log("Tabela zawiera już 5 elementów");
+			showErrorOverFiveElements();
 		}
 	} else {
-		console.log("Tabela zawiera już 5 elementów");
+		showErrorEmptyInput();
 	}
-
-	// console.log(ingredientName.value);
-	// userChosed.value.push(ingredientName.value);
-	// console.log(userChosed.value);
 };
 
 const deleteSelectedTag = (index) => {
@@ -132,29 +133,14 @@ const showMoreTags = () => {
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
-const checkNuberChosedTags = () => {
-	while (userChosed.value.length < 5) {
-		userChosed.value.push(" - ");
-	}
-};
 const toggleToGetRecipes = () => {
-	checkNuberChosedTags();
 	getRecipe();
 };
 
 async function getRecipe() {
 	isLoading.value = true;
 	const selectedIngredients = userChosed.value.join(",");
-	await recipeStoreByTags.getRecipes(
-		0,
-		5,
-		selectedIngredients
-		// userChosed.value[0],
-		// userChosed.value[1],
-		// userChosed.value[2],
-		// userChosed.value[3],
-		// userChosed.value[4]
-	);
+	await recipeStoreByTags.getRecipes(0, 5, selectedIngredients);
 	console.log(recipeStoreByTags.fetchedRecipes);
 	recipesLoading.value = false;
 	if (recipeStoreByTags.fetchedRecipes.length === 0) {
@@ -165,6 +151,30 @@ async function getRecipe() {
 	}
 }
 
+const showErrorItemExist = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "This item is already selected ",
+		life: 3000,
+	});
+};
+const showErrorOverFiveElements = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "You have already selected five items ",
+		life: 3000,
+	});
+};
+const showErrorEmptyInput = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "Ingredient name not provided. Enter the ingredient name",
+		life: 3000,
+	});
+};
 const showError = () => {
 	toast.add({
 		severity: "error",
@@ -176,6 +186,27 @@ const showError = () => {
 </script>
 
 <style scoped>
+.left-box {
+	width: 37%;
+	position: fixed;
+	margin-top: 2rem;
+	left: 1rem;
+	z-index: 1;
+}
+.box-content {
+	border: 1px solid;
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	z-index: 0;
+}
+.right-box {
+	width: 37%;
+	position: fixed;
+	margin-top: 2rem;
+	right: 1rem;
+}
 .description {
 	font-size: 18px;
 	margin-left: auto;
@@ -189,10 +220,17 @@ p {
 .paragraph {
 	font-size: 22px;
 }
-
-.button-box {
+.get-tags {
+	display: inline;
+}
+.button-box-right {
 	margin-top: 1rem;
-	margin-left: 7rem;
+	margin-bottom: 2rem;
+	margin-left: 25rem;
+}
+.button-box-left {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
 }
 .carrot {
 	position: relative;
@@ -205,17 +243,17 @@ p {
 	animation: moveUpDown 0.7s infinite alternate;
 }
 
-.box-property {
-	width: 35%;
-	margin: 3% 3%;
-	/* border: 1px solid black; */
+.box-property-left {
+	width: 100%;
+	margin: 0;
+	padding: 2rem;
 	box-sizing: border-box;
-	/* display: flex; */
 }
-.get-user-chose {
-	float: right;
-	width: 30%;
-	margin: 3% 5%;
+.box-property-right {
+	width: 100%;
+	margin: 0;
+	padding: 2rem;
+	box-sizing: border-box;
 }
 
 .button-chose {
@@ -252,18 +290,13 @@ p {
 	top: 0px;
 	left: 0px;
 }
-@media (min-width: 768px) {
-	.button-chose {
-		padding: 13px 50px 13px;
-	}
-}
 
 @keyframes moveUpDown {
 	from {
-		top: 0;
+		top: -30px;
 	}
 	to {
-		top: 20px;
+		top: 0px;
 	}
 }
 </style>
