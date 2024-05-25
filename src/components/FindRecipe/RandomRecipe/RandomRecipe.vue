@@ -10,12 +10,12 @@
 				>Click the button and enjoy the recipe for a delicious dish!</Strong
 			>
 		</p>
-	</div>
-	<div class="button-box">
-		<div class="card flex justify-content-center">
-			<Button
-				@click="getRecipe()"
-				label="Get random recipe" />
+		<div class="button-box">
+			<div class="card flex justify-content-center">
+				<Button
+					@click="getRecipe()"
+					label="Get random recipe" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -74,27 +74,31 @@ const showError = () => {
 <style scoped>
 .content {
 	position: relative;
-	border: 1px solid black;
+	border: 1px solid;
+	border-color: aliceblue;
 	border-radius: 10px;
-	background-color: #faf8f7;
+	background-color: #fcffff;
 	padding: 1rem;
 	margin-top: 10rem;
-	width: 25rem;
+	width: 30rem;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-size: 22px;
-	box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .description {
 	font-size: 18px;
 	margin-left: auto;
 	margin-right: auto;
+	padding: 1rem;
 }
 p {
 	margin-left: auto;
 	margin-right: auto;
 }
-
+.button-box {
+	margin-top: 2rem;
+}
 .carrot {
 	position: relative;
 	left: 15%;
