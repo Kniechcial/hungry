@@ -24,10 +24,10 @@
 	width: 100px;
 	height: 100px;
 	position: absolute;
-	top: -90px;
+	top: -100px;
 	left: 86%;
 	transform: translateX(-50%);
-	z-index: -1;
+	z-index: 0;
 }
 .image-medium {
 	width: 200px;
@@ -36,7 +36,7 @@
 	top: -200px;
 	left: 93%;
 	transform: translateX(-50%);
-	z-index: -1;
+	z-index: 0;
 }
 
 footer {
