@@ -19,6 +19,9 @@ components: {
 import { onMounted } from "vue";
 import { useRecipeStore } from "./stores/recipes";
 import { useTagsListStore } from "./stores/tags";
+import { useToast } from "primevue/usetoast";
+
+const toast = useToast();
 
 const recipeStore = useRecipeStore();
 const tagListStore = useTagsListStore();
@@ -29,11 +32,18 @@ onMounted(() => {
 
 async function getTags() {
 	await tagListStore.getTags();
-	isLoading.value = false;
-	if (recipeStore.fetchedRecipes.length === 0) {
+	if (!recipeStore.fetchedRecipes) {
 		showError();
 	}
 }
+const showError = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "Sorry, no results found. Try again ",
+		life: 3000,
+	});
+};
 </script>
 <style>
 body {

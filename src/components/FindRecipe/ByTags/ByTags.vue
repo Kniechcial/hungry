@@ -134,11 +134,7 @@ async function getRecipe() {
 	const selectedTags = userChosed.value
 		.map((tag) => tag.display_name)
 		.join(",");
-	await recipeStoreByTags.getRecipes(
-		0,
-		5,
-		selectedTags
-	);
+	await recipeStoreByTags.getRecipes(0, 5, selectedTags);
 	console.log(recipeStoreByTags.fetchedRecipes);
 	recipesLoading.value = false;
 	if (recipeStoreByTags.fetchedRecipes.length === 0) {
@@ -252,3 +248,4 @@ p {
 	}
 }
 </style>
+root_tag_type

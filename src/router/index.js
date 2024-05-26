@@ -2,10 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import CreateRecipeStepTwo from "../components/CreateRecipe/CreateRecipeStepTwo.vue";
 
-import ByTags from "@/components/FindRecipe/ByTags/ByTags.vue";
-import ByName from "../components/FindRecipe/ByName/ByName.vue";
-import RandomRecipe from "../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
 import ByIngredients from "@/components/FindRecipe/ByIngredients/ByIngredients.vue";
+import BaseDescription from "@/components/FindRecipe/BaseDescrtiption/BaseDescription.vue";
+import ByName from "../components/FindRecipe/ByName/ByName.vue";
+import ByTags from "@/components/FindRecipe/ByTags/ByTags.vue";
+import RandomRecipe from "../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
 import RecipeDetails from "../components/FindRecipe/RecipeDetails/RecipeDetails.vue";
 import RecipeList from "../components/FindRecipe/RecipeDetails/RecipeList.vue";
 
@@ -87,11 +88,6 @@ const router = createRouter({
 			component: CreateRecipeStepTwo,
 		},
 		{
-			path: "/ByName",
-			name: "ByName",
-			component: ByName,
-		},
-		{
 			path: "/RecipeDetails",
 			name: "RecipeDetails",
 			component: RecipeDetails,
@@ -102,22 +98,32 @@ const router = createRouter({
 			component: RecipeList,
 		},
 		{
-			path: "/ByTags",
+			path: "/FindRecipe/ByName",
+			name: "ByName",
+			component: ByName,
+		},
+		{
+			path: "/FindRecipe/ByTags",
 			name: "ByTags",
 			component: ByTags,
 		},
 		{
-			path: "/RandomRecipe",
+			path: "/FindRecipe/RandomRecipe",
 			name: "RandomRecipe",
 			component: RandomRecipe,
 		},
 		{
-			path: "/ByIngredients",
+			path: "/FindRecipe/ByIngredients",
 			name: "ByIngredients",
 			component: ByIngredients,
 		},
 		{
-			path: "/FindRecipe",
+			path: "/FindRecipe/BaseDescription",
+			name: "BaseDescription",
+			component: BaseDescription,
+		},
+		{
+			path: "/FindRecipe/:findBy",
 			name: "FindRecipe",
 			component: FindRecipe,
 		},

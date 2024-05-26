@@ -10,24 +10,7 @@
 			:model="items"
 			class="card flex" />
 	</div>
-	<ByTags v-if="displayByTags"></ByTags>
-	<ByName v-if="displayByName"></ByName>
-	<Random v-if="displayRandom"></Random>
-	<ByIngredients v-if="displayByIngredients"></ByIngredients>
-
-	<div
-		v-if="displayBaseDescription"
-		class="base-description">
-		<div class="description">
-			<h3>Select how you want to search for a recipe</h3>
-		</div>
-		<p>
-			If you want to search by dish name or type of dish, select the first
-			option "Name or Tag". However, if you want to search for the dish you are
-			interested in by ingredients, select the second option "Ingridients".
-		</p>
-		<strong>ENJOY YOUR MEAL!</strong>
-	</div>
+	<component :is="currentComponent"></component>
 </template>
 
 <script setup>
@@ -38,13 +21,41 @@ import ByName from "../../components/FindRecipe/ByName/ByName.vue";
 import ByIngredients from "../../components/FindRecipe/ByIngredients/ByIngredients.vue";
 import ByTags from "../../components/FindRecipe/ByTags/ByTags.vue";
 import Random from "../../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
+import BaseDescription from "@/components/FindRecipe/BaseDescrtiption/BaseDescription.vue";
 
 const isLoading = ref(false);
-const displayByName = ref(false);
-const displayByIngredients = ref(false);
-const displayByTags = ref(false);
-const displayRandom = ref(false);
-const displayBaseDescription = ref(true);
+
+//
+
+import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
+import { computed } from "vue";
+const router = useRouter();
+const route = useRoute();
+const findBy = ref(route.params.findBy);
+const newFindBy = ref(null);
+const currentComponent = computed(() => {
+	switch (findBy.value) {
+		case "Name":
+			return ByName;
+		case "Ingredients":
+			return ByIngredients;
+		case "Random":
+			return Random;
+		case "Tags":
+			return ByTags;
+		case "BaseDescription":
+			return BaseDescription;
+		default:
+			return null;
+	}
+});
+const changeComponent = (newFindBy) => {
+	findBy.value = newFindBy;
+	router.push(`/FindRecipe/${newFindBy}`);
+};
+
+//
 
 defineComponent({
 	components: {
@@ -60,87 +71,38 @@ const items = ref([
 		label: "Name",
 		icon: "pi pi-tags",
 		command: () => {
-			displayByName.value = true;
-			displayByIngredients.value = false;
-			displayByTags.value = false;
-			displayRandom.value = false;
-			displayBaseDescription.value = false;
+			newFindBy.value = "Name";
+			changeComponent(newFindBy.value);
 		},
 	},
 	{
 		label: "Ingredients",
 		icon: "pi pi-list",
 		command: () => {
-			displayByName.value = false;
-			displayByIngredients.value = true;
-			displayByTags.value = false;
-			displayRandom.value = false;
-			displayBaseDescription.value = false;
+			newFindBy.value = "Ingredients";
+			changeComponent(newFindBy.value);
 		},
 	},
 	{
 		label: "Tags",
 		icon: "pi pi-list",
 		command: () => {
-			displayByName.value = false;
-			displayByIngredients.value = false;
-			displayByTags.value = true;
-			displayRandom.value = false;
-			displayBaseDescription.value = false;
+			newFindBy.value = "Tags";
+			changeComponent(newFindBy.value);
 		},
 	},
 	{
 		label: "Random",
 		icon: "pi pi-list",
 		command: () => {
-			displayByName.value = false;
-			displayByIngredients.value = false;
-			displayByTags.value = false;
-			displayRandom.value = true;
-			displayBaseDescription.value = false;
+			newFindBy.value = "Random";
+			changeComponent(newFindBy.value);
 		},
 	},
 ]);
 </script>
 
 <style scoped>
-.base-description {
-	position: relative;
-	padding: 1rem;
-	border: 1px solid;
-	border-color: aliceblue;
-	color: #261474;
-	max-width: 55rem;
-	margin-top: 4rem;
-	margin-left: auto;
-	margin-right: auto;
-	border-radius: 10px;
-	background-color: #fcffff;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-.description {
-	font-size: 22px;
-	margin-left: auto;
-	margin-right: auto;
-}
-p {
-	margin-top: 1rem;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.content {
-	position: relative;
-	border: 1px solid black;
-	border-radius: 10px;
-	background-color: #faf8f7;
-	padding: 1rem;
-	margin-top: 10rem;
-	width: max-content;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	font-size: 22px;
-}
 .button-box {
 	margin-left: 7rem;
 }

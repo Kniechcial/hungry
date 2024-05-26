@@ -71,13 +71,19 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const navigateToFindByName = () => {
-	router.push({ name: "ByName" });
+	router.push({ name: "FindRecipe", params: { findBy: "Name" } });
 };
 const navigateToFindByTags = () => {
-	router.push({ name: "ByTags" });
+	router.push({
+		name: "FindRecipe",
+		params: { findBy: "Ingredients" },
+	});
 };
 const navigateToRandomRecipe = () => {
-	router.push({ name: "RandomRecipe" });
+	router.push({
+		name: "FindRecipe",
+		params: { findBy: "Random" },
+	});
 };
 </script>
 <style scoped>
