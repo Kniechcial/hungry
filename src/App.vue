@@ -48,5 +48,7 @@ const showError = () => {
 <style>
 body {
 	min-height: 87vh;
+	box-sizing: border-box;
+	margin: 0;
 }
 </style>
