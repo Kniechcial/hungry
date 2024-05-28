@@ -23,7 +23,7 @@
 					<small id="recipe-help">Enter the ingredient</small>
 				</div>
 			</div>
-			<div class="button-box-right">
+			<div class="button-box-left">
 				<div class="card flex justify-content-center">
 					<Button
 						@click="getChosedIngredient()"
@@ -54,7 +54,7 @@
 					{{ ingredient }}
 				</button>
 			</div>
-			<div class="button-box-left">
+			<div class="button-box-right">
 				<div class="card flex">
 					<Button
 						@click="toggleToGetRecipes()"
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import { useRecipeStore } from "../../../stores/recipes.js";
@@ -117,8 +117,6 @@ const getChosedIngredient = () => {
 const deleteSelectedTag = (index) => {
 	userChosed.value.splice(index, 1);
 };
-
-watch(userChosed);
 
 const toggleShow = () => {
 	showAll.value = !showAll.value;
@@ -186,32 +184,43 @@ const showError = () => {
 </script>
 
 <style scoped>
-.left-box {
-	width: 37%;
-	position: fixed;
-	margin-top: 2rem;
-	left: 1rem;
-	z-index: 1;
-}
 .box-content {
+	position: relative;
 	border: 1px solid;
 	border-color: aliceblue;
 	border-radius: 10px;
 	background-color: #fcffff;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	z-index: 0;
+	color: #44424d;
+}
+
+.left-box {
+	position: fixed;
+	width: 37%;
+	margin-top: 2rem;
+	left: 5rem;
+	z-index: 1;
+	justify-content: flex-end;
+	align-items: flex-end;
+	height: 19rem;
 }
 .right-box {
 	width: 37%;
 	position: fixed;
 	margin-top: 2rem;
-	right: 1rem;
+	right: 5rem;
+	align-items: flex-end;
+	justify-content: flex-start;
+	height: 19rem;
 }
+
 .description {
 	font-size: 18px;
 	margin-left: auto;
 	margin-right: auto;
 }
+
 p {
 	margin-top: 1rem;
 	margin-left: auto;
@@ -220,22 +229,18 @@ p {
 .paragraph {
 	font-size: 22px;
 }
-.get-tags {
-	display: inline;
+.button-box-left {
+	position: absolute;
+	bottom: 2.5rem;
+	right: 2rem;
 }
 .button-box-right {
-	margin-top: 1rem;
-	margin-bottom: 2rem;
-	margin-left: 25rem;
-}
-.button-box-left {
-	margin-top: 2rem;
-	margin-bottom: 2rem;
+	position: absolute;
+	bottom: 2.5rem;
 }
 .carrot {
-	position: relative;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	position: absolute;
+	left: 40%;
 	z-index: 1;
 }
 .carrot-box {
@@ -243,12 +248,7 @@ p {
 	animation: moveUpDown 0.7s infinite alternate;
 }
 
-.box-property-left {
-	width: 100%;
-	margin: 0;
-	padding: 2rem;
-	box-sizing: border-box;
-}
+.box-property-left,
 .box-property-right {
 	width: 100%;
 	margin: 0;

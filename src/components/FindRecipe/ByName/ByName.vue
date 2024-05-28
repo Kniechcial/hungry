@@ -6,8 +6,8 @@
 	</div>
 	<div class="content">
 		<label for="recipe">Dish name</label>
-		<div class="card flex justify-content-center mt-3">
-			<div class="flex flex-column gap-2">
+		<div class="card flex mt-3">
+			<div class="flex flex-column p-3 gap-2">
 				<InputText
 					id="recipe"
 					style="width: 350px"
@@ -92,13 +92,14 @@ const showError = () => {
 	transform: translate(-50%, -50%);
 	font-size: 22px;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	color: #44424d;
 }
 .button-box {
 	margin-top: 2rem;
 	margin-left: 18rem;
 }
 .carrot {
-	position: relative;
+	position: absolute;
 	left: 20%;
 	transform: translate(-50%, -50%);
 	z-index: 1;

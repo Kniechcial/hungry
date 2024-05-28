@@ -6,8 +6,8 @@
 	</div>
 	<div class="content">
 		<p class="description">
-			<Strong
-				>Click the button and enjoy the recipe for a delicious dish!</Strong
+			<strong
+				>Click the button and enjoy the recipe for a delicious dish!</strong
 			>
 		</p>
 		<div class="button-box">
@@ -85,6 +85,7 @@ const showError = () => {
 	transform: translate(-50%, -50%);
 	font-size: 22px;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	color: #44424d;
 }
 .description {
 	font-size: 18px;
@@ -100,7 +101,7 @@ p {
 	margin-top: 2rem;
 }
 .carrot {
-	position: relative;
+	position: absolute;
 	left: 15%;
 	transform: translate(-50%, -50%);
 	z-index: 1;

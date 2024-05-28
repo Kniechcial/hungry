@@ -1,5 +1,5 @@
 <template>
-	<footer>
+	<footer class="bg-green-500">
 		<img
 			class="image-small"
 			src="../../assets/icon/carrot-leaves-medium.png"
@@ -21,18 +21,18 @@
 </template>
 <style scoped>
 .image-small {
+	position: absolute;
 	width: 100px;
 	height: 100px;
-	position: absolute;
 	top: -100px;
 	left: 86%;
 	transform: translateX(-50%);
 	z-index: 0;
 }
 .image-medium {
+	position: absolute;
 	width: 200px;
 	height: 200px;
-	position: absolute;
 	top: -200px;
 	left: 93%;
 	transform: translateX(-50%);
@@ -40,15 +40,14 @@
 }
 
 footer {
+	position: relative;
 	bottom: 0;
 	height: 80px;
 	line-height: 80px;
 	font-size: 20px;
-	background-color: rgb(8, 194, 8);
 	color: white;
 	text-align: center;
 	margin-top: 2rem;
-	position: relative;
 }
 
 .icon-box {

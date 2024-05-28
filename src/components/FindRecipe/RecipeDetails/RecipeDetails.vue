@@ -9,18 +9,12 @@
 								<ul>
 									<li>
 										<strong>{{ recipe.name || "no data" }}</strong>
-										<!-- 
-											Jak mogę zrobić coś takiego jak w wordzie "zawijanie tekstu"? Chodzi mi o coś takiego że nazwa mojego dania jest na tyle długa że wychodzi poza box. Chciał bym w takim przypadku żeby tekst się w jakiś sposób podzielił i wyświetlił w 2 linijkach.
-										 -->
 									</li>
 								</ul>
 							</div>
-							<div class="set-time">
+							<div class="set-time bg-yellow-200">
 								<p class="time">
 									<strong>TIME: {{ recipe.Time || "no data" }} min</strong>
-									<!-- 
-										Jak mogę zareagować w przypadku gdy dana wartość nie jest podana z API. Np. Nie dostaję informacji z API o czasie przygotowania dania. Chciał bym mieć możliwość wyświetlić jakąś informację dla użytkownika, a nie zostawiać puste okno.
-									 -->
 								</p>
 							</div>
 						</div>
@@ -64,9 +58,7 @@
 												@click="displayIngridients"
 												label="Show Ingridiens" />
 										</div>
-										<ul
-											class="ingredients-specific"
-											v-if="showIngridients">
+										<ul v-if="showIngridients">
 											<strong>Ingridients:</strong>
 											<div
 												v-for="name in recipe.ingridients"
@@ -138,15 +130,19 @@ const getIndexInArray = (index) => {
 	margin-right: auto;
 	margin-top: 2rem;
 	max-width: 65rem;
-	width: 100%;
-	color: #261474;
+	/* max-height: 45rem; */
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	color: #44424d;
 }
 .recipe-box {
 	display: flex;
 	flex-wrap: wrap;
 	overflow: auto;
 	max-width: 65rem;
-	border: 1px solid black;
+	border-color: aliceblue;
 	border-radius: 10px;
 }
 .top-row {
@@ -154,8 +150,7 @@ const getIndexInArray = (index) => {
 	display: block;
 	width: 100%;
 	min-height: 1px;
-	padding-right: 15px;
-	padding-left: 15px;
+	padding: 15px;
 	max-width: 100%;
 	border-radius: 10px;
 	background-color: #faf8f7;
@@ -207,16 +202,17 @@ img {
 	max-height: 100%;
 	font-size: 20px;
 	margin-top: 2rem;
-	overflow: hidden;
 }
 .ingridiens-recipe {
+	max-height: 15rem;
 	max-width: 20rem;
 }
 .description-recipe {
 	display: block;
+	max-height: 30rem;
 	padding-left: 1rem;
-	height: 100%;
 	font-size: 16px;
+	word-wrap: break-word;
 }
 .calories-recipe {
 	display: block;
@@ -227,10 +223,12 @@ img {
 .left-part-description-recipe {
 	width: 40%;
 	float: left;
+	overflow-y: auto;
 }
 .right-part-description-recipe {
 	width: 60%;
 	float: right;
+	overflow-y: auto;
 }
 .details ul {
 	font-size: 16px;
@@ -267,9 +265,9 @@ li {
 	border-radius: 10px;
 	padding-top: 1.5rem;
 	padding-bottom: 1.5rem;
-	margin-right: -15px !important;
+	/* margin-right: -15px !important; */
 	margin-left: 0.5rem;
-	background-color: #ecf005;
+	/* background-color: #ecf005; */
 }
 .time {
 	font-size: 16px;

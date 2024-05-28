@@ -237,6 +237,7 @@ main {
 	font-size: 50px;
 	font-weight: bold;
 	font-style: italic;
+	color: blanchedalmond;
 }
 .about-us-box:hover {
 	height: 360px;

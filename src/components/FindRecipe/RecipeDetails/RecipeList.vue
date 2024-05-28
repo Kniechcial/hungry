@@ -1,5 +1,6 @@
 <template>
 	<Dialog
+		class="dialog-class"
 		v-model:visible="recipeVisible"
 		modal
 		:closable="false"
@@ -25,7 +26,7 @@
 									label="Show recipe"
 									icon="pi pi-chevron-down" />
 							</div>
-							<div class="set-time">
+							<div class="set-time bg-yellow-200">
 								<p class="time">
 									<strong
 										>Time: {{ recipe.Time || "no data" }}
@@ -63,6 +64,9 @@ const showRecipe = (recipe) => {
 	margin: 0;
 	padding: 0;
 }
+.dialog-class {
+	border-radius: 10px;
+}
 
 .container {
 	display: block;
@@ -71,14 +75,17 @@ const showRecipe = (recipe) => {
 	margin-top: 2rem;
 	max-width: 65rem;
 	width: 100%;
-	color: #261474;
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	color: #44424d;
 }
 .recipe-box {
 	display: flex;
 	flex-wrap: wrap;
 	overflow: auto;
 	max-width: 65rem;
-	border: 1px solid black;
 	border-radius: 10px;
 }
 .top-row {
@@ -105,12 +112,11 @@ const showRecipe = (recipe) => {
 	float: right;
 	height: 100%;
 	max-height: 4rem;
-	border: 1px solid black;
 	margin-top: 0.5rem;
 	border-radius: 10px;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
-	background-color: #ecf005;
+	color: black;
 }
 .time {
 	font-size: 16px;
