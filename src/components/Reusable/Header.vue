@@ -22,7 +22,7 @@ const goHome = () => {
 .header-img {
 	position: relative;
 	height: 150px;
-	background-image: url("@/assets/icon/bg2.jpg");
+	background-image: url("../../assets/photo/backgroundHeader.jpg");
 	background-size: cover;
 	background-position: 0 100%;
 	cursor: pointer;

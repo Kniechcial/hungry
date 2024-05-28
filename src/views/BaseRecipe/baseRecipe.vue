@@ -90,7 +90,7 @@
 
 <script setup>
 import { ref } from "vue";
-import image from "@/assets/icon/bg/pizza.jpg";
+import image from "@/assets/photo/pizza.jpg";
 import Button from "primevue/button";
 
 const showIngridients = ref(false);

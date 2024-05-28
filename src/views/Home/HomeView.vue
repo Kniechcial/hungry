@@ -123,7 +123,7 @@ main {
 
 .first::before {
 	content: "";
-	background-image: url("../../assets/icon/bg/pizza.jpg");
+	background-image: url("../../assets/photo/pizza.jpg");
 	background-attachment: fixed;
 	background-position: center;
 	position: absolute;
@@ -139,7 +139,7 @@ main {
 
 .second::before {
 	content: "";
-	background-image: url("../../assets/icon/bg/spagetti.jpg");
+	background-image: url("../../assets/photo/spagetti.jpg");
 	background-attachment: fixed;
 	background-position: center;
 	position: absolute;
@@ -153,7 +153,7 @@ main {
 
 .third::before {
 	content: "";
-	background-image: url("../../assets/icon/bg/soup.jpg");
+	background-image: url("../../assets/photo/soup.jpg");
 	background-attachment: fixed;
 	background-position: center;
 	position: absolute;
@@ -171,7 +171,7 @@ main {
 
 .fourth::before {
 	content: "";
-	background-image: url("../../assets/icon/bg/sushi.jpg");
+	background-image: url("../../assets/photo/sushi.jpg");
 	background-attachment: fixed;
 	background-position: center;
 	position: absolute;
@@ -185,7 +185,7 @@ main {
 
 .five::before {
 	content: "";
-	background-image: url("../../assets/icon/bg/kanapka_z_jajkiem.png");
+	background-image: url("../../assets/photo/kanapka_z_jajkiem.png");
 	background-attachment: fixed;
 	background-position: center;
 	position: absolute;
@@ -215,7 +215,7 @@ main {
 	height: 230px;
 	width: 150px;
 	display: none;
-	background-image: url("../../assets/icon/bg/loock.png");
+	background-image: url("../../assets/icon/loock.png");
 	background-position: center;
 	position: absolute;
 	top: 2rem;
