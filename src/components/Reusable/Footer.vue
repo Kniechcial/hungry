@@ -25,7 +25,9 @@
 	width: 100px;
 	height: 100px;
 	top: -100px;
-	left: 86%;
+	/* left: 86%; */
+	right: 7%;
+	margin-right: 0.5rem;
 	transform: translateX(-50%);
 	z-index: 0;
 }
@@ -34,7 +36,9 @@
 	width: 200px;
 	height: 200px;
 	top: -200px;
-	left: 93%;
+	/* left: 93%; */
+	right: -5%;
+	overflow: hidden;
 	transform: translateX(-50%);
 	z-index: 0;
 }
@@ -70,5 +74,15 @@ footer {
 .icon-box a:hover {
 	font-size: 25px;
 	color: black;
+}
+@media (max-width: 1150px) {
+	.image-small {
+		display: none;
+	}
+}
+@media (max-width: 1450px) {
+	.image-small {
+		margin-right: 3rem;
+	}
 }
 </style>

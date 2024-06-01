@@ -275,4 +275,11 @@ main {
 .five:hover .lets-go-try {
 	display: flex;
 }
+
+@media (max-width: 1100px) {
+	main {
+		margin-right: 2rem;
+		margin-left: 2rem;
+	}
+}
 </style>

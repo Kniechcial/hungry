@@ -8,13 +8,9 @@
 </template>
 
 <script setup>
-import Header from "./components/Reusable/Header.vue";
-import Footer from "./components/Reusable/Footer.vue";
-import NavigateMainBar from "./components/Reusable/NavigateMainBar.vue";
-
-components: {
-	Header, Footer, NavigateMainBar;
-}
+import Header from "./components/reusable/Header.vue";
+import Footer from "./components/reusable/Footer.vue";
+import NavigateMainBar from "./components/reusable/NavigateMainBar.vue";
 
 import { onMounted } from "vue";
 import { useRecipeStore } from "./stores/recipes";
