@@ -17,11 +17,11 @@
 import { ref, defineComponent } from "vue";
 import carrotDialog from "@/components/Reusable/carrotDialog.vue";
 import TabMenu from "primevue/tabmenu";
-import ByName from "../../components/FindRecipe/ByName/ByName.vue";
-import ByIngredients from "../../components/FindRecipe/ByIngredients/ByIngredients.vue";
-import ByTags from "../../components/FindRecipe/ByTags/ByTags.vue";
-import Random from "../../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
-import BaseDescription from "@/components/FindRecipe/BaseDescrtiption/BaseDescription.vue";
+import BaseDescription from "@/components/FindRecipe/base_descrtiption/BaseDescription.vue";
+import ByIngredients from "../../components/FindRecipe/by_ingredients/ByIngredients.vue";
+import ByName from "../../components/FindRecipe/by_name/ByName.vue";
+import ByTags from "../../components/FindRecipe/by_tags/ByTags.vue";
+import Random from "../../components/FindRecipe/random_recipe/RandomRecipe.vue";
 
 const isLoading = ref(false);
 

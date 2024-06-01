@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import CreateRecipeStepTwo from "../components/CreateRecipe/CreateRecipeStepTwo.vue";
+import CreateRecipeStepTwo from "../components/create_recipe/CreateRecipeStepTwo.vue";
 
-import ByIngredients from "@/components/FindRecipe/ByIngredients/ByIngredients.vue";
-import BaseDescription from "@/components/FindRecipe/BaseDescrtiption/BaseDescription.vue";
-import ByName from "../components/FindRecipe/ByName/ByName.vue";
-import ByTags from "@/components/FindRecipe/ByTags/ByTags.vue";
-import RandomRecipe from "../components/FindRecipe/RandomRecipe/RandomRecipe.vue";
-import RecipeDetails from "../components/FindRecipe/RecipeDetails/RecipeDetails.vue";
-import RecipeList from "../components/FindRecipe/RecipeDetails/RecipeList.vue";
+import BaseDescription from "@/components/FindRecipe/base_descrtiption/BaseDescription.vue";
+import ByIngredients from "@/components/FindRecipe/by_ingredients/ByIngredients.vue";
+import ByName from "../components/FindRecipe/by_name/ByName.vue";
+import ByTags from "@/components/FindRecipe/by_tags/ByTags.vue";
+import RandomRecipe from "../components/FindRecipe/random_recipe/RandomRecipe.vue";
+import RecipeDetails from "../components/FindRecipe/recipe_details/RecipeDetails.vue";
+import RecipeList from "../components/FindRecipe/recipe_details/RecipeList.vue";
 
 import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
 
@@ -19,10 +19,10 @@ import EditPassword from "../components/User/CreateNewUser/EditPassword.vue";
 import RestorePassword from "../components/User/LogIn/RestorePassword.vue";
 import ConfirmRerstorePassword from "../components/User/LogIn/ConfirmRestorePassword.vue";
 
-import BaseRecipeView from "../views/BaseRecipe/baseRecipe.vue";
-import CreateNewRecipe from "../views/CreateRecipe/CreateNewRecipeView.vue";
-import FindRecipe from "../views/FindRecipe/FindRecipe.vue";
-import HomeView from "../views/Home/HomeView.vue";
+import BaseRecipeView from "../views/base_recipe/baseRecipe.vue";
+import CreateNewRecipe from "../views/create_recipe/CreateNewRecipeView.vue";
+import FindRecipe from "../views/find_recipe/FindRecipe.vue";
+import HomeView from "../views/home/HomeView.vue";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),

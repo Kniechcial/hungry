@@ -17,7 +17,7 @@
 	<CreateRecipeStepOne></CreateRecipeStepOne>
 </template>
 <script>
-import CreateRecipeStepOne from "../../components/CreateRecipe/CreateRecipeStepOne.vue";
+import CreateRecipeStepOne from "../../components/create_recipe/CreateRecipeStepOne.vue";
 export default {
 	components: { CreateRecipeStepOne: CreateRecipeStepOne },
 };

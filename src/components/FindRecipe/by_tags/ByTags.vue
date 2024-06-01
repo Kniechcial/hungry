@@ -66,7 +66,7 @@ import { useRecipeStore } from "../../../stores/recipes.js";
 import { useTagsListStore } from "../../../stores/tags.js";
 import { useRecipeStoreByTags } from "../../../stores/recipesByTags.js";
 import Toast from "primevue/toast";
-import carrotDialog from "@/components/Reusable/carrotDialog.vue";
+import carrotDialog from "@/components/reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 

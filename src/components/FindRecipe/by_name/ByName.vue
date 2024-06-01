@@ -5,60 +5,67 @@
 			v-if="isLoading"></carrotDialog>
 	</div>
 	<div class="content">
-		<p class="description">
-			<strong
-				>Click the button and enjoy the recipe for a delicious dish!</strong
-			>
-		</p>
+		<label for="recipe">Dish name</label>
+		<div class="card flex mt-3">
+			<div class="flex flex-column p-3 gap-2">
+				<InputText
+					id="recipe"
+					style="width: 350px"
+					v-model="foodName"
+					:feedback="false"
+					aria-describedby="recipe-help" />
+				<small
+					id="recipe-help"
+					class="description-input"
+					>Enter name dish to find recipe.</small
+				>
+			</div>
+		</div>
 		<div class="button-box">
-			<div class="card flex justify-content-center">
+			<div class="card flex">
 				<Button
 					@click="getRecipe()"
-					label="Get random recipe" />
+					label="Find recipe" />
 			</div>
 		</div>
 	</div>
+	<Toast />
 </template>
 
 <script setup>
 import { ref } from "vue";
+import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import carrotDialog from "@/components/Reusable/carrotDialog.vue";
+import carrotDialog from "@/components/reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
+import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { useRecipeStore } from "../../../stores/recipes.js";
-import { useTagsListStore } from "../../../stores/tags.js";
 
-const tagListStore = useTagsListStore();
 const recipeStore = useRecipeStore();
 const router = useRouter();
-let foodName = ref(null);
+const foodName = ref(null);
 const isLoading = ref(false);
 const recipesLoading = ref(false);
 const toast = useToast();
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
-// const RecipeDetails = () => router.push({ name: "RecipeDetails" });
 
 async function getRecipe() {
 	isLoading.value = true;
-	getRandomRecipe();
-	await recipeStore.getRecipes(0, 1, foodName.display_name);
-	// console.log(recipeStore.fetchedRecipes);
+	await recipeStore.getRecipes(0, 2, foodName.value);
+	console.log(recipeStore.fetchedRecipes);
 	recipesLoading.value = false;
-	if (recipeStore.fetchedRecipes.length === 0) {
-		showError();
-		isLoading.value = !isLoading.value;
+	if (foodName) {
+		if (recipeStore.fetchedRecipes.length === 0) {
+			showError();
+			isLoading.value = !isLoading.value;
+		} else {
+			BaseRecipeList();
+		}
 	} else {
-		BaseRecipeList();
-		// RecipeDetails();
+		showError();
 	}
-}
-
-function getRandomRecipe() {
-	const randomIndex = Math.floor(Math.random() * 500);
-	foodName = tagListStore.fetchedTags[randomIndex];
-	console.log(foodName.display_name);
 }
 
 const showError = () => {
@@ -87,22 +94,13 @@ const showError = () => {
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
 }
-.description {
-	font-size: 18px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 1rem;
-}
-p {
-	margin-left: auto;
-	margin-right: auto;
-}
 .button-box {
 	margin-top: 2rem;
+	margin-left: 18rem;
 }
 .carrot {
 	position: absolute;
-	left: 15%;
+	left: 20%;
 	transform: translate(-50%, -50%);
 	z-index: 1;
 }
@@ -110,13 +108,12 @@ p {
 	position: relative;
 	animation: moveUpDown 0.7s infinite alternate;
 }
-
-@media (min-width: 768px) {
-	.button-chose {
-		padding: 13px 50px 13px;
-	}
+.content label {
+	padding: 1rem;
 }
-
+.description-input {
+	font-style: italic;
+}
 @keyframes moveUpDown {
 	from {
 		top: 0;
