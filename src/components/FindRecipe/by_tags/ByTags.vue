@@ -4,84 +4,91 @@
 			class="carrot"
 			v-if="isLoading"></carrotDialog>
 	</div>
-	<div class="get-user-chose">
-		<div>
-			<div class="paragraph">
-				<strong>Your selected tags: </strong>
-			</div>
-			<div v-if="userChosed.length === 0">
-				<p class="description">
-					You haven't selected any tag yet. Click on the tag you are interested
-					in to add it to your search. You can select a maximum of five tags at
-					a time.
-				</p>
-			</div>
-		</div>
-		<div v-if="userChosed">
-			<button
-				class="button-chose show-less"
-				v-for="(item, index) in userChosed"
-				:key="index"
-				@click="deleteSelectedTag(index)">
-				{{ item.display_name }}
-			</button>
-		</div>
-		<Toast />
-		<div class="button-box">
-			<div class="card flex justify-content-center">
-				<Button
-					@click="toggleToGetRecipes()"
-					label="Find recipe" />
-			</div>
-		</div>
-	</div>
-	<div class="box-property">
-		<div class="select-category">
-			<div v-if="displayCategoryList">
-				<div class="paragraph">
-					<strong
-						>Select the category you would like to choose tags to describe the
-						dish</strong
-					>
+	<div class="main-box">
+		<div class="box-property">
+			<div
+				v-if="displayCategoryList"
+				class="select-category">
+				<div>
+					<div class="paragraph">
+						<strong
+							>Select the category you would like to choose tags to describe the
+							dish</strong
+						>
+					</div>
+					<div class="category-button-box">
+						<button
+							class="button-chose"
+							v-for="(item, index) in uniqueCategory"
+							:key="index"
+							@click="toggleShowCategory(item)">
+							{{ item.root_tag_type }}
+						</button>
+					</div>
 				</div>
-
+			</div>
+			<div
+				v-if="displayTagsList"
+				class="get-tags">
+				<div>
+					<div class="paragraph">
+						<strong
+							>Select the tags you would like to choose to describe the
+							dish</strong
+						>
+					</div>
+				</div>
+				<div class="tag-button-box">
+					<button
+						class="button-chose"
+						v-for="(item, index) in filteredItems"
+						:key="index"
+						@click="getChosedTag(item)">
+						{{ item.display_name }}
+					</button>
+				</div>
 				<button
-					class="button-chose"
-					v-for="(item, index) in uniqueCategory"
-					:key="index"
-					@click="toggleShowCategory(item)">
-					{{ item.root_tag_type }}
+					class="button-chose show-less"
+					@click="toggleShow">
+					{{ showAll ? "Show less" : "Show more" }}
+				</button>
+				<button
+					class="button-chose show-less"
+					@click="toggleShowCategory()">
+					Show Category
 				</button>
 			</div>
 		</div>
-		<div
-			v-if="displayTagsList"
-			class="get-tags">
+		<div class="get-user-chose">
 			<div>
 				<div class="paragraph">
-					<strong
-						>Select the tags you would like to choose to describe the
-						dish</strong
-					>
+					<strong>Your selected tags: </strong>
+				</div>
+				<div v-if="userChosed.length === 0">
+					<p class="description">
+						You haven't selected any tag yet. Click on the tag you are
+						interested in to add it to your search. You can select a maximum of
+						five tags at a time.
+					</p>
 				</div>
 			</div>
-			<button
-				class="button-chose"
-				v-for="(item, index) in filteredItems"
-				:key="index"
-				@click="getChosedTag(item)">
-				{{ item.display_name }}
-			</button>
-			<button
-				class="button-chose show-less"
-				@click="toggleShow">
-				{{ showAll ? "Show less" : "Show more" }}
-			</button>
-			<button
-				class="button-chose show-less"
-				@click="toggleShowCategory()">
-				Show Category
-			</button>
+			<div v-if="userChosed">
+				<button
+					class="button-chose show-less"
+					v-for="(item, index) in userChosed"
+					:key="index"
+					@click="deleteSelectedTag(index)">
+					{{ item.display_name }}
+				</button>
+			</div>
+			<Toast />
+			<div class="button-box">
+				<div class="card flex justify-content-center">
+					<Button
+						@click="toggleToGetRecipes()"
+						label="Find recipe" />
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -229,6 +236,45 @@ const showError = () => {
 </script>
 
 <style scoped>
+.category-button-box,
+.tag-button-box {
+	max-height: 20rem;
+	overflow: auto;
+	margin-bottom: 0.5rem;
+}
+
+.tag-button-box {
+	max-height: 15rem;
+}
+.main-box {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.base-card {
+	border: 1px solid;
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	z-index: 0;
+	color: #44424d;
+}
+.select-category,
+.get-user-chose,
+.get-tags {
+	position: absolute;
+	padding: 1rem;
+	position: relative;
+	border: 1px solid;
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	z-index: 0;
+	color: #44424d;
+}
+
 .description {
 	font-size: 18px;
 	margin-left: auto;
@@ -266,10 +312,11 @@ p {
 }
 .get-tags,
 .select-category {
-	max-height: 28rem;
-	overflow: auto;
+	/* max-height: 28.5rem; */
+	max-height: 25rem;
 }
 .get-user-chose {
+	max-height: 25rem;
 	float: right;
 	width: 30%;
 	margin: 3% 5%;
@@ -314,7 +361,37 @@ p {
 		padding: 13px 50px 13px;
 	}
 }
-
+@media (max-width: 1000px) {
+	.paragraph {
+		font-size: 14px;
+	}
+	.main-box {
+		flex-direction: column;
+	}
+	.select-category,
+	.get-user-chose,
+	.get-tags {
+		width: 100%;
+		border: 1px solid black;
+		justify-content: center;
+	}
+	.get-user-chose {
+		margin: none;
+	}
+	.box-property {
+		width: 100%;
+		align-items: center;
+	}
+	.description {
+		font-size: 12px;
+	}
+	.button-box {
+		scale: 0.7;
+	}
+	.button-chose {
+		font-size: 14px;
+	}
+}
 @keyframes moveUpDown {
 	from {
 		top: 0;
