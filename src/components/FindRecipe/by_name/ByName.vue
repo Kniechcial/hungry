@@ -9,8 +9,8 @@
 		<div class="card flex mt-3">
 			<div class="flex flex-column p-3 gap-2">
 				<InputText
+					class="input-text"
 					id="recipe"
-					style="width: 350px"
 					v-model="foodName"
 					:feedback="false"
 					aria-describedby="recipe-help" />
@@ -94,6 +94,10 @@ const showError = () => {
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
 }
+.input-text {
+	width: 350px;
+	margin-bottom: 1rem;
+}
 .button-box {
 	margin-top: 2rem;
 	margin-left: 18rem;
@@ -120,6 +124,23 @@ const showError = () => {
 	}
 	to {
 		top: 20px;
+	}
+}
+@media (max-width: 1250px) {
+	.content {
+		flex-direction: column;
+		align-items: center;
+		font-size: 12px;
+		width: 100%;
+
+		max-width: 300px;
+	}
+	.input-text {
+		width: 230px;
+	}
+	.button-box {
+		scale: 0.7;
+		margin-left: 8rem;
 	}
 }
 </style>

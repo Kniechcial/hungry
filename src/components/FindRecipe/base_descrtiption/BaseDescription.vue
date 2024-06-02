@@ -18,7 +18,6 @@
 	padding: 1rem;
 	border: 1px solid;
 	border-color: aliceblue;
-	color: #261474;
 	max-width: 55rem;
 	margin-top: 4rem;
 	margin-left: auto;
@@ -37,5 +36,12 @@ p {
 	margin-top: 1rem;
 	margin-left: auto;
 	margin-right: auto;
+}
+@media (max-width: 900px) {
+	.base-description {
+		margin-top: 1rem;
+		margin-left: 1rem;
+		margin-right: 1rem;
+	}
 }
 </style>

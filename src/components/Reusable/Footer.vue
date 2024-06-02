@@ -25,7 +25,6 @@
 	width: 100px;
 	height: 100px;
 	top: -100px;
-	/* left: 86%; */
 	right: 7%;
 	margin-right: 0.5rem;
 	transform: translateX(-50%);
@@ -36,7 +35,6 @@
 	width: 200px;
 	height: 200px;
 	top: -200px;
-	/* left: 93%; */
 	right: -5%;
 	overflow: hidden;
 	transform: translateX(-50%);
@@ -75,14 +73,39 @@ footer {
 	font-size: 25px;
 	color: black;
 }
-@media (max-width: 1150px) {
+
+@media (max-width: 1500px) {
 	.image-small {
 		display: none;
 	}
+	footer {
+		font-size: 18px;
+	}
+
+	.icon-box a {
+		font-size: 18px;
+	}
+
+	.icon-box div {
+		font-size: 18px;
+	}
+
+	.icon-box a:hover {
+		font-size: 22px;
+	}
 }
-@media (max-width: 1450px) {
-	.image-small {
-		margin-right: 3rem;
+@media (max-width: 1150px) {
+	.image-medium {
+		display: none;
+	}
+}
+@media (max-width: 768px) {
+	footer {
+		font-size: 12px;
+	}
+
+	.icon-box a {
+		display: none;
 	}
 }
 </style>

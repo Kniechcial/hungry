@@ -77,7 +77,6 @@ const showRecipe = (recipe) => {
 	width: 100%;
 	border-color: aliceblue;
 	border-radius: 10px;
-	background-color: #fcffff;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
 }
@@ -87,6 +86,7 @@ const showRecipe = (recipe) => {
 	overflow: auto;
 	max-width: 65rem;
 	border-radius: 10px;
+	justify-content: space-between;
 }
 .top-row {
 	position: relative;
@@ -135,5 +135,39 @@ const showRecipe = (recipe) => {
 }
 .button-class {
 	padding: 1rem;
+}
+@media (max-width: 768px) {
+	.container {
+		margin-left: 1rem;
+		margin-right: 1rem;
+	}
+
+	.recipe-box {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.recipe-name {
+		font-size: 14px;
+	}
+
+	.set-time {
+		display: none;
+	}
+
+	.button-location {
+		transform: scale(0.7);
+		margin-left: 0;
+		margin-right: 0;
+		padding: 0.6rem;
+		float: none;
+	}
+
+	.top-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.5rem;
+	}
 }
 </style>

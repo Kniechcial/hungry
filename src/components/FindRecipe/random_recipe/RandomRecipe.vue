@@ -111,9 +111,23 @@ p {
 	animation: moveUpDown 0.7s infinite alternate;
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
 	.button-chose {
 		padding: 13px 50px 13px;
+	}
+} */
+
+@media (max-width: 1250px) {
+	.content {
+		flex-direction: column;
+		align-items: center;
+		font-size: 12px;
+		width: 100%;
+
+		max-width: 300px;
+	}
+	.button-box {
+		scale: 0.7;
 	}
 }
 

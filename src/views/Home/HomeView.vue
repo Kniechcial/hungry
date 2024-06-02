@@ -4,8 +4,8 @@
 			<div class="about-us-box first">
 				<div class="disable"></div>
 				<div class="about-us-text">
-					<h3>Create a list of your favorite dishes</h3>
-					<p>
+					<p class="head-description">Create a list of your favorite dishes</p>
+					<p class="add-description">
 						Thanks to this website, you are able to create a list of your
 						favorite dishes. Edit their ingredients, add calories, showcase a
 						photo of your dish, and much more!
@@ -17,10 +17,10 @@
 				class="about-us-box second">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
-					<h3>
+					<p class="head-description">
 						If you don't have an idea for dinner? That's no longer a problem
-					</h3>
-					<p>
+					</p>
+					<p class="add-description">
 						Hungry will help you find a recipe for whatever you're craving right
 						now. Pizza, pasta, ramen? Use the built-in search function to find
 						exactly what you're in the mood for
@@ -30,8 +30,8 @@
 			<div class="about-us-box third">
 				<div class="disable"></div>
 				<div class="about-us-text">
-					<h3>Create your own recipe</h3>
-					<p>
+					<p class="head-description">Create your own recipe</p>
+					<p class="add-description">
 						If you already have a recipe for your favorite dish, you can input
 						it and have it on hand whenever you want to use it
 					</p>
@@ -42,8 +42,10 @@
 				class="about-us-box fourth">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
-					<h3>Find a recipe using what you have on hand</h3>
-					<p>
+					<p class="head-description">
+						Find a recipe using what you have on hand
+					</p>
+					<p class="add-description">
 						"Do you have ingredients in your fridge that you'd like to use, but
 						you're not sure how to combine them? Use the browser by providing
 						the ingredients you want to use, and Hungry will create a list of
@@ -56,8 +58,10 @@
 				class="about-us-box five">
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
-					<h3>Randomly choose a recipe for a delicious dish</h3>
-					<p>
+					<p class="head-description">
+						Randomly choose a recipe for a delicious dish
+					</p>
+					<p class="add-description">
 						You don't have any idea for a dish? Longer than that is no longer a
 						problem. Just click and draw a recipe for a delicious dish."
 					</p>
@@ -111,8 +115,13 @@ main {
 	background-color: rgba(0, 0, 0, 0.8);
 }
 
-.about-us-box h3 {
+.head-description {
 	text-transform: uppercase;
+	padding-bottom: 20px;
+	font-size: 20px;
+	font-weight: bold;
+}
+.about-us-box .head-description {
 	padding-bottom: 20px;
 }
 
@@ -280,6 +289,31 @@ main {
 	main {
 		margin-right: 2rem;
 		margin-left: 2rem;
+	}
+}
+
+@media (max-width: 768px) {
+	.image-small {
+		display: none;
+	}
+	.head-description {
+		font-size: 16px;
+	}
+	.image-medium {
+		display: none;
+	}
+	.add-description {
+		display: none;
+	}
+	.disable {
+		height: 180px;
+		width: 120px;
+	}
+	.icon-box a {
+		display: none;
+	}
+	.about-us-text {
+		height: 30%;
 	}
 }
 </style>

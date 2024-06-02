@@ -4,61 +4,63 @@
 			class="carrot"
 			v-if="isLoading"></carrotDialog>
 	</div>
-	<div class="left-box box-content">
-		<div class="box-property-left">
-			<strong class="paragraph">
-				Enter the name of the ingredient from which you want to create a dish
-			</strong>
-		</div>
-		<div class="content">
-			<div class="card flex justify-content-center">
-				<div class="flex flex-column gap-2">
-					<label for="ingredient">Ingredient name:</label>
-					<InputText
-						id="ingredient"
-						style="width: 350px"
-						v-model="ingredientName"
-						:feedback="false"
-						aria-describedby="recipe-help" />
-					<small id="recipe-help">Enter the ingredient</small>
-				</div>
+	<div class="main-box">
+		<div class="left-box box-content">
+			<div class="box-property-left">
+				<strong class="paragraph">
+					Enter the name of the ingredient from which you want to create a dish
+				</strong>
 			</div>
-			<div class="button-box-left">
+			<div class="content">
 				<div class="card flex justify-content-center">
-					<Button
-						@click="getChosedIngredient()"
-						label="Add ingredient" />
+					<div class="flex flex-column gap-2">
+						<label for="ingredient">Ingredient name:</label>
+						<InputText
+							class="input-text"
+							id="ingredient"
+							v-model="ingredientName"
+							:feedback="false"
+							aria-describedby="recipe-help" />
+						<small id="recipe-help">Enter the ingredient</small>
+					</div>
+				</div>
+				<div class="button-box-left">
+					<div class="card flex justify-content-center">
+						<Button
+							@click="getChosedIngredient()"
+							label="Add ingredient" />
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="right-box box-content">
-		<div class="box-property-right">
-			<p>
-				<strong class="paragraph">Your selected ingredients: </strong>
-			</p>
-			<div v-if="userChosed.length === 0">
-				<p class="description">
-					You haven't selected any ingredient yet. Enter the ingredient you are
-					interested in and add it to the search. You can serve up to five
-					ingredients at a time.
+		<div class="right-box box-content">
+			<div class="box-property-right">
+				<p>
+					<strong class="paragraph">Your selected ingredients: </strong>
 				</p>
-			</div>
+				<div v-if="userChosed.length === 0">
+					<p class="description">
+						You haven't selected any ingredient yet. Enter the ingredient you
+						are interested in and add it to the search. You can serve up to five
+						ingredients at a time.
+					</p>
+				</div>
 
-			<div v-if="userChosed">
-				<button
-					class="button-chose show-less"
-					v-for="(ingredient, index) in userChosed"
-					:key="index"
-					@click="deleteSelectedTag(index)">
-					{{ ingredient }}
-				</button>
-			</div>
-			<div class="button-box-right">
-				<div class="card flex">
-					<Button
-						@click="toggleToGetRecipes()"
-						label="Find recipe" />
+				<div v-if="userChosed">
+					<button
+						class="button-chose show-less"
+						v-for="(ingredient, index) in userChosed"
+						:key="index"
+						@click="deleteSelectedTag(index)">
+						{{ ingredient }}
+					</button>
+				</div>
+				<div class="button-box-right">
+					<div class="card flex">
+						<Button
+							@click="toggleToGetRecipes()"
+							label="Find recipe" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -184,6 +186,17 @@ const showError = () => {
 </script>
 
 <style scoped>
+.main-box {
+	display: flex;
+	justify-content: space-between;
+	margin: 0 2rem;
+	flex-wrap: wrap;
+}
+.input-text {
+	width: 350px;
+	margin-bottom: 1rem;
+}
+
 .box-content {
 	position: relative;
 	border: 1px solid;
@@ -196,23 +209,17 @@ const showError = () => {
 }
 
 .left-box {
-	position: fixed;
+	height: 19rem;
 	width: 37%;
 	margin-top: 2rem;
-	left: 5rem;
 	z-index: 1;
-	justify-content: flex-end;
-	align-items: flex-end;
-	height: 19rem;
+	max-width: 37%;
 }
 .right-box {
-	width: 37%;
-	position: fixed;
-	margin-top: 2rem;
-	right: 5rem;
-	align-items: flex-end;
-	justify-content: flex-start;
 	height: 19rem;
+	width: 37%;
+	margin-top: 2rem;
+	max-width: 37%;
 }
 
 .description {
@@ -231,12 +238,12 @@ p {
 }
 .button-box-left {
 	position: absolute;
-	bottom: 2.5rem;
-	right: 2rem;
+	bottom: 1rem;
+	right: 2rem !important;
 }
 .button-box-right {
 	position: absolute;
-	bottom: 2.5rem;
+	bottom: 1rem;
 }
 .carrot {
 	position: absolute;
@@ -299,4 +306,51 @@ p {
 		top: 0px;
 	}
 }
+@media (max-width: 1000px) {
+	.left-box,
+	.right-box {
+		width: 100%;
+		max-width: none;
+		margin: 1rem 0;
+	}
+	.input-text {
+		width: 250px;
+		margin-bottom: 1rem;
+	}
+	.description {
+		font-size: 12px;
+	}
+	.paragraph {
+		font-size: 14px;
+	}
+	.button-box-left,
+	.button-box-right {
+		scale: 0.8;
+		margin-bottom: 1rem;
+	}
+	.button-box-right {
+		right: 2rem !important;
+	}
+}
+@media (max-width: 1250px) {
+	.main-box {
+		flex-direction: column;
+		align-items: center;
+		margin: 0 1rem;
+	}
+	.input-text {
+		width: 250px;
+		margin-bottom: 1rem;
+	}
+	.button-box-left,
+	.button-box-right {
+		scale: 0.8;
+		margin-bottom: 1rem;
+	}
+	.carrot {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
+
 </style>
