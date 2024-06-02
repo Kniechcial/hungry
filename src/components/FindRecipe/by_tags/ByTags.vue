@@ -6,9 +6,9 @@
 	</div>
 	<div class="get-user-chose">
 		<div>
-			<p>
-				<strong class="paragraph">Your selected tags: </strong>
-			</p>
+			<div class="paragraph">
+				<strong>Your selected tags: </strong>
+			</div>
 			<div v-if="userChosed.length === 0">
 				<p class="description">
 					You haven't selected any tag yet. Click on the tag you are interested
@@ -36,15 +36,38 @@
 		</div>
 	</div>
 	<div class="box-property">
-		<div class="get-tags">
+		<div class="select-category">
+			<div v-if="displayCategoryList">
+				<div class="paragraph">
+					<strong
+						>Select the category you would like to choose tags to describe the
+						dish</strong
+					>
+				</div>
+
+				<button
+					class="button-chose"
+					v-for="(item, index) in uniqueCategory"
+					:key="index"
+					@click="toggleShowCategory(item)">
+					{{ item.root_tag_type }}
+				</button>
+			</div>
+		</div>
+		<div
+			v-if="displayTagsList"
+			class="get-tags">
 			<div>
-				<strong class="paragraph"
-					>Select the tags you would like to choose to describe the dish</strong
-				>
+				<div class="paragraph">
+					<strong
+						>Select the tags you would like to choose to describe the
+						dish</strong
+					>
+				</div>
 			</div>
 			<button
 				class="button-chose"
-				v-for="(item, index) in displayedItems"
+				v-for="(item, index) in filteredItems"
 				:key="index"
 				@click="getChosedTag(item)">
 				{{ item.display_name }}
@@ -52,14 +75,19 @@
 			<button
 				class="button-chose show-less"
 				@click="toggleShow">
-				{{ showAll ? "Pokaż mniej" : "Pokaż więcej" }}
+				{{ showAll ? "Show less" : "Show more" }}
+			</button>
+			<button
+				class="button-chose show-less"
+				@click="toggleShowCategory()">
+				Show Category
 			</button>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { computed } from "vue";
 import Button from "primevue/button";
 import { useRecipeStore } from "../../../stores/recipes.js";
@@ -81,8 +109,52 @@ const toast = useToast();
 
 const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
+const showAllCategory = ref(true);
 const userChosed = ref([]);
+const displayCategoryList = ref(true);
+const displayTagsList = ref(false);
+const selectedCategory = ref();
 
+//  Categorys List
+
+const uniqueCategory = computed(() => {
+	const category = new Set();
+	return displayedCategory.value.filter((item) => {
+		const duplicate = category.has(item.root_tag_type);
+		category.add(item.root_tag_type);
+		return !duplicate;
+	});
+});
+
+const displayedCategory = computed(() => {
+	return tagListStore.fetchedTags.filter((item, index) => {
+		return showAllCategory.value;
+	});
+});
+
+const toggleShowCategory = (item) => {
+	displayCategoryList.value = !displayCategoryList.value;
+	displayTagsList.value = !displayTagsList.value;
+	showAll.value = false;
+	filterCriteria.value.root_tag_type = item.root_tag_type;
+	console.log(filteredItems.length);
+};
+
+//
+
+// Tags List
+const filterCriteria = ref({
+	root_tag_type: "",
+});
+const filteredItems = computed(() => {
+	return displayedItems.value.filter(
+		(item) => item.root_tag_type === filterCriteria.value.root_tag_type
+	);
+});
+
+//
+
+// Chosed Tag
 const getChosedTag = (item) => {
 	if (userChosed.value.length < 5) {
 		const checkDuplicate = userChosed.value.some(
@@ -103,8 +175,6 @@ const deleteSelectedTag = (index) => {
 	userChosed.value.splice(index, 1);
 };
 
-watch(userChosed);
-
 const toggleShow = () => {
 	showAll.value = !showAll.value;
 	if (!showAll.value) {
@@ -117,10 +187,9 @@ const displayedItems = computed(() => {
 		return showAll.value || index < numberOfItemsToShow.value;
 	});
 });
+//
 
-const showMoreTags = () => {
-	numberOfItemsToShow.value = numberOfItemsToShow.value = Infinity;
-};
+// Get Recipe
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
@@ -128,7 +197,6 @@ const toggleToGetRecipes = () => {
 	getRecipe();
 };
 
-//
 async function getRecipe() {
 	isLoading.value = true;
 	const selectedTags = userChosed.value
@@ -146,6 +214,8 @@ async function getRecipe() {
 }
 //
 
+//  Error
+
 const showError = () => {
 	toast.add({
 		severity: "error",
@@ -154,6 +224,8 @@ const showError = () => {
 		life: 3000,
 	});
 };
+
+//
 </script>
 
 <style scoped>
@@ -168,6 +240,7 @@ p {
 	margin-right: auto;
 }
 .paragraph {
+	margin-bottom: 1rem;
 	font-size: 22px;
 }
 
@@ -189,9 +262,12 @@ p {
 .box-property {
 	width: 35%;
 	margin: 3% 3%;
-	/* border: 1px solid black; */
 	box-sizing: border-box;
-	/* display: flex; */
+}
+.get-tags,
+.select-category {
+	max-height: 28rem;
+	overflow: auto;
 }
 .get-user-chose {
 	float: right;
@@ -248,4 +324,3 @@ p {
 	}
 }
 </style>
-root_tag_type
