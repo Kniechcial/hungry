@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const useTagsListStore = defineStore("tagsList", () => {
@@ -23,8 +23,14 @@ export const useTagsListStore = defineStore("tagsList", () => {
 			console.error(error);
 		}
 	}
+	const categorys = computed(() =>
+		fetchedTags.value
+			? new Set(fetchedTags.value.map((tag) => tag.root_tag_type))
+			: null
+	);
 	return {
 		fetchedTags,
 		getTags,
+		categorys,
 	};
 });
