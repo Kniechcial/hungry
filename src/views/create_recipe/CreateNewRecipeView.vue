@@ -16,11 +16,8 @@
 	</div>
 	<CreateRecipeStepOne></CreateRecipeStepOne>
 </template>
-<script>
+<script setup>
 import CreateRecipeStepOne from "../../components/create_recipe/CreateRecipeStepOne.vue";
-export default {
-	components: { CreateRecipeStepOne: CreateRecipeStepOne },
-};
 </script>
 
 <style scoped>

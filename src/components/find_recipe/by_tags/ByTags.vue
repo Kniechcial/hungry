@@ -19,10 +19,10 @@
 					<div class="category-button-box">
 						<button
 							class="button-chose"
-							v-for="category in tagListStore.categorys"
-							:key="category"
-							@click="toggleShowCategory(category)">
-							{{ category }}
+							v-for="item in tagListStore.categorys"
+							:key="item"
+							@click="toggleShowCategory(item)">
+							{{ item }}
 						</button>
 					</div>
 				</div>
@@ -42,7 +42,7 @@
 					<button
 						class="button-chose"
 						v-for="(item, index) in filteredTags"
-						:key="item"
+						:key="index"
 						@click="getChosedTag(item)">
 						{{ item.display_name }}
 					</button>
@@ -114,6 +114,7 @@ const recipesLoading = ref(false);
 
 const toast = useToast();
 
+const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
 const showAllCategory = ref(true);
 const userChosed = ref([]);
@@ -129,6 +130,7 @@ const filteredTags = computed(() =>
 		(tag) => tag.root_tag_type === selectedCategory.value
 	)
 );
+
 // Chosed Tag
 const getChosedTag = (item) => {
 	if (userChosed.value.length < 5) {
@@ -139,11 +141,9 @@ const getChosedTag = (item) => {
 			userChosed.value.push(item);
 			console.log(userChosed.value);
 		} else {
-			showErrorElementExist();
 			console.log("Ten element już istnieje w tabeli.");
 		}
 	} else {
-		showErrorMaxElements();
 		console.log("Tabela zawiera już 5 elementów");
 	}
 };
@@ -154,10 +154,16 @@ const deleteSelectedTag = (index) => {
 
 const toggleShow = () => {
 	showAll.value = !showAll.value;
-	if (filteredTags.value.length < 5) {
-		return filteredTags.value.slice(0, 5);
+	if (!showAll.value) {
+		numberOfItemsToShow.value = 6;
 	}
 };
+
+const displayedItems = computed(() => {
+	return tagListStore.fetchedTags.filter((item, index) => {
+		return showAll.value || index < numberOfItemsToShow.value;
+	});
+});
 //
 
 // Get Recipe
@@ -192,22 +198,6 @@ const showError = () => {
 		severity: "error",
 		summary: "Error Message",
 		detail: "Sorry, no results found. Try again ",
-		life: 3000,
-	});
-};
-const showErrorElementExist = () => {
-	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: "This item already exists in the table.",
-		life: 3000,
-	});
-};
-const showErrorMaxElements = () => {
-	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: "The table already contains the maximum number of elements",
 		life: 3000,
 	});
 };
