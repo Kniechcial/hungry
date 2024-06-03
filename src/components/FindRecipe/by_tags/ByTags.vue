@@ -7,7 +7,7 @@
 	<div class="main-box">
 		<div class="box-property">
 			<div
-				v-if="displayCategoryList"
+				v-if="!selectedCategory"
 				class="select-category">
 				<div>
 					<div class="paragraph">
@@ -19,16 +19,16 @@
 					<div class="category-button-box">
 						<button
 							class="button-chose"
-							v-for="(item, index) in uniqueCategory"
-							:key="index"
-							@click="toggleShowCategory(item)">
-							{{ item.root_tag_type }}
+							v-for="category in tagListStore.categorys"
+							:key="category"
+							@click="toggleShowCategory(category)">
+							{{ category }}
 						</button>
 					</div>
 				</div>
 			</div>
 			<div
-				v-if="displayTagsList"
+				v-else
 				class="get-tags">
 				<div>
 					<div class="paragraph">
@@ -41,8 +41,8 @@
 				<div class="tag-button-box">
 					<button
 						class="button-chose"
-						v-for="(item, index) in filteredItems"
-						:key="index"
+						v-for="(item, index) in filteredTags"
+						:key="item"
 						@click="getChosedTag(item)">
 						{{ item.display_name }}
 					</button>
@@ -54,7 +54,7 @@
 				</button>
 				<button
 					class="button-chose show-less"
-					@click="toggleShowCategory()">
+					@click="toggleShowCategory(null)">
 					Show Category
 				</button>
 			</div>
@@ -114,53 +114,21 @@ const recipesLoading = ref(false);
 
 const toast = useToast();
 
-const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
 const showAllCategory = ref(true);
 const userChosed = ref([]);
-const displayCategoryList = ref(true);
-const displayTagsList = ref(false);
-const selectedCategory = ref();
+const selectedCategory = ref(null);
 
 //  Categorys List
 
-const uniqueCategory = computed(() => {
-	const category = new Set();
-	return displayedCategory.value.filter((item) => {
-		const duplicate = category.has(item.root_tag_type);
-		category.add(item.root_tag_type);
-		return !duplicate;
-	});
-});
-
-const displayedCategory = computed(() => {
-	return tagListStore.fetchedTags.filter((item, index) => {
-		return showAllCategory.value;
-	});
-});
-
-const toggleShowCategory = (item) => {
-	displayCategoryList.value = !displayCategoryList.value;
-	displayTagsList.value = !displayTagsList.value;
-	showAll.value = false;
-	filterCriteria.value.root_tag_type = item.root_tag_type;
-	console.log(filteredItems.length);
+const toggleShowCategory = (category) => {
+	selectedCategory.value = category;
 };
-
-//
-
-// Tags List
-const filterCriteria = ref({
-	root_tag_type: "",
-});
-const filteredItems = computed(() => {
-	return displayedItems.value.filter(
-		(item) => item.root_tag_type === filterCriteria.value.root_tag_type
-	);
-});
-
-//
-
+const filteredTags = computed(() =>
+	tagListStore.fetchedTags.filter(
+		(tag) => tag.root_tag_type === selectedCategory.value
+	)
+);
 // Chosed Tag
 const getChosedTag = (item) => {
 	if (userChosed.value.length < 5) {
@@ -171,9 +139,11 @@ const getChosedTag = (item) => {
 			userChosed.value.push(item);
 			console.log(userChosed.value);
 		} else {
+			showErrorElementExist();
 			console.log("Ten element już istnieje w tabeli.");
 		}
 	} else {
+		showErrorMaxElements();
 		console.log("Tabela zawiera już 5 elementów");
 	}
 };
@@ -184,16 +154,10 @@ const deleteSelectedTag = (index) => {
 
 const toggleShow = () => {
 	showAll.value = !showAll.value;
-	if (!showAll.value) {
-		numberOfItemsToShow.value = 6;
+	if (filteredTags.value.length < 5) {
+		return filteredTags.value.slice(0, 5);
 	}
 };
-
-const displayedItems = computed(() => {
-	return tagListStore.fetchedTags.filter((item, index) => {
-		return showAll.value || index < numberOfItemsToShow.value;
-	});
-});
 //
 
 // Get Recipe
@@ -228,6 +192,22 @@ const showError = () => {
 		severity: "error",
 		summary: "Error Message",
 		detail: "Sorry, no results found. Try again ",
+		life: 3000,
+	});
+};
+const showErrorElementExist = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "This item already exists in the table.",
+		life: 3000,
+	});
+};
+const showErrorMaxElements = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "The table already contains the maximum number of elements",
 		life: 3000,
 	});
 };
@@ -367,6 +347,8 @@ p {
 	}
 	.main-box {
 		flex-direction: column;
+		display: grid;
+		justify-content: center;
 	}
 	.select-category,
 	.get-user-chose,
@@ -380,7 +362,7 @@ p {
 	}
 	.box-property {
 		width: 100%;
-		align-items: center;
+		/* align-items: center; */
 	}
 	.description {
 		font-size: 12px;
