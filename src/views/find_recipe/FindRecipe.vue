@@ -36,15 +36,15 @@ const findBy = ref(route.params.findBy);
 const newFindBy = ref(null);
 const currentComponent = computed(() => {
 	switch (findBy.value) {
-		case "Name":
+		case "name":
 			return ByName;
-		case "Ingredients":
+		case "ingredients":
 			return ByIngredients;
-		case "Random":
+		case "random":
 			return Random;
-		case "Tags":
+		case "tags":
 			return ByTags;
-		case "BaseDescription":
+		case "base-description":
 			return BaseDescription;
 		default:
 			return null;
@@ -52,7 +52,7 @@ const currentComponent = computed(() => {
 });
 const changeComponent = (newFindBy) => {
 	findBy.value = newFindBy;
-	router.push(`/FindRecipe/${newFindBy}`);
+	router.push(`/find-recipe/${newFindBy}`);
 };
 
 //
@@ -71,7 +71,7 @@ const items = ref([
 		label: "Name",
 		icon: "pi pi-tags",
 		command: () => {
-			newFindBy.value = "Name";
+			newFindBy.value = "name";
 			changeComponent(newFindBy.value);
 		},
 	},
@@ -79,7 +79,7 @@ const items = ref([
 		label: "Ingredients",
 		icon: "pi pi-list",
 		command: () => {
-			newFindBy.value = "Ingredients";
+			newFindBy.value = "ingredients";
 			changeComponent(newFindBy.value);
 		},
 	},
@@ -87,7 +87,7 @@ const items = ref([
 		label: "Tags",
 		icon: "pi pi-list",
 		command: () => {
-			newFindBy.value = "Tags";
+			newFindBy.value = "tags";
 			changeComponent(newFindBy.value);
 		},
 	},
@@ -95,7 +95,7 @@ const items = ref([
 		label: "Random",
 		icon: "pi pi-list",
 		command: () => {
-			newFindBy.value = "Random";
+			newFindBy.value = "random";
 			changeComponent(newFindBy.value);
 		},
 	},

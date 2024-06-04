@@ -104,7 +104,7 @@ const items = ref([
 		command: () => {
 			router.push({
 				name: "FindRecipe",
-				params: { findBy: "BaseDescription" },
+				params: { findBy: "base-description" },
 			});
 		},
 	},
@@ -112,7 +112,7 @@ const items = ref([
 		label: "Setting",
 		icon: "pi pi-cog",
 		command: () => {
-			router.push({ name: "UserPanel" });
+			router.push({ name: "user-panel" });
 		},
 	},
 ]);
