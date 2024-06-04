@@ -1,4 +1,5 @@
 <template>
+	<div>Chcek</div>
 	<div class="carrot-box">
 		<carrotDialog
 			class="carrot"
