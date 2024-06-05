@@ -1,14 +1,14 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
-export const useRecipeStoreByTags = defineStore("recipe", () => {
+export const tastyStore = defineStore("recipe", () => {
 	const fetchedRecipes = ref(null);
 	async function getRecipes(from, size, q) {
 		const url = `https://tasty.p.rapidapi.com/recipes/list?from=${from}&size=${size}&q=${q}`;
 		const options = {
 			method: "GET",
 			headers: {
-				"X-RapidAPI-Key": "3ada471c34mshdbee7bcbd2861dep1bddaajsn8e32b406c05b",
+				"X-RapidAPI-Key": "45ee827cebmsh676436b4271b070p10a3e1jsn243868bc5d6b",
 				"X-RapidAPI-Host": "tasty.p.rapidapi.com",
 			},
 		};
@@ -65,5 +65,38 @@ export const useRecipeStoreByTags = defineStore("recipe", () => {
 	return {
 		fetchedRecipes,
 		getRecipes,
+	};
+});
+export const tastyTagsListStore = defineStore("tagsList", () => {
+	const fetchedTags = ref(null);
+	async function getTags() {
+		const url = `https://tasty.p.rapidapi.com/tags/list`;
+		const options = {
+			method: "GET",
+			headers: {
+				"X-RapidAPI-Key": "45ee827cebmsh676436b4271b070p10a3e1jsn243868bc5d6b",
+				"X-RapidAPI-Host": "tasty.p.rapidapi.com",
+			},
+		};
+
+		try {
+			const response = await fetch(url, options);
+			const responseData = await response.json();
+
+			fetchedTags.value = responseData.results;
+			console.log(fetchedTags.value);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+	const categorys = computed(() =>
+		fetchedTags.value
+			? new Set(fetchedTags.value.map((tag) => tag.root_tag_type))
+			: null
+	);
+	return {
+		fetchedTags,
+		getTags,
+		categorys,
 	};
 });

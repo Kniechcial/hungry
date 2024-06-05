@@ -19,7 +19,7 @@
 					<div class="category-button-box">
 						<button
 							class="button-chose"
-							v-for="item in tagListStore.categorys"
+							v-for="item in useTastyTagsListStore.categorys"
 							:key="item"
 							@click="toggleShowCategory(item)">
 							{{ item }}
@@ -97,17 +97,13 @@
 import { ref } from "vue";
 import { computed } from "vue";
 import Button from "primevue/button";
-import { useRecipeStore } from "../../../stores/recipes.js";
-import { useTagsListStore } from "../../../stores/tags.js";
-import { useRecipeStoreByTags } from "../../../stores/recipesByTags.js";
 import Toast from "primevue/toast";
 import carrotDialog from "@/components/reusable/carrotDialog.vue";
+import { tastyTagsListStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
-const recipeStore = useRecipeStore();
-const tagListStore = useTagsListStore();
-const recipeStoreByTags = useRecipeStoreByTags();
+const useTastyTagsListStore = tastyTagsListStore();
 const router = useRouter();
 const isLoading = ref(false);
 const recipesLoading = ref(false);
@@ -126,7 +122,7 @@ const toggleShowCategory = (category) => {
 	selectedCategory.value = category;
 };
 const filteredTags = computed(() =>
-	tagListStore.fetchedTags.filter(
+	useTastyTagsListStore.fetchedTags.filter(
 		(tag) => tag.root_tag_type === selectedCategory.value
 	)
 );
@@ -160,7 +156,7 @@ const toggleShow = () => {
 };
 
 const displayedItems = computed(() => {
-	return tagListStore.fetchedTags.filter((item, index) => {
+	return useTastyTagsListStore.fetchedTags.filter((item, index) => {
 		return showAll.value || index < numberOfItemsToShow.value;
 	});
 });

@@ -26,38 +26,37 @@ import Button from "primevue/button";
 import carrotDialog from "@/components/reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import { useRecipeStore } from "../../../stores/recipes.js";
-import { useTagsListStore } from "../../../stores/tags.js";
+import { tastyStore } from "../../../stores/tasty.js";
+import { tastyTagsListStore } from "../../../stores/tasty.js";
 
-const tagListStore = useTagsListStore();
-const recipeStore = useRecipeStore();
+const useTastyStore = tastyStore();
+const useTastyTagsListStore = tastyTagsListStore();
 const router = useRouter();
-let foodName = ref(null);
-const isLoading = ref(false);
-const recipesLoading = ref(false);
 const toast = useToast();
 
+const isLoading = ref(false);
+const recipesLoading = ref(false);
+
+let foodName = ref(null);
+
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
-// const RecipeDetails = () => router.push({ name: "RecipeDetails" });
 
 async function getRecipe() {
 	isLoading.value = true;
 	getRandomRecipe();
-	await recipeStore.getRecipes(0, 1, foodName.display_name);
-	// console.log(recipeStore.fetchedRecipes);
+	await useTastyStore.getRecipes(0, 1, foodName.display_name);
 	recipesLoading.value = false;
-	if (recipeStore.fetchedRecipes.length === 0) {
+	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 		isLoading.value = !isLoading.value;
 	} else {
 		BaseRecipeList();
-		// RecipeDetails();
 	}
 }
 
 function getRandomRecipe() {
 	const randomIndex = Math.floor(Math.random() * 500);
-	foodName = tagListStore.fetchedTags[randomIndex];
+	foodName = useTastyTagsListStore.fetchedTags[randomIndex];
 	console.log(foodName.display_name);
 }
 

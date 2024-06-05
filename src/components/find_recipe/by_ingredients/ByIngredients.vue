@@ -72,26 +72,21 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import { useRecipeStore } from "../../../stores/recipes.js";
-import { useTagsListStore } from "../../../stores/tags.js";
-import { useRecipeStoreByTags } from "../../../stores/recipesByTags.js";
 import Toast from "primevue/toast";
 import carrotDialog from "@/components/reusable/carrotDialog.vue";
+import { tastyStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
-const recipeStore = useRecipeStore();
-const tagListStore = useTagsListStore();
-const recipeStoreByTags = useRecipeStoreByTags();
+const useTastyStore = tastyStore();
 const router = useRouter();
 const isLoading = ref(false);
 const recipesLoading = ref(false);
-
 const toast = useToast();
-
 const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
 const userChosed = ref([]);
+
 let ingredientName = ref(null);
 
 const getChosedIngredient = () => {
@@ -140,10 +135,10 @@ const toggleToGetRecipes = () => {
 async function getRecipe() {
 	isLoading.value = true;
 	const selectedIngredients = userChosed.value.join(",");
-	await recipeStoreByTags.getRecipes(0, 5, selectedIngredients);
-	console.log(recipeStoreByTags.fetchedRecipes);
+	await useTastyStore.getRecipes(0, 5, selectedIngredients);
+	console.log(useTastyStore.fetchedRecipes);
 	recipesLoading.value = false;
-	if (recipeStoreByTags.fetchedRecipes.length === 0) {
+	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 		isLoading.value = !isLoading.value;
 	} else {
@@ -352,5 +347,4 @@ p {
 		transform: translateX(-50%);
 	}
 }
-
 </style>

@@ -13,22 +13,26 @@ import Footer from "./components/reusable/Footer.vue";
 import NavigateMainBar from "./components/reusable/NavigateMainBar.vue";
 
 import { onMounted } from "vue";
-import { useRecipeStore } from "./stores/recipes";
-import { useTagsListStore } from "./stores/tags";
+// import { useRecipeStore } from "./stores/recipes";
+// import { useTagsListStore } from "./stores/tags";
+import { tastyStore } from "./stores/tasty.js";
+import { tastyTagsListStore } from "./stores/tasty.js";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 
-const recipeStore = useRecipeStore();
-const tagListStore = useTagsListStore();
+// const recipeStore = useRecipeStore();
+const useTastyStore = tastyStore();
+const useTastyTagsListStore = tastyTagsListStore();
+// const tagListStore = useTagsListStore();
 
 onMounted(() => {
 	getTags();
 });
 
 async function getTags() {
-	await tagListStore.getTags();
-	if (!recipeStore.fetchedRecipes) {
+	await useTastyTagsListStore.getTags();
+	if (!useTastyStore.fetchedRecipes) {
 		showError();
 	}
 }
