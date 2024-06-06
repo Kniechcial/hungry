@@ -43,5 +43,11 @@ p {
 		margin-left: 1rem;
 		margin-right: 1rem;
 	}
+	.description {
+		font-size: 15px;
+	}
+	.p {
+		font-size: 14px;
+	}
 }
 </style>

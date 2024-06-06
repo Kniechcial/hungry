@@ -8,7 +8,7 @@
 		<RecipeDetails :recipe="activeRecipe"></RecipeDetails>
 	</Dialog>
 	<div
-		v-for="recipe in recipeStore.fetchedRecipes"
+		v-for="recipe in useTastyStore.fetchedRecipes"
 		:key="recipe.name">
 		<ul>
 			<li>
@@ -45,10 +45,10 @@
 <script setup>
 import { ref } from "vue";
 import Button from "primevue/button";
-// import { useRecipeStore } from "../../../stores/recipes.js";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "./RecipeDetails.vue";
-// const recipeStore = useRecipeStore();
+import { tastyStore } from "../../../stores/tasty.js";
+const useTastyStore = tastyStore();
 
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
@@ -66,6 +66,8 @@ const showRecipe = (recipe) => {
 }
 .dialog-class {
 	border-radius: 10px;
+	margin: 0;
+	padding: 0;
 }
 
 .container {

@@ -297,7 +297,7 @@ main {
 		display: none;
 	}
 	.head-description {
-		font-size: 16px;
+		font-size: 14px;
 	}
 	.image-medium {
 		display: none;
@@ -313,7 +313,13 @@ main {
 		display: none;
 	}
 	.about-us-text {
-		height: 30%;
+		height: 45%;
+	}
+	.about-us-box {
+		height: 190px;
+	}
+	.about-us-box:hover {
+		height: 190px;
 	}
 }
 </style>

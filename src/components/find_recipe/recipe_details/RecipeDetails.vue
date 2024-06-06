@@ -29,10 +29,10 @@
 							<div class="details">
 								<div class="left-part-description-recipe">
 									<div class="calories-recipe">
-										<strong>
+										<div class="header-description">
 											Kalorie:
-											{{ recipe.calories.calories || "no data" }} kcal</strong
-										>
+											{{ recipe.calories.calories || "no data" }} kcal
+										</div>
 										<ul class="calories-specific">
 											<li>
 												<strong>Fat:</strong>
@@ -59,7 +59,7 @@
 												label="Show Ingridiens" />
 										</div>
 										<ul v-if="showIngridients">
-											<strong>Ingridients:</strong>
+											<div class="header-description">Ingridients:</div>
 											<div
 												v-for="name in recipe.ingridients"
 												:key="name">
@@ -76,12 +76,16 @@
 								</div>
 								<div class="right-part-description-recipe">
 									<div class="description-recipe">
-										<Strong class="description-topic">Description:</Strong>
+										<div class="description-topic header-description">
+											Description:
+										</div>
 										<div
 											v-for="(step, index) in recipe.instructions"
 											:key="index">
 											<ul>
-												<strong>Step: {{ getIndexInArray(index) }}</strong>
+												<div class="header-description">
+													Step: {{ getIndexInArray(index) }}
+												</div>
 												<li class="description-step">
 													{{ step.step }}
 												</li>
@@ -130,12 +134,15 @@ const getIndexInArray = (index) => {
 	margin-right: auto;
 	margin-top: 2rem;
 	max-width: 65rem;
-	/* max-height: 45rem; */
 	border-color: aliceblue;
 	border-radius: 10px;
 	background-color: #fcffff;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
+}
+.header-description {
+	padding-left: 0.5rem;
+	font-weight: bold;
 }
 .recipe-box {
 	display: flex;
@@ -204,6 +211,7 @@ img {
 	margin-top: 2rem;
 }
 .ingridiens-recipe {
+	overflow: auto;
 	max-height: 15rem;
 	max-width: 20rem;
 }
@@ -265,9 +273,7 @@ li {
 	border-radius: 10px;
 	padding-top: 1.5rem;
 	padding-bottom: 1.5rem;
-	/* margin-right: -15px !important; */
 	margin-left: 0.5rem;
-	/* background-color: #ecf005; */
 }
 .time {
 	font-size: 16px;
@@ -287,5 +293,54 @@ button {
 }
 .description-step {
 	font-style: italic;
+}
+
+@media (max-width: 1100px) {
+	.recipe-box {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.recipe-name,
+	.recipe-tags {
+		float: none;
+		text-align: center;
+	}
+
+	.recipe-image {
+		float: none;
+		width: 100%;
+		height: auto;
+		padding: 0.5rem;
+		margin: 0 auto;
+	}
+
+	.details {
+		width: 100%;
+		float: none;
+	}
+
+	.left-part-description-recipe,
+	.right-part-description-recipe {
+		width: 100%;
+		float: none;
+	}
+
+	.set-time {
+		float: none;
+		width: 100%;
+		margin: 1rem 0;
+		text-align: center;
+	}
+
+	.description-recipe,
+	.ingridiens-recipe,
+	.calories-recipe {
+		width: 100%;
+		max-width: none;
+		margin-top: 1rem;
+		padding-left: 0;
+		padding-right: 0;
+	}
 }
 </style>
