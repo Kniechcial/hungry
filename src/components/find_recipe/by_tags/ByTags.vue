@@ -99,11 +99,13 @@ import { computed } from "vue";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
 import carrotDialog from "@/components/reusable/carrotDialog.vue";
+import { tastyStore } from "../../../stores/tasty.js";
 import { tastyTagsListStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
 const useTastyTagsListStore = tastyTagsListStore();
+const useTastyStore = tastyStore();
 const router = useRouter();
 const isLoading = ref(false);
 const recipesLoading = ref(false);
@@ -175,10 +177,10 @@ async function getRecipe() {
 	const selectedTags = userChosed.value
 		.map((tag) => tag.display_name)
 		.join(",");
-	await recipeStoreByTags.getRecipes(0, 5, selectedTags);
-	console.log(recipeStoreByTags.fetchedRecipes);
+	await useTastyStore.getRecipes(0, 5, selectedTags);
+	console.log(useTastyStore.fetchedRecipes);
 	recipesLoading.value = false;
-	if (recipeStoreByTags.fetchedRecipes.length === 0) {
+	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 		isLoading.value = !isLoading.value;
 	} else {

@@ -100,7 +100,7 @@ const showRecipe = (recipe) => {
 	padding-left: 15px;
 	max-width: 100%;
 	border-radius: 10px;
-	background-color: #faf8f7;
+	/* background-color: #faf8f7; */
 }
 .recipe-name {
 	float: left;
