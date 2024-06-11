@@ -7,16 +7,17 @@
 		:dismissableMask="true">
 		<RecipeDetails :recipe="activeRecipe"></RecipeDetails>
 	</Dialog>
-	<div
-		v-for="recipe in useTastyStore.fetchedRecipes"
-		:key="recipe.name">
+	<div class="header-text">Your five delicious recipes. Enjoy your meal !</div>
+	<div>
 		<ul>
-			<li>
+			<li
+				v-for="(recipe, index) in useTastyStore.fetchedRecipes"
+				:key="index">
 				<div class="container">
 					<div class="recipe-box">
-						<div class="top-row">
+						<div :class="['top-row', getItemClass(index)]">
 							<div class="recipe-name">
-								<strong>{{ recipe.name || "no data" }}</strong>
+								<strong>{{ index + 1 }}. {{ recipe.name || "no data" }}</strong>
 							</div>
 							<div class="button-location">
 								<Button
@@ -29,8 +30,8 @@
 							<div class="set-time bg-yellow-200">
 								<p class="time">
 									<strong
-										>Time: {{ recipe.Time || "no data" }}
-										<strong>min</strong></strong
+										>Time: {{ recipe.Time || "no data"
+										}}<strong> min</strong></strong
 									>
 								</p>
 							</div>
@@ -56,9 +57,34 @@ const showRecipe = (recipe) => {
 	recipeVisible.value = true;
 	activeRecipe.value = recipe;
 };
+
+const getItemClass = (index) => {
+	return (index + 1) % 2 === 0 ? "even" : "odd";
+};
 </script>
 
 <style scoped>
+.even {
+	background-color: #fcffff;
+
+	/* color: red; */
+}
+.odd {
+	background-color: #a6ffea;
+	/* color: blue; */
+}
+.header-text {
+	margin: 2rem auto 0 auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	display: block;
+	width: fit-content;
+	font-size: 26px;
+	font-weight: bold;
+	font-style: italic;
+	color: #44424d;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -143,7 +169,6 @@ const showRecipe = (recipe) => {
 		margin-left: 1rem;
 		margin-right: 1rem;
 	}
-
 	.recipe-box {
 		flex-direction: column;
 		align-items: flex-start;

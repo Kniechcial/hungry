@@ -242,7 +242,7 @@ p {
 }
 .carrot {
 	position: absolute;
-	left: 40%;
+	left: 50%;
 	z-index: 1;
 }
 .carrot-box {
