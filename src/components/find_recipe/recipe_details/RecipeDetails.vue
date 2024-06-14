@@ -12,6 +12,55 @@
 									</li>
 								</ul>
 							</div>
+							<div class="recipe-tags">
+								<ul>
+									<li
+										v-for="(tag, index) in recipe.tags"
+										:key="index">
+										<div
+											class="allergy-icon-box"
+											v-if="tag.display_name === 'Gluten-Free'">
+											<img
+												class="allergy-icon"
+												src="../../../assets/icon/gluten-free.png" />
+											<p>Gluten Free</p>
+										</div>
+									</li>
+									<li>
+										<div class="allergy-icon-box">
+											<img
+												class="allergy-icon"
+												src="../../../assets/icon/meats-free.png" />
+											<p>Meats Free</p>
+										</div>
+									</li>
+									<li>
+										<div class="allergy-icon-box">
+											<img
+												class="allergy-icon"
+												src="../../../assets/icon/dairy-free.png" />
+											<p>Dairy Free</p>
+										</div>
+									</li>
+									<li>
+										<div class="allergy-icon-box">
+											<img
+												class="allergy-icon"
+												src="../../../assets/icon/seefood-free.png" />
+											<p>Seefood Free</p>
+										</div>
+									</li>
+									<li>
+										<div class="allergy-icon-box">
+											<img
+												class="allergy-icon"
+												src="../../../assets/icon/nuts free.png" />
+											<p>Nuts Free</p>
+										</div>
+									</li>
+								</ul>
+							</div>
+
 							<div class="set-time bg-yellow-200">
 								<p class="time">
 									<strong>TIME: {{ recipe.Time || "no data" }} min</strong>
@@ -128,6 +177,16 @@ const getIndexInArray = (index) => {
 	padding: 0;
 }
 
+.allergy-icon-box {
+	max-height: 70px;
+	max-width: 70px;
+}
+
+.allergy-icon {
+	width: 50px;
+	height: 50px;
+}
+
 .container {
 	display: block;
 	margin-left: auto;
@@ -154,25 +213,32 @@ const getIndexInArray = (index) => {
 }
 .top-row {
 	position: relative;
-	display: block;
+	display: flex;
 	width: 100%;
 	min-height: 1px;
 	padding: 15px;
 	max-width: 100%;
 	border-radius: 10px;
 	background-color: #faf8f7;
+	justify-content: flex-end;
+	align-items: center;
 }
 .recipe-name {
-	float: left;
+	display: contents;
+	width: 20rem;
 	max-height: 100%;
 	font-size: 20px;
 	margin-top: 0.5rem !important;
 }
 .recipe-tags {
-	float: right;
-	font-size: 20px;
+	display: inline-block;
+	font-size: 22px;
 	max-height: 100%;
 	margin-top: 0.5rem !important;
+}
+.recipe-tags ul {
+	display: flex; /* Ustawienie na flex, aby elementy <li> były w jednym rzędzie */
+	justify-content: flex-end; /* Wyjustowanie do prawej strony */
 }
 .bottom-row {
 	position: relative;
@@ -266,9 +332,11 @@ li {
 	line-height: 20px;
 }
 .set-time {
-	display: block;
+	display: inline-flex;
+	align-items: center; /* Wyśrodkowanie pionowe zawartości */
 	float: right;
 	height: 100%;
+	min-width: 6rem;
 	border: 1px solid black;
 	border-radius: 10px;
 	padding-top: 1.5rem;
@@ -276,7 +344,7 @@ li {
 	margin-left: 0.5rem;
 }
 .time {
-	font-size: 16px;
+	font-size: 17px;
 	padding-right: 0.5rem;
 	padding-left: 0.5rem;
 }

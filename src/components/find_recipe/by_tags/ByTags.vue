@@ -206,13 +206,13 @@ const showError = () => {
 <style scoped>
 .category-button-box,
 .tag-button-box {
-	max-height: 20rem;
+	max-height: 16rem;
 	overflow: auto;
 	margin-bottom: 0.5rem;
 }
 
 .tag-button-box {
-	max-height: 15rem;
+	max-height: 13rem;
 }
 .main-box {
 	display: flex;
@@ -280,11 +280,10 @@ p {
 }
 .get-tags,
 .select-category {
-	/* max-height: 28.5rem; */
-	max-height: 25rem;
+	max-height: 23rem;
 }
 .get-user-chose {
-	max-height: 25rem;
+	max-height: 23rem;
 	float: right;
 	width: 30%;
 	margin: 3% 5%;

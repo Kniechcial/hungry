@@ -25,7 +25,13 @@ export const tastyStore = defineStore("recipe", () => {
 					Time: recipe.cook_time_minutes,
 					image: recipe.thumbnail_url,
 					ingridients: [],
+					tags: [],
 				};
+				for (const tag of recipe.tags) {
+					const modifiedTags = {};
+					modifiedTags["display_name"] = tag.display_name;
+					modifiedRecipe.tags.push(modifiedTags);
+				}
 				for (const instruction of recipe.instructions) {
 					const modifiedInstruction = {};
 					modifiedInstruction["step"] = instruction.display_text;
@@ -62,6 +68,7 @@ export const tastyStore = defineStore("recipe", () => {
 			console.error(error);
 		}
 	}
+
 	return {
 		fetchedRecipes,
 		getRecipes,
@@ -94,6 +101,7 @@ export const tastyTagsListStore = defineStore("tagsList", () => {
 			? new Set(fetchedTags.value.map((tag) => tag.root_tag_type))
 			: null
 	);
+
 	return {
 		fetchedTags,
 		getTags,
