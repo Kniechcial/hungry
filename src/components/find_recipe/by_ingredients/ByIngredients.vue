@@ -20,7 +20,6 @@
 							id="ingredient"
 							v-model="ingredientName"
 							:feedback="false"
-							placeholder=" "
 							aria-describedby="recipe-help" />
 						<small id="recipe-help">Enter the ingredient</small>
 					</div>
