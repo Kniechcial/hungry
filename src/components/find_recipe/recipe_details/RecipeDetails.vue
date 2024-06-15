@@ -148,6 +148,9 @@
 				</div>
 			</li>
 		</ul>
+		<Button
+			class="button-add-to-book"
+			label="Add recipe to Your book" />
 	</div>
 </template>
 
@@ -237,8 +240,8 @@ const getIndexInArray = (index) => {
 	margin-top: 0.5rem !important;
 }
 .recipe-tags ul {
-	display: flex; /* Ustawienie na flex, aby elementy <li> były w jednym rzędzie */
-	justify-content: flex-end; /* Wyjustowanie do prawej strony */
+	display: flex;
+	justify-content: flex-end;
 }
 .bottom-row {
 	position: relative;
@@ -333,7 +336,7 @@ li {
 }
 .set-time {
 	display: inline-flex;
-	align-items: center; /* Wyśrodkowanie pionowe zawartości */
+	align-items: center;
 	float: right;
 	height: 100%;
 	min-width: 6rem;
@@ -362,7 +365,10 @@ button {
 .description-step {
 	font-style: italic;
 }
-
+.button-add-to-book {
+	float: right;
+	margin: 1rem;
+}
 @media (max-width: 1100px) {
 	.recipe-box {
 		flex-direction: column;
