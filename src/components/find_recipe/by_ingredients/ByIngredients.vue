@@ -20,6 +20,7 @@
 							id="ingredient"
 							v-model="ingredientName"
 							:feedback="false"
+							placeholder=" "
 							aria-describedby="recipe-help" />
 						<small id="recipe-help">Enter the ingredient</small>
 					</div>
@@ -109,6 +110,7 @@ const getChosedIngredient = () => {
 	} else {
 		showErrorEmptyInput();
 	}
+	ingredientName.value = "";
 };
 
 const deleteSelectedTag = (index) => {
@@ -243,13 +245,14 @@ p {
 .carrot {
 	position: absolute;
 	left: 50%;
+	transform: translateX(-50%);
 	z-index: 1;
 }
+
 .carrot-box {
 	position: relative;
 	animation: moveUpDown 0.7s infinite alternate;
 }
-
 .box-property-left,
 .box-property-right {
 	width: 100%;
