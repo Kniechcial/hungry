@@ -61,6 +61,14 @@ const showRecipe = (recipe) => {
 const getItemClass = (index) => {
 	return (index + 1) % 2 === 0 ? "even" : "odd";
 };
+
+//
+
+const handleResize = () => {
+	isClosable.value = window.innerWidth >= 1000;
+};
+
+//
 </script>
 
 <style scoped>

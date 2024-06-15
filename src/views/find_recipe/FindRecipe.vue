@@ -8,7 +8,7 @@
 	<div class="card flex justify-content-center">
 		<TabMenu
 			:model="items"
-			class="card flex" />
+			class="card flex scale" />
 	</div>
 	<component :is="currentComponent"></component>
 </template>
@@ -123,6 +123,11 @@ const items = ref([
 	}
 	to {
 		top: 20px;
+	}
+}
+@media (max-width: 768px) {
+	.scale {
+		scale: 0.8;
 	}
 }
 </style>

@@ -367,16 +367,28 @@ button {
 	.recipe-box {
 		flex-direction: column;
 		align-items: center;
+		border: solid;
+		max-width: 500px;
+	}
+
+	.top-row {
+		flex-direction: column;
+		align-items: center;
 	}
 
 	.recipe-name,
-	.recipe-tags {
-		float: none;
+	.recipe-tags,
+	.set-time {
+		width: 100%;
+		margin-top: 1rem !important;
+		text-align: center;
+	}
+	.set-time {
+		justify-content: center;
 		text-align: center;
 	}
 
 	.recipe-image {
-		float: none;
 		width: 100%;
 		height: auto;
 		padding: 0.5rem;
@@ -385,20 +397,15 @@ button {
 
 	.details {
 		width: 100%;
-		float: none;
 	}
 
 	.left-part-description-recipe,
 	.right-part-description-recipe {
 		width: 100%;
-		float: none;
 	}
 
 	.set-time {
-		float: none;
-		width: 100%;
-		margin: 1rem 0;
-		text-align: center;
+		margin: 1rem auto;
 	}
 
 	.description-recipe,
