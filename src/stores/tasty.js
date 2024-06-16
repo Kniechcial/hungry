@@ -26,6 +26,7 @@ export const tastyStore = defineStore("recipe", () => {
 					image: recipe.thumbnail_url,
 					ingridients: [],
 					tags: [],
+					
 				};
 				for (const tag of recipe.tags) {
 					const modifiedTags = {};

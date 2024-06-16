@@ -12,59 +12,59 @@
 									</li>
 								</ul>
 							</div>
-							<div class="recipe-tags">
-								<ul>
-									<li
-										v-for="(tag, index) in recipe.tags"
-										:key="index">
+							<div class="right-top-row-box">
+								<div class="recipe-tags">
+									<span
+										v-for="tag in recipe.tags"
+										:key="tag">
 										<div
 											class="allergy-icon-box"
-											v-if="tag.display_name === 'Gluten-Free'">
+											v-if="tag.display_name === 'North American'">
 											<img
 												class="allergy-icon"
 												src="../../../assets/icon/gluten-free.png" />
 											<p>Gluten Free</p>
 										</div>
-									</li>
-									<li>
+									</span>
+									<span>
 										<div class="allergy-icon-box">
 											<img
 												class="allergy-icon"
 												src="../../../assets/icon/meats-free.png" />
 											<p>Meats Free</p>
 										</div>
-									</li>
-									<li>
+									</span>
+									<span>
 										<div class="allergy-icon-box">
 											<img
 												class="allergy-icon"
 												src="../../../assets/icon/dairy-free.png" />
 											<p>Dairy Free</p>
 										</div>
-									</li>
-									<li>
+									</span>
+									<span>
 										<div class="allergy-icon-box">
 											<img
 												class="allergy-icon"
 												src="../../../assets/icon/seefood-free.png" />
 											<p>Seefood Free</p>
 										</div>
-									</li>
-									<li>
+									</span>
+									<span>
 										<div class="allergy-icon-box">
 											<img
 												class="allergy-icon"
 												src="../../../assets/icon/nuts free.png" />
 											<p>Nuts Free</p>
 										</div>
-									</li>
-								</ul>
-							</div>
+									</span>
+								</div>
 
-							<div class="set-time bg-yellow-200">
-								<p class="time">
-									<strong>TIME: {{ recipe.Time || "no data" }} min</strong>
-								</p>
+								<div class="set-time bg-yellow-200">
+									<p class="time">
+										<strong>TIME: {{ recipe.Time || "no data" }} min</strong>
+									</p>
+								</div>
 							</div>
 						</div>
 						<div class="bottom-row">
@@ -181,6 +181,7 @@ const getIndexInArray = (index) => {
 }
 
 .allergy-icon-box {
+	margin-left: 0.5rem;
 	max-height: 70px;
 	max-width: 70px;
 }
@@ -215,33 +216,48 @@ const getIndexInArray = (index) => {
 	border-radius: 10px;
 }
 .top-row {
-	position: relative;
 	display: flex;
+	flex-direction: row;
 	width: 100%;
-	min-height: 1px;
-	padding: 15px;
-	max-width: 100%;
-	border-radius: 10px;
-	background-color: #faf8f7;
-	justify-content: flex-end;
 	align-items: center;
+	justify-content: space-between;
+	padding: 0 1rem;
 }
-.recipe-name {
+.right-top-row-box {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+}
+
+.set-time {
+	display: flex;
+	align-items: center;
+	height: 4rem;
+	text-wrap: nowrap;
+	width: fit-content;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
+}
+.time {
+	font-size: 17px;
+	padding-right: 0.5rem;
+	padding-left: 0.5rem;
+}
+/* .recipe-name {
+	justify-content: flex-start;
 	display: contents;
 	width: 20rem;
 	max-height: 100%;
 	font-size: 20px;
 	margin-top: 0.5rem !important;
-}
+} */
 .recipe-tags {
-	display: inline-block;
-	font-size: 22px;
-	max-height: 100%;
-	margin-top: 0.5rem !important;
-}
-.recipe-tags ul {
 	display: flex;
-	justify-content: flex-end;
+	flex-direction: row;
+	/* gap: 1rem; */
 }
 .bottom-row {
 	position: relative;
@@ -333,23 +349,6 @@ li {
 	margin-left: 10px;
 	font-size: 20px;
 	line-height: 20px;
-}
-.set-time {
-	display: inline-flex;
-	align-items: center;
-	float: right;
-	height: 100%;
-	min-width: 6rem;
-	border: 1px solid black;
-	border-radius: 10px;
-	padding-top: 1.5rem;
-	padding-bottom: 1.5rem;
-	margin-left: 0.5rem;
-}
-.time {
-	font-size: 17px;
-	padding-right: 0.5rem;
-	padding-left: 0.5rem;
 }
 
 button {

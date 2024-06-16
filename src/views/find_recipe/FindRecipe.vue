@@ -4,11 +4,12 @@
 			class="carrot"
 			v-if="isLoading"></carrotDialog>
 	</div>
-
+	{{ indexId }}
 	<div class="card flex justify-content-center">
 		<TabMenu
 			:model="items"
-			class="card flex scale" />
+			class="card flex scale recipe-tabmenu"
+			v-model:activeIndex="indexId" />
 	</div>
 	<component :is="currentComponent"></component>
 </template>
@@ -34,17 +35,22 @@ const router = useRouter();
 const route = useRoute();
 const findBy = ref(route.params.findBy);
 const newFindBy = ref(null);
+const indexId = ref(0);
 const currentComponent = computed(() => {
 	switch (findBy.value) {
 		case "name":
+			indexId.value = 0;
 			return ByName;
 		case "ingredients":
+			indexId.value = 1;
 			return ByIngredients;
 		case "random":
+			indexId.value = 3;
 			return Random;
 		case "tags":
 			return ByTags;
 		case "base-description":
+			indexId.value = 4;
 			return BaseDescription;
 		default:
 			return null;
@@ -126,8 +132,8 @@ const items = ref([
 	}
 }
 @media (max-width: 768px) {
-	.scale {
-		scale: 0.8;
+	.recipe-tabmenu:deep(.p-menuitem-text) {
+		display: none;
 	}
 }
 </style>

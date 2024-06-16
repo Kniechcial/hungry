@@ -3,8 +3,9 @@
 		class="dialog-class"
 		v-model:visible="recipeVisible"
 		modal
-		:closable="false"
-		:dismissableMask="true">
+		:closable="true"
+		:dismissableMask="true"
+		:showHeader="false">
 		<RecipeDetails :recipe="activeRecipe"></RecipeDetails>
 	</Dialog>
 	<div class="header-text">Your five delicious recipes. Enjoy your meal !</div>
@@ -172,6 +173,7 @@ const handleResize = () => {
 .button-class {
 	padding: 1rem;
 }
+
 @media (max-width: 768px) {
 	.container {
 		margin-left: 1rem;

@@ -22,7 +22,7 @@
 							v-for="item in useTastyTagsListStore.categorys"
 							:key="item"
 							@click="toggleShowCategory(item)">
-							{{ item }}
+							{{ formatTagName(item) }}
 						</button>
 					</div>
 				</div>
@@ -117,7 +117,11 @@ const showAll = ref(false);
 const showAllCategory = ref(true);
 const userChosed = ref([]);
 const selectedCategory = ref(null);
-
+const formatTagName = (name) => {
+	let nameA = name.replaceAll("_", " ");
+	let nameB = nameA.charAt(0).toUpperCase() + nameA.slice(1);
+	return nameB;
+};
 //  Categorys List
 
 const toggleShowCategory = (category) => {
