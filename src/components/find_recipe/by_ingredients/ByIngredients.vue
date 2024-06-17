@@ -9,6 +9,7 @@
 			<div class="box-property-left">
 				<strong class="paragraph">
 					Enter the name of the ingredient from which you want to create a dish
+					test
 				</strong>
 			</div>
 			<div class="content">
