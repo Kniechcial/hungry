@@ -1,6 +1,7 @@
 <template>
 	<div class="image-style">
 		<img
+			class="carrot-img"
 			src="../../assets/icon/carrot.png"
 			alt="carrot" />
 	</div>
@@ -8,8 +9,9 @@
 
 <style>
 .image-style {
-	height: 100px;
-	width: 100px;
-	scale: 0.2;
+	max-width: 200px;
+}
+.carrot-img {
+	width: 100%;
 }
 </style>

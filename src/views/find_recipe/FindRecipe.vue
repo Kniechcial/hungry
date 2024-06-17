@@ -1,8 +1,8 @@
 <template>
 	<div class="carrot-box">
-		<carrotDialog
-			class="carrot"
-			v-if="isLoading"></carrotDialog>
+		<CarrotLoader
+			v-if="isLoading"
+			class="carrot"></CarrotLoader>
 	</div>
 	<div class="card flex justify-content-center">
 		<TabMenu
@@ -10,12 +10,14 @@
 			class="card flex scale recipe-tabmenu"
 			v-model:activeIndex="indexId" />
 	</div>
-	<component :is="currentComponent"></component>
+	<component
+		:is="currentComponent"
+		@setLoading="setLoading()"></component>
 </template>
 
 <script setup>
 import { ref, defineComponent } from "vue";
-import carrotDialog from "@/components/reusable/carrotDialog.vue";
+import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
 import TabMenu from "primevue/tabmenu";
 import BaseDescription from "@/components/find_recipe/base_descrtiption/BaseDescription.vue";
 import ByIngredients from "../../components/find_recipe/by_ingredients/ByIngredients.vue";
@@ -24,7 +26,9 @@ import ByTags from "../../components/find_recipe/by_tags/ByTags.vue";
 import Random from "../../components/find_recipe/random_recipe/RandomRecipe.vue";
 
 const isLoading = ref(false);
-
+const setLoading = () => {
+	isLoading.value = !isLoading.value;
+};
 //
 
 import { useRoute } from "vue-router";
@@ -111,23 +115,26 @@ const items = ref([
 .button-box {
 	margin-left: 7rem;
 }
-.carrot {
-	position: relative;
-	left: 60%;
-	transform: translate(-50%, -50%);
-	z-index: 1;
-}
 .carrot-box {
-	position: relative;
-	animation: moveUpDown 0.7s infinite alternate;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	left: 0;
 }
-
+.carrot {
+	animation: moveUpDown 0.7s infinite alternate;
+	z-index: 10;
+}
 @keyframes moveUpDown {
 	from {
-		top: 0;
+		transform: translateY(0);
 	}
 	to {
-		top: 20px;
+		transform: translateY(40px);
 	}
 }
 @media (max-width: 650px) {

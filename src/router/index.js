@@ -19,7 +19,6 @@ import EditPassword from "../components/user/create_new_user/EditPassword.vue";
 import RestorePassword from "../components/user/log_in/RestorePassword.vue";
 import ConfirmRerstorePassword from "../components/user/log_in/ConfirmRestorePassword.vue";
 
-import BaseRecipeView from "../views/base_recipe/baseRecipe.vue";
 import CreateNewRecipe from "../views/create_recipe/CreateNewRecipeView.vue";
 import FindRecipe from "../views/find_recipe/FindRecipe.vue";
 import HomeView from "../views/home/HomeView.vue";
@@ -72,11 +71,7 @@ const router = createRouter({
 			name: "confirmRestorePassword",
 			component: ConfirmRerstorePassword,
 		},
-		{
-			path: "/base-recipe",
-			name: "baserecipe",
-			component: BaseRecipeView,
-		},
+
 		{
 			path: "/create-recipe-step-two",
 			name: "CreateRecipeStepTwo",
