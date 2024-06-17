@@ -4,7 +4,6 @@
 			class="carrot"
 			v-if="isLoading"></carrotDialog>
 	</div>
-	{{ indexId }}
 	<div class="card flex justify-content-center">
 		<TabMenu
 			:model="items"
@@ -75,7 +74,7 @@ defineComponent({
 const items = ref([
 	{
 		label: "Name",
-		icon: "pi pi-tags",
+		icon: "pi pi-pencil",
 		command: () => {
 			newFindBy.value = "name";
 			changeComponent(newFindBy.value);
@@ -91,7 +90,7 @@ const items = ref([
 	},
 	{
 		label: "Tags",
-		icon: "pi pi-list",
+		icon: "pi pi-tags",
 		command: () => {
 			newFindBy.value = "tags";
 			changeComponent(newFindBy.value);
@@ -99,7 +98,7 @@ const items = ref([
 	},
 	{
 		label: "Random",
-		icon: "pi pi-list",
+		icon: "pi pi-gift",
 		command: () => {
 			newFindBy.value = "random";
 			changeComponent(newFindBy.value);
@@ -131,7 +130,7 @@ const items = ref([
 		top: 20px;
 	}
 }
-@media (max-width: 768px) {
+@media (max-width: 650px) {
 	.recipe-tabmenu:deep(.p-menuitem-text) {
 		display: none;
 	}
