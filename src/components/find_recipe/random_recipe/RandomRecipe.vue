@@ -1,9 +1,4 @@
 <template>
-	<div class="carrot-box">
-		<carrotDialog
-			class="carrot"
-			v-if="isLoading"></carrotDialog>
-	</div>
 	<div class="content">
 		<p class="description">
 			<strong
@@ -23,32 +18,30 @@
 <script setup>
 import { ref } from "vue";
 import Button from "primevue/button";
-import carrotDialog from "@/components/reusable/carrotDialog.vue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { tastyStore } from "../../../stores/tasty.js";
 import { tastyTagsListStore } from "../../../stores/tasty.js";
 
+const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
 const useTastyTagsListStore = tastyTagsListStore();
 const router = useRouter();
 const toast = useToast();
-
-const isLoading = ref(false);
-const recipesLoading = ref(false);
+// const recipesLoading = ref(false);
 
 let foodName = ref(null);
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
 async function getRecipe() {
-	isLoading.value = true;
+	emit("setLoading");
 	getRandomRecipe();
 	await useTastyStore.getRecipes(0, 1, foodName.display_name);
-	recipesLoading.value = false;
+	// recipesLoading.value = false;
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
-		isLoading.value = !isLoading.value;
+		emit("setLoading");
 	} else {
 		BaseRecipeList();
 	}
@@ -99,43 +92,18 @@ p {
 .button-box {
 	margin-top: 2rem;
 }
-.carrot {
-	position: absolute;
-	left: 15%;
-	transform: translate(-50%, -50%);
-	z-index: 1;
-}
-.carrot-box {
-	position: relative;
-	animation: moveUpDown 0.7s infinite alternate;
-}
 
-/* @media (min-width: 768px) {
-	.button-chose {
-		padding: 13px 50px 13px;
-	}
-} */
-
-@media (max-width: 1250px) {
+@media (max-width: 650px) {
 	.content {
 		flex-direction: column;
 		align-items: center;
-		font-size: 12px;
+		font-size: 18px;
 		width: 100%;
 
 		max-width: 300px;
 	}
 	.button-box {
-		scale: 0.7;
-	}
-}
-
-@keyframes moveUpDown {
-	from {
-		top: 0;
-	}
-	to {
-		top: 20px;
+		scale: 0.9;
 	}
 }
 </style>

@@ -4,6 +4,13 @@
 			<li>
 				<div class="container">
 					<div class="recipe-box">
+						<div class="closeRecipe">
+							<Button
+								class="buttonCloseRecipe"
+								@click="closeRecipe()"
+								label="X" />
+						</div>
+
 						<div class="top-row">
 							<div class="recipe-name">
 								<ul>
@@ -19,45 +26,75 @@
 										:key="tag">
 										<div
 											class="allergy-icon-box"
-											v-if="tag.display_name === 'North American'">
+											v-if="tag.display_name === 'Gluten-Free'">
 											<img
 												class="allergy-icon"
 												src="../../../assets/icon/gluten-free.png" />
-											<p>Gluten Free</p>
+											<p class="description-allergy">Gluten Free</p>
 										</div>
 									</span>
-									<span>
-										<div class="allergy-icon-box">
-											<img
-												class="allergy-icon"
-												src="../../../assets/icon/meats-free.png" />
-											<p>Meats Free</p>
-										</div>
+									<span
+										v-for="tag in recipe.tags"
+										:key="tag">
 									</span>
-									<span>
-										<div class="allergy-icon-box">
+									<div
+										class="allergy-icon-box"
+										v-if="
+											!recipe.tags.some((tag) =>
+												['Chicken', 'Meats', 'Beef'].includes(tag.display_name)
+											)
+										">
+										<img
+											class="allergy-icon"
+											src="../../../assets/icon/meats-free.png" />
+										<p class="description-allergy">Meats Free</p>
+									</div>
+									<span
+										v-for="tag in recipe.tags"
+										:key="tag">
+										<div
+											class="allergy-icon-box"
+											v-if="tag.display_name === 'Dairy-Free'">
 											<img
 												class="allergy-icon"
 												src="../../../assets/icon/dairy-free.png" />
-											<p>Dairy Free</p>
+											<p class="description-allergy">Dairy Free</p>
 										</div>
 									</span>
-									<span>
-										<div class="allergy-icon-box">
-											<img
-												class="allergy-icon"
-												src="../../../assets/icon/seefood-free.png" />
-											<p>Seefood Free</p>
-										</div>
+									<span
+										v-for="tag in recipe.tags"
+										:key="tag">
 									</span>
-									<span>
-										<div class="allergy-icon-box">
-											<img
-												class="allergy-icon"
-												src="../../../assets/icon/nuts free.png" />
-											<p>Nuts Free</p>
-										</div>
+									<div
+										class="allergy-icon-box"
+										v-if="
+											!recipe.tags.some((tag) =>
+												['Seafood', 'Shellfish', 'Fish'].includes(
+													tag.display_name
+												)
+											)
+										">
+										<img
+											class="allergy-icon"
+											src="../../../assets/icon/seefood-free.png" />
+										<p class="description-allergy">Seafood Free</p>
+									</div>
+									<span
+										v-for="tag in recipe.tags"
+										:key="tag">
 									</span>
+									<div
+										class="allergy-icon-box"
+										v-if="
+											!recipe.tags.some((tag) =>
+												['Tree nuts', 'Peanuts'].includes(tag.display_name)
+											)
+										">
+										<img
+											class="allergy-icon"
+											src="../../../assets/icon/nuts free.png" />
+										<p class="description-allergy">Nuts Free</p>
+									</div>
 								</div>
 
 								<div class="set-time bg-yellow-200">
@@ -146,11 +183,11 @@
 						</div>
 					</div>
 				</div>
+				<Button
+					class="button-add-to-book"
+					label="Add recipe to Your book" />
 			</li>
 		</ul>
-		<Button
-			class="button-add-to-book"
-			label="Add recipe to Your book" />
 	</div>
 </template>
 
@@ -160,7 +197,12 @@ import Button from "primevue/button";
 const props = defineProps({
 	recipe: Object,
 });
+const emit = defineEmits(["setVisible"]);
 
+const closeRecipe = () => {
+	emit("setVisible");
+	console.log("TAK");
+};
 const showIngridients = ref(false);
 const hiddenButton = ref(false);
 
@@ -179,16 +221,43 @@ const getIndexInArray = (index) => {
 	margin: 0;
 	padding: 0;
 }
+.closeRecipe {
+	display: flex;
+	visibility: hidden;
+	flex-direction: row-reverse !important;
+	margin-top: 1rem;
+	margin-left: auto;
+}
+.buttonCloseRecipe {
+	margin-right: 2rem;
+}
 
 .allergy-icon-box {
 	margin-left: 0.5rem;
 	max-height: 70px;
 	max-width: 70px;
+	padding: 10px;
 }
 
 .allergy-icon {
 	width: 50px;
 	height: 50px;
+}
+.description-allergy {
+	visibility: hidden;
+	z-index: 9999 !important;
+}
+
+.allergy-icon-box:hover .description-allergy {
+	visibility: visible;
+	opacity: 1;
+	font-weight: 500;
+	font-size: 14px;
+	font-style: italic;
+	color: red;
+}
+.allergy-icon-box:hover .allergy-icon {
+	transform: scale(1.2);
 }
 
 .container {
@@ -203,6 +272,7 @@ const getIndexInArray = (index) => {
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
 }
+
 .header-description {
 	padding-left: 0.5rem;
 	font-weight: bold;
@@ -222,6 +292,7 @@ const getIndexInArray = (index) => {
 	align-items: center;
 	justify-content: space-between;
 	padding: 0 1rem;
+	z-index: 1;
 }
 .right-top-row-box {
 	display: flex;
@@ -246,28 +317,20 @@ const getIndexInArray = (index) => {
 	padding-right: 0.5rem;
 	padding-left: 0.5rem;
 }
-/* .recipe-name {
-	justify-content: flex-start;
-	display: contents;
-	width: 20rem;
-	max-height: 100%;
-	font-size: 20px;
-	margin-top: 0.5rem !important;
-} */
+
 .recipe-tags {
 	display: flex;
 	flex-direction: row;
-	/* gap: 1rem; */
 }
 .bottom-row {
 	position: relative;
 	display: block;
 	margin-right: 1rem;
-	margin-left: -1rem;
 	width: 100%;
 	min-height: 1px;
 	padding-right: 15px;
 	padding-left: 15px;
+	padding: 1rem;
 	max-width: 100%;
 	background-color: #fff;
 }
@@ -277,8 +340,7 @@ img {
 }
 .recipe-image {
 	float: left;
-	padding: 2rem;
-	padding-right: 1rem;
+	margin-left: -1rem;
 	overflow: hidden;
 	width: 400px;
 	height: 400px;
@@ -366,14 +428,15 @@ button {
 }
 .button-add-to-book {
 	float: right;
-	margin: 1rem;
+	margin-top: 1rem;
+	margin-bottom: -1rem;
 }
 @media (max-width: 1100px) {
 	.recipe-box {
 		flex-direction: column;
 		align-items: center;
 		border: solid;
-		max-width: 500px;
+		max-width: 700px;
 	}
 
 	.top-row {
@@ -421,6 +484,9 @@ button {
 		margin-top: 1rem;
 		padding-left: 0;
 		padding-right: 0;
+	}
+	.closeRecipe {
+		visibility: visible;
 	}
 }
 </style>

@@ -1,9 +1,4 @@
 <template>
-	<div class="carrot-box">
-		<carrotDialog
-			class="carrot"
-			v-if="isLoading"></carrotDialog>
-	</div>
 	<div class="main-box">
 		<div class="left-box box-content">
 			<div class="box-property-left">
@@ -74,15 +69,13 @@ import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
-import carrotDialog from "@/components/reusable/carrotDialog.vue";
 import { tastyStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
+const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
 const router = useRouter();
-const isLoading = ref(false);
-const recipesLoading = ref(false);
 const toast = useToast();
 const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
@@ -135,14 +128,14 @@ const toggleToGetRecipes = () => {
 };
 
 async function getRecipe() {
-	isLoading.value = true;
+	emit("setLoading");
 	const selectedIngredients = userChosed.value.join(",");
 	await useTastyStore.getRecipes(0, 5, selectedIngredients);
 	console.log(useTastyStore.fetchedRecipes);
-	recipesLoading.value = false;
+	// recipesLoading.value = false;
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
-		isLoading.value = !isLoading.value;
+		emit("setLoading");
 	} else {
 		BaseRecipeList();
 	}

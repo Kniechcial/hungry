@@ -1,9 +1,4 @@
 <template>
-	<div class="carrot-box">
-		<carrotDialog
-			class="carrot"
-			v-if="isLoading"></carrotDialog>
-	</div>
 	<div class="content">
 		<label for="recipe">Dish name</label>
 		<div class="card flex mt-3">
@@ -36,30 +31,27 @@
 import { ref } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
-import carrotDialog from "@/components/reusable/carrotDialog.vue";
 import Toast from "primevue/toast";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { tastyStore } from "../../../stores/tasty.js";
 
+const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
 const router = useRouter();
 const foodName = ref(null);
-const isLoading = ref(false);
-const recipesLoading = ref(false);
 const toast = useToast();
 
 const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
 async function getRecipe() {
-	isLoading.value = true;
+	emit("setLoading");
 	await useTastyStore.getRecipes(0, 2, foodName.value);
 	console.log(useTastyStore.fetchedRecipes);
-	recipesLoading.value = false;
 	if (foodName) {
 		if (useTastyStore.fetchedRecipes.length === 0) {
 			showError();
-			isLoading.value = !isLoading.value;
+			emit("setLoading");
 		} else {
 			BaseRecipeList();
 		}
@@ -86,7 +78,7 @@ const showError = () => {
 	border-radius: 10px;
 	background-color: #fcffff;
 	padding: 1rem;
-	margin-top: 10rem;
+	margin-top: 12rem;
 	width: 30rem;
 	left: 50%;
 	transform: translate(-50%, -50%);
@@ -102,16 +94,6 @@ const showError = () => {
 	margin-top: 2rem;
 	margin-left: 18rem;
 }
-.carrot {
-	position: absolute;
-	left: 20%;
-	transform: translate(-50%, -50%);
-	z-index: 1;
-}
-.carrot-box {
-	position: relative;
-	animation: moveUpDown 0.7s infinite alternate;
-}
 .content label {
 	padding: 1rem;
 }
@@ -126,7 +108,7 @@ const showError = () => {
 		top: 20px;
 	}
 }
-@media (max-width: 1250px) {
+/* @media (max-width: 1250px) {
 	.content {
 		flex-direction: column;
 		align-items: center;
@@ -141,6 +123,22 @@ const showError = () => {
 	.button-box {
 		scale: 0.7;
 		margin-left: 8rem;
+	}
+} */
+@media (max-width: 650px) {
+	.content {
+		flex-direction: column;
+		align-items: center;
+		font-size: 14px;
+		width: 100%;
+		max-width: 300px;
+	}
+	.button-box {
+		margin-left: 8rem;
+		scale: 0.9;
+	}
+	.input-text {
+		width: 230px;
 	}
 }
 </style>
