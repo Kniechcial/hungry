@@ -106,7 +106,7 @@ import { useToast } from "primevue/usetoast";
 
 const useTastyTagsListStore = tastyTagsListStore();
 const useTastyStore = tastyStore();
-const router = useRouter();
+const router = useRouter(); 
 const isLoading = ref(false);
 const recipesLoading = ref(false);
 

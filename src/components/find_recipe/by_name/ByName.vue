@@ -132,8 +132,8 @@ const showError = () => {
 		align-items: center;
 		font-size: 12px;
 		width: 100%;
-
-		max-width: 300px;
+		max-width: none;
+		margin: 1rem 0;
 	}
 	.input-text {
 		width: 230px;
