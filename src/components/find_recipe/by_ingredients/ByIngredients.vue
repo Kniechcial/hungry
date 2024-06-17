@@ -303,11 +303,36 @@ p {
 		top: 0px;
 	}
 }
+@media (max-width: 1250px) {
+	.main-box {
+		flex-direction: column;
+		align-items: center;
+		margin: 0 1rem;
+	}
+	.left-box,
+	.right-box {
+		width: 100%;
+		max-width: 65%;
+		margin: 1rem 0;
+	}
+	.input-text {
+		width: 250px;
+		margin-bottom: 1rem;
+	}
+	.button-box-left,
+	.button-box-right {
+		margin-bottom: 1rem;
+	}
+	.carrot {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
 @media (max-width: 1000px) {
 	.left-box,
 	.right-box {
 		width: 100%;
-		max-width: none;
+		max-width: 65%;
 		margin: 1rem 0;
 	}
 	.input-text {
@@ -315,10 +340,10 @@ p {
 		margin-bottom: 1rem;
 	}
 	.description {
-		font-size: 12px;
+		font-size: 13px;
 	}
 	.paragraph {
-		font-size: 14px;
+		font-size: 15px;
 	}
 	.button-box-left,
 	.button-box-right {
@@ -329,24 +354,12 @@ p {
 		right: 2rem !important;
 	}
 }
-@media (max-width: 1250px) {
-	.main-box {
-		flex-direction: column;
-		align-items: center;
-		margin: 0 1rem;
-	}
-	.input-text {
-		width: 250px;
-		margin-bottom: 1rem;
-	}
-	.button-box-left,
-	.button-box-right {
-		scale: 0.8;
-		margin-bottom: 1rem;
-	}
-	.carrot {
-		left: 50%;
-		transform: translateX(-50%);
+@media (max-width: 650px) {
+	.left-box,
+	.right-box {
+		width: 100%;
+		max-width: none;
+		margin: 1rem 0;
 	}
 }
 </style>

@@ -99,11 +99,7 @@ footer {
 		display: none;
 	}
 }
-@media (max-width: 768px) {
-	footer {
-		font-size: 12px;
-	}
-
+@media (max-width: 650px) {
 	.icon-box a {
 		display: none;
 	}
