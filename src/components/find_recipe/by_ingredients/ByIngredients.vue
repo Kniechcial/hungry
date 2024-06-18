@@ -235,17 +235,6 @@ p {
 	position: absolute;
 	bottom: 1rem;
 }
-.carrot {
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 1;
-}
-
-.carrot-box {
-	position: relative;
-	animation: moveUpDown 0.7s infinite alternate;
-}
 .box-property-left,
 .box-property-right {
 	width: 100%;

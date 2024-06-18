@@ -1,51 +1,36 @@
 <template>
-	<div class="carrot-box">
-		<carrotDialog
-			class="carrot"
-			v-if="isLoading"></carrotDialog>
-	</div>
 	<div class="main-box">
-		<div class="box-property">
-			<div
-				v-if="!selectedCategory"
-				class="select-category">
-				<div>
-					<div class="paragraph">
-						<strong
-							>Select the category you would like to choose tags to describe the
-							dish</strong
-						>
-					</div>
-					<div class="category-button-box">
-						<button
-							class="button-chose"
-							v-for="item in useTastyTagsListStore.categorys"
-							:key="item"
-							@click="toggleShowCategory(item)">
-							{{ formatTagName(item) }}
-						</button>
-					</div>
-				</div>
-			</div>
-			<div
-				v-else
-				class="get-tags">
-				<div>
-					<div class="paragraph">
-						<strong
-							>Select the tags you would like to choose to describe the
-							dish</strong
-						>
-					</div>
-				</div>
-				<div class="tag-button-box">
+		<div class="left-box box-content">
+			<div v-if="!selectedCategory">
+				<strong class="paragraph"
+					>Select the category you would like to choose tags to describe the
+					dish</strong
+				>
+				<div class="category-box">
 					<button
 						class="button-chose"
-						v-for="(item, index) in filteredTags"
-						:key="index"
-						@click="getChosedTag(item)">
-						{{ item.display_name }}
+						v-for="item in useTastyTagsListStore.categorys"
+						:key="item"
+						@click="toggleShowCategory(item)">
+						{{ formatTagName(item) }}
 					</button>
+				</div>
+			</div>
+			<div v-else>
+				<strong class="paragraph"
+					>Select the tags you would like to choose to describe the dish</strong
+				>
+				<div class="tag-box">
+					<span
+						v-for="(item, index) in filteredTags"
+						:key="index">
+						<button
+							v-if="showAll || (!showAll && index < 5)"
+							class="button-chose"
+							@click="getChosedTag(item)">
+							{{ item.display_name }}
+						</button>
+					</span>
 				</div>
 				<button
 					class="button-chose show-less"
@@ -59,11 +44,9 @@
 				</button>
 			</div>
 		</div>
-		<div class="get-user-chose">
+		<div class="right-box box-content">
 			<div>
-				<div class="paragraph">
-					<strong>Your selected tags: </strong>
-				</div>
+				<strong class="paragraph">Your selected tags: </strong>
 				<div v-if="userChosed.length === 0">
 					<p class="description">
 						You haven't selected any tag yet. Click on the tag you are
@@ -73,13 +56,15 @@
 				</div>
 			</div>
 			<div v-if="userChosed">
-				<button
-					class="button-chose show-less"
-					v-for="(item, index) in userChosed"
-					:key="index"
-					@click="deleteSelectedTag(index)">
-					{{ item.display_name }}
-				</button>
+				<div>
+					<button
+						class="button-chose show-less"
+						v-for="(item, index) in userChosed"
+						:key="index"
+						@click="deleteSelectedTag(index)">
+						{{ item.display_name }}
+					</button>
+				</div>
 			</div>
 			<Toast />
 			<div class="button-box">
@@ -98,17 +83,18 @@ import { ref } from "vue";
 import { computed } from "vue";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
-import carrotDialog from "@/components/reusable/carrotDialog.vue";
 import { tastyStore } from "../../../stores/tasty.js";
 import { tastyTagsListStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
+const emit = defineEmits(["setLoading"]);
+
 const useTastyTagsListStore = tastyTagsListStore();
 const useTastyStore = tastyStore();
-const router = useRouter(); 
-const isLoading = ref(false);
-const recipesLoading = ref(false);
+const router = useRouter();
+// const isLoading = ref(false);
+// const recipesLoading = ref(false);
 
 const toast = useToast();
 
@@ -126,6 +112,7 @@ const formatTagName = (name) => {
 
 const toggleShowCategory = (category) => {
 	selectedCategory.value = category;
+	showAll.value = false;
 };
 const filteredTags = computed(() =>
 	useTastyTagsListStore.fetchedTags.filter(
@@ -156,9 +143,6 @@ const deleteSelectedTag = (index) => {
 
 const toggleShow = () => {
 	showAll.value = !showAll.value;
-	if (!showAll.value) {
-		numberOfItemsToShow.value = 6;
-	}
 };
 
 const displayedItems = computed(() => {
@@ -177,16 +161,15 @@ const toggleToGetRecipes = () => {
 };
 
 async function getRecipe() {
-	isLoading.value = true;
+	emit("setLoading");
 	const selectedTags = userChosed.value
 		.map((tag) => tag.display_name)
 		.join(",");
 	await useTastyStore.getRecipes(0, 5, selectedTags);
 	console.log(useTastyStore.fetchedRecipes);
-	recipesLoading.value = false;
+	emit("setLoading");
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
-		isLoading.value = !isLoading.value;
 	} else {
 		BaseRecipeList();
 	}
@@ -208,36 +191,17 @@ const showError = () => {
 </script>
 
 <style scoped>
-.category-button-box,
-.tag-button-box {
-	max-height: 16rem;
-	overflow: auto;
-	margin-bottom: 0.5rem;
-}
-
-.tag-button-box {
-	max-height: 13rem;
-}
+/* */
 .main-box {
 	display: flex;
 	justify-content: space-between;
+	margin: 0 2rem;
 	flex-wrap: wrap;
 }
-.base-card {
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	z-index: 0;
-	color: #44424d;
-}
-.select-category,
-.get-user-chose,
-.get-tags {
-	position: absolute;
-	padding: 1rem;
+
+.box-content {
 	position: relative;
+	padding: 1rem;
 	border: 1px solid;
 	border-color: aliceblue;
 	border-radius: 10px;
@@ -247,50 +211,46 @@ const showError = () => {
 	color: #44424d;
 }
 
-.description {
-	font-size: 18px;
-	margin-left: auto;
-	margin-right: auto;
+.left-box {
+	height: 24rem;
+	width: 37%;
+	margin-top: 2rem;
+	z-index: 1;
+	max-width: 37%;
 }
+.right-box {
+	height: 24rem;
+	width: 37%;
+	margin-top: 2rem;
+	max-width: 37%;
+}
+
+.category-box {
+	margin: 2rem 1rem;
+	max-height: 14rem;
+	overflow: auto;
+}
+.tag-box {
+	margin: 2rem 1rem;
+	max-height: 12rem;
+	overflow: auto;
+}
+
 p {
 	margin-top: 1rem;
 	margin-left: auto;
 	margin-right: auto;
 }
 .paragraph {
-	margin-bottom: 1rem;
 	font-size: 22px;
+	width: 100%;
+	margin: 0;
+	box-sizing: border-box;
 }
 
 .button-box {
 	margin-top: 1rem;
 	margin-left: 7rem;
-}
-.carrot {
-	position: relative;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 1;
-}
-.carrot-box {
-	position: relative;
-	animation: moveUpDown 0.7s infinite alternate;
-}
-
-.box-property {
-	width: 35%;
-	margin: 3% 3%;
-	box-sizing: border-box;
-}
-.get-tags,
-.select-category {
-	max-height: 23rem;
-}
-.get-user-chose {
-	max-height: 23rem;
-	float: right;
-	width: 30%;
-	margin: 3% 5%;
 }
 
 .button-chose {
@@ -327,50 +287,39 @@ p {
 	top: 0px;
 	left: 0px;
 }
-@media (min-width: 768px) {
-	.button-chose {
-		padding: 13px 50px 13px;
+@media (max-width: 1250px) {
+	.main-box {
+		flex-direction: column;
+		align-items: center;
+		margin: 0 1rem;
+	}
+	.left-box,
+	.right-box {
+		width: 100%;
+		max-width: 65%;
+		margin: 1rem 0;
 	}
 }
 @media (max-width: 1000px) {
-	.paragraph {
-		font-size: 14px;
-	}
-	.main-box {
-		flex-direction: column;
-		display: grid;
-		justify-content: center;
-	}
-	.select-category,
-	.get-user-chose,
-	.get-tags {
+	.left-box,
+	.right-box {
 		width: 100%;
-		border: 1px solid black;
-		justify-content: center;
-	}
-	.get-user-chose {
-		margin: none;
-	}
-	.box-property {
-		width: 100%;
-		/* align-items: center; */
+		max-width: 65%;
+		margin: 1rem 0;
 	}
 	.description {
-		font-size: 12px;
-	}
-	.button-box {
-		scale: 0.7;
-	}
-	.button-chose {
 		font-size: 14px;
 	}
-}
-@keyframes moveUpDown {
-	from {
-		top: 0;
+	.paragraph {
+		font-size: 16px;
 	}
-	to {
-		top: 20px;
+}
+@media (max-width: 650px) {
+	.left-box,
+	.right-box {
+		width: 100%;
+		max-width: none;
+		margin: 1rem 0;
 	}
 }
 </style>
