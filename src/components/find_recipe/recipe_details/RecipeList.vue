@@ -5,8 +5,9 @@
 		modal
 		:closable="true"
 		:dismissableMask="true"
+		@setVisible="setVisible()"
 		:showHeader="false">
-		<RecipeDetails :recipe="activeRecipe"></RecipeDetails>
+		<RecipeDetails :recipe="activeRecipe" @setVisible="setVisible(false)"></RecipeDetails>
 	</Dialog>
 	<div class="header-text">Your five delicious recipes. Enjoy your meal !</div>
 	<div>
@@ -57,30 +58,24 @@ const activeRecipe = ref(null);
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
 	activeRecipe.value = recipe;
+	console.log(activeRecipe);
+};
+const setVisible = (visible) => {
+	recipeVisible.value = visible;
+	console.log("RecipeList");
 };
 
 const getItemClass = (index) => {
 	return (index + 1) % 2 === 0 ? "even" : "odd";
 };
-
-//
-
-const handleResize = () => {
-	isClosable.value = window.innerWidth >= 1000;
-};
-
-//
 </script>
 
 <style scoped>
 .even {
 	background-color: #fcffff;
-
-	/* color: red; */
 }
 .odd {
-	background-color: #a6ffea;
-	/* color: blue; */
+	background-color: #a6ffea8c;
 }
 .header-text {
 	margin: 2rem auto 0 auto;
@@ -100,7 +95,6 @@ const handleResize = () => {
 	padding: 0;
 }
 .dialog-class {
-	border-radius: 10px;
 	margin: 0;
 	padding: 0;
 }
@@ -135,7 +129,6 @@ const handleResize = () => {
 	padding-left: 15px;
 	max-width: 100%;
 	border-radius: 10px;
-	/* background-color: #faf8f7; */
 }
 .recipe-name {
 	float: left;

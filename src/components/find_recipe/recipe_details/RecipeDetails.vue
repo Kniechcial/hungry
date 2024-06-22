@@ -200,8 +200,9 @@ const props = defineProps({
 const emit = defineEmits(["setVisible"]);
 
 const closeRecipe = () => {
-	emit("setVisible");
+	emit("setVisible", false);
 	console.log("TAK");
+	console.log("setVisible");
 };
 const showIngridients = ref(false);
 const hiddenButton = ref(false);
