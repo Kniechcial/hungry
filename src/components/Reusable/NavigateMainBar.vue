@@ -5,9 +5,8 @@
 		</div>
 		<div
 			class="avatar"
-			@click="checkUser()">
+			@click="navigateToAuthorization()">
 			<Avatar
-				:model="userItems"
 				icon="pi pi-user"
 				class="avatar-design"
 				size="large"
@@ -23,40 +22,24 @@ import Avatar from "primevue/avatar";
 import Menubar from "primevue/menubar";
 import { useRouter } from "vue-router";
 
-const isUser = ref(false);
-
-const logInView = () => {
-	router.push({ name: "LogIn" });
-};
-const userPanel = () => {
-	router.push({ name: "UserPanel" });
+const navigateToAuthorization = () => {
+	router.push({
+		name: "Authorization",
+		params: { findBy: "register" },
+	});
 };
 
-const checkUser = () => {
-	if (isUser.value != true) {
-		logInView();
-	} else {
-		userPanel();
-	}
-};
 const router = useRouter();
-const userItems = ref([
-	{
-		label: "Home",
-		icon: "pi pi-home",
-		command: () => {
-			router.push({ name: "HomeView" });
-		},
-	},
-	{
-		label: "RecipeList",
-		icon: "pi pi-book",
-		command: () => {
-			router.push({ name: "RecipeList" });
-		},
-	},
-]);
 const items = ref([
+	// {
+	// 	label: "Autorisation",
+	// 	command: () => {
+	// 		router.push({
+	// 			name: "Authorization",
+	// 			params: { findBy: "register" },
+	// 		});
+	// 	},
+	// },
 	{
 		label: "Home",
 		icon: "pi pi-home",
@@ -134,7 +117,7 @@ const items = ref([
 	transform: translateY(-50%);
 }
 .avatar-design {
-	background-color: lightgreen;
+	background-color: rgb(204, 206, 204);
 	cursor: pointer;
 }
 </style>

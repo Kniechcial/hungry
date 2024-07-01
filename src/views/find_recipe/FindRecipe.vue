@@ -39,6 +39,7 @@ const route = useRoute();
 const findBy = ref(route.params.findBy);
 const newFindBy = ref(null);
 const indexId = ref(0);
+
 const currentComponent = computed(() => {
 	switch (findBy.value) {
 		case "name":

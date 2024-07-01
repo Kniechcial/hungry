@@ -1,44 +1,43 @@
 <template>
-	<body>
-		<div class="content">
-			<div>
-				<img
-					class="log-icon"
-					:src="logIcon"
-					alt="Zdjęcie" />
-			</div>
-			<div class="card flex justify-content-center">
-				<div class="flex flex-column gap-3">
-					<p>Email:</p>
-					<div>
-						<div class="card flex">
-							<InputText
-								v-model.trim="inputEmail"
-								type="text"
-								size="large" />
-						</div>
+	<div class="content">
+		<div>
+			<img
+				class="log-icon"
+				:src="logIcon"
+				alt="Zdjęcie" />
+		</div>
+		<div class="card flex justify-content-center">
+			<div class="flex flex-column gap-3">
+				<p>E-mail:</p>
+				<div>
+					<div class="card flex">
+						<InputText
+							v-model.trim="inputEmail"
+							type="text"
+							size="large" />
 					</div>
+				</div>
 
-					<p>Hasło:</p>
-					<div>
-						<div class="card flex justify-content-center">
-							<Password
-								v-model.trim="inputPassword"
-								toggleMask />
-						</div>
+				<p>Password:</p>
+				<div>
+					<div class="card flex justify-content-center">
+						<Password
+							v-model.trim="inputPassword"
+							toggleMask />
 					</div>
 				</div>
 			</div>
-
+		</div>
+		<div class="button-box">
 			<div class="card relative inline-block mr-1 mt-4 ml-5 cursor-pointer">
 				<Button
-					label="Załóż konto"
+					label="Add account"
 					@click="panelSingIn()" />
 			</div>
 
 			<div class="card relative inline-block mr-5 mt-4 ml-5 cursor-pointer">
 				<Toast />
-				<Button @click="logInUser()" label="Zaloguj" type:="submit"/>
+				<Button @click="logInUser()" label="Login" type:="submit"/>
 			</div>
 			<div v-if="displayError">
 				<p class="errorInput">Błędny email lub hasło!</p>
@@ -47,7 +46,7 @@
 					label="Przywróć konto" />
 			</div>
 		</div>
-	</body>
+	</div>
 </template>
 
 <script setup>
@@ -69,10 +68,6 @@ const inputPassword = ref("");
 const displayError = ref(false);
 let correctPassword = true;
 let correctEmail = false;
-let usersList = ref([
-	{ id: 1, name: "karol", password: "hasło" },
-	{ id: 2, name: "Aneta", password: "hasło2" },
-]);
 
 const checkEmail = () => {
 	if (usersList.value.find((user) => user.name === inputEmail.value)) {
@@ -151,26 +146,30 @@ const errorPassword = () => {
 	/* font-size: large; */
 }
 .content {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 4rem;
-	border: 1px solid black;
-	border-radius: 1rem;
-	background-color: #f6f7f9;
+	position: relative;
+	border: 1px solid;
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
 	padding: 1rem;
-	max-width: 23rem;
-	/* margin-left: 39%;
-	margin-right: 39%; */
+	width: 27rem;
+	left: 50%;
+	transform: translate(-50%, 15%);
+	font-size: 18px;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	color: #44424d;
+}
+.button-box {
+	display: flex;
+	justify-content: space-between;
 }
 button {
-	padding-left: 1rem;
-	padding-right: 1rem;
+	padding: 1rem;
 	padding-top: 0.5rem;
-	padding-bottom: 0.6rem;
+	padding-bottom: 0.5rem;
 }
 .log-icon {
-	margin-top: 2.5rem;
+	margin-top: 3rem;
 	position: relative;
 	margin-bottom: -5rem;
 	left: 50%;

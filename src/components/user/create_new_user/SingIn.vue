@@ -1,19 +1,17 @@
 <template>
-	<body class="content">
-		<div>
-			<img
-				class="log-icon"
-				:src="logIcon"
-				alt="Zdjęcie" />
-		</div>
+	<div class="content">
+		<img
+			class="log-icon"
+			:src="logIcon"
+			alt="Photo" />
 		<div class="card flex justify-content-center">
 			<div class="flex flex-column gap-3">
-				<p>Email:</p>
+				<p>E-mail:</p>
 				<div>
 					<div :class="{ redBorder: displayEmailError }">
 						<div class="card flex">
 							<InputText
-								v-model.trim="inputEmail"
+								v-model.trim="newUser.email"
 								type="text"
 								size="large" />
 						</div>
@@ -21,37 +19,22 @@
 					<span
 						class="showError"
 						v-if="displayEmailError"
-						>BŁĘDNY ADRES EMAIL!</span
+						>WRONG E-MAIL ADDRESS!</span
 					>
 				</div>
-				<p>Hasło:</p>
+				<p>Password:</p>
 				<div>
 					<div :class="{ redBorder: displayPasswordError }">
 						<div class="card flex justify-content-center">
 							<Password
-								v-model.trim="inputPassword"
+								v-model.trim="newUser.password"
 								toggleMask />
 						</div>
 					</div>
 					<span
 						class="showError"
 						v-if="displayPasswordError"
-						>BŁĘDNE HASŁO!</span
-					>
-				</div>
-				<p>Potwierdź hasło:</p>
-				<div>
-					<div :class="{ redBorder: displayPasswordError }">
-						<div class="card flex justify-content-center">
-							<Password
-								v-model.trim="inputConfirmPassword"
-								toggleMask />
-						</div>
-					</div>
-					<span
-						class="showError"
-						v-if="displayPasswordError"
-						>BŁĘDNE HASŁO!</span
+						>WRONG PASSWORD!</span
 					>
 				</div>
 			</div>
@@ -60,40 +43,97 @@
 			<Toast />
 			<Button
 				@click="requireConditions"
-				label="Dodaj użytkownika" />
+				label="Add User" />
 		</div>
-	</body>
+	</div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import { authStore } from "../../../stores/authStore.js";
+import { useRouter } from "vue-router";
+
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-import { useRouter } from "vue-router";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import logIcon from "../../../assets/icon/log-icon.png";
 
 const router = useRouter();
 const toast = useToast();
+const useAuthStore = authStore();
 
 const displayPasswordError = ref(false);
 const displayEmailError = ref(false);
-let inputEmail = ref("");
-let inputPassword = ref("");
-let inputConfirmPassword = ref("");
-let correctPassword = true;
+
+let correctPassword = false;
 let correctEmail = false;
-let userList = ref([
-	{ id: 1, name: "karol", password: "hasło" },
-	{ id: 2, name: "Aneta", password: "hasło2" },
-]);
+
+const newUser = reactive({
+	id: Date.now(),
+	email: "",
+	password: "",
+});
+
+const checkEmail = () => {
+	if (!newUser.email) {
+		return (correctEmail = false), showEmailEmptyError();
+	} else {
+		return (correctEmail = true);
+	}
+};
+
+const checkPassword = () => {
+	if (!newUser.password) {
+		return (correctPassword = false), showPasswordError();
+	} else {
+		return (correctPassword = true);
+	}
+};
+
+const addUser = () => {
+	console.log("name", newUser.email);
+	console.log("password", newUser.password);
+	useAuthStore.registerUser(newUser);
+};
+
+const requireConditions = () => {
+	checkPassword();
+	checkEmail();
+	if (correctEmail && correctPassword) {
+		addUser();
+		showSucces();
+		setTimeout(() => {
+			navigateToHome();
+		}, 2000);
+	} else {
+		showError();
+	}
+};
+
+const navigateToHome = () => {
+	router.push({ name: "HomeView" });
+};
+const restorePassword = () => {
+	// router.push({ name: "restorePassword" });
+};
+
+const confirmpassword = () => {
+	// router.push({ name: "confirmpassword" });
+};
+const showSucces = () => {
+	toast.add({
+		severity: "success",
+		detail: "The account has been added!",
+		life: 3000,
+	});
+};
 
 const showError = () => {
 	toast.add({
 		severity: "error",
-		detail: "Konto nie zostało dodane!",
+		detail: "The account has not been added, please check the entered data!",
 		life: 3000,
 	});
 };
@@ -101,14 +141,7 @@ const showError = () => {
 const showEmailEmptyError = () => {
 	toast.add({
 		severity: "error",
-		detail: "Wprowadź adres email!",
-		life: 6000,
-	});
-};
-const showEmailExistError = () => {
-	toast.add({
-		severity: "error",
-		detail: "Konto zarejestrowane na taki adres email już istnieje!",
+		detail: "Wrong input adress E-mail!",
 		life: 6000,
 	});
 };
@@ -116,69 +149,9 @@ const showEmailExistError = () => {
 const showPasswordError = () => {
 	toast.add({
 		severity: "error",
-		detail: "Błędne Hasła!",
+		detail: "Wrong input password!",
 		life: 6000,
 	});
-};
-
-const checkEmail = () => {
-	if (userList.value.find((email) => email.name === inputEmail.value)) {
-		return (correctEmail = false), showEmailExistError();
-	} else {
-		if (inputEmail.value) {
-			return (correctEmail = true), (displayEmailError.value = false);
-		} else {
-			return (correctEmail = false), showEmailEmptyError();
-		}
-	}
-};
-
-const checkPassword = () => {
-	if (inputPassword.value === inputConfirmPassword.value) {
-		if (inputPassword.value || inputConfirmPassword.value) {
-			return (correctPassword = true), (displayPasswordError.value = false);
-		} else {
-			return (correctPassword = false), showPasswordError();
-		}
-	} else {
-		return (correctPassword = false), showPasswordError();
-	}
-};
-
-const addUser = () => {
-	let newUser = {
-		id: Date.now(),
-		name: inputEmail.value,
-		password: inputPassword.value,
-	};
-	userList.value.push(newUser);
-};
-
-const requireConditions = () => {
-	checkPassword();
-	checkEmail();
-	if (correctEmail) {
-		if (correctPassword) {
-			addUser();
-			showSuccess();
-			confirmpassword();
-			displayPasswordError.value = false;
-		} else {
-			showError();
-			displayPasswordError.value = true;
-		}
-	} else {
-		showError();
-		displayEmailError.value = true;
-	}
-};
-
-const restorePassword = () => {
-	router.push({ name: "restorePassword" });
-};
-
-const confirmpassword = () => {
-	router.push({ name: "confirmpassword" });
 };
 </script>
 
@@ -188,14 +161,20 @@ const confirmpassword = () => {
 	margin: 0;
 	padding: 0;
 }
+
 .content {
-	margin-top: 4rem;
-	margin-left: 39%;
-	margin-right: 39%;
+	position: relative;
+	border: 1px solid;
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
 	padding: 1rem;
-	border-radius: 1rem;
-	border: 1px solid black;
-	background-color: #f6f7f9;
+	width: 27rem;
+	left: 50%;
+	transform: translate(-50%, 15%);
+	font-size: 18px;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	color: #44424d;
 }
 .showError {
 	color: red;
@@ -206,13 +185,14 @@ const confirmpassword = () => {
 	border-radius: 10px;
 }
 button {
-	padding-left: 1rem;
-	padding-right: 1rem;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 4rem;
 	padding-top: 0.5rem;
-	padding-bottom: 0.6rem;
+	padding-bottom: 0.5rem;
 }
 .log-icon {
-	margin-top: 2.5rem;
+	margin-top: 3rem;
 	position: relative;
 	margin-bottom: -5rem;
 	left: 50%;

@@ -19,6 +19,7 @@ import EditPassword from "../components/user/create_new_user/EditPassword.vue";
 import RestorePassword from "../components/user/log_in/RestorePassword.vue";
 import ConfirmRerstorePassword from "../components/user/log_in/ConfirmRestorePassword.vue";
 
+import Authorization from "@/views/authorization/Authorization.vue";
 import CreateNewRecipe from "../views/create_recipe/CreateNewRecipeView.vue";
 import FindRecipe from "../views/find_recipe/FindRecipe.vue";
 import HomeView from "../views/home/HomeView.vue";
@@ -30,11 +31,6 @@ const router = createRouter({
 			path: "/",
 			name: "HomeView",
 			component: HomeView,
-		},
-		{
-			path: "/log-in",
-			name: "LogIn",
-			component: LogIn,
 		},
 		{
 			path: "/user-panel",
@@ -50,11 +46,6 @@ const router = createRouter({
 			path: "/top-bar-menu",
 			name: "TopBarMenu",
 			component: TopBarMenu,
-		},
-		{
-			path: "/sing-in",
-			name: "singIn",
-			component: SingIn,
 		},
 		{
 			path: "/edit-password",
@@ -116,6 +107,26 @@ const router = createRouter({
 			path: "/find-recipe/:findBy",
 			name: "FindRecipe",
 			component: FindRecipe,
+		},
+		{
+			path: "/authorization/:findBy",
+			name: "Authorization",
+			component: Authorization,
+		},
+		{
+			path: "/authorization/register",
+			name: "Register",
+			component: SingIn,
+		},
+		{
+			path: "/authorization/login",
+			name: "Login",
+			component: LogIn,
+		},
+		{
+			path: "/authorization/random-recipe",
+			name: "Login",
+			component: LogIn,
 		},
 	],
 });
