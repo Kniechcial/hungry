@@ -12,7 +12,7 @@
 				<div>
 					<div class="card flex">
 						<InputText
-							v-model.trim="loginUser.email"
+							v-model.trim="inputEmail"
 							type="text"
 							size="large" />
 					</div>
@@ -22,7 +22,7 @@
 				<div>
 					<div class="card flex justify-content-center">
 						<Password
-							v-model.trim="loginUser.password"
+							v-model.trim="inputPassword"
 							toggleMask />
 					</div>
 				</div>
@@ -30,44 +30,99 @@
 		</div>
 		<div class="button-box">
 			<div class="card relative inline-block mr-5 mt-4 ml-5 cursor-pointer">
-				<!-- <Toast /> -->
+				<Toast />
 				<Button @click="logInUser()" label="Login" type:="submit"/>
 			</div>
-			<!-- <div v-if="displayError">
+			<div v-if="displayError">
 				<p class="errorInput">Błędny email lub hasło!</p>
 				<Button
 					@click="restorePassword"
 					label="Przywróć konto" />
-			</div> -->
+			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-// import Toast from "primevue/toast";
-// import { useToast } from "primevue/usetoast";
-// import { useRouter } from "vue-router";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
+import { useRouter } from "vue-router";
 import logIcon from "../../../assets/icon/log-icon.png";
-import { authStore } from "../../../stores/authStore.js";
 
-const useAuthStore = authStore();
-// const toast = useToast();
-// const router = useRouter();
+const router = useRouter();
+const panelSingIn = () => router.push({ name: "singIn" });
 
-const loginUser = reactive({
-	email: "",
-	password: "",
-});
+const inputEmail = ref("");
+const inputPassword = ref("");
+const displayError = ref(false);
+let correctPassword = true;
+let correctEmail = false;
+
+const checkEmail = () => {
+	if (usersList.value.find((user) => user.name === inputEmail.value)) {
+		checkPassword();
+		correctEmail = true;
+	} else {
+		return (
+			checkPassword(),
+			(correctEmail = false),
+			(displayError.value = true),
+			// alert("Konto zarejestrowane na taki adres email nie istnieje!"),
+			errorEmail()
+		);
+	}
+};
+
+const checkPassword = () => {
+	if (usersList.value.find((user) => user.password === inputPassword.value)) {
+		(correctPassword = true), (displayError.value = false), goToMainView();
+	} else {
+		return (
+			(correctPassword = false),
+			(displayError.value = true),
+			// alert("Błędne hasło!"),
+			errorPassword()
+		);
+	}
+};
+const goToMainView = () => {
+	router.push({ name: "mainView" });
+};
 
 const logInUser = () => {
-	if (!loginUser.email || !loginUser.password) {
-		alert("Please enter email and password");
-		return;
-	} else useAuthStore.loginUser(loginUser);
+	console.log(inputEmail.value);
+	const LogUser = { email: inputEmail.value, password: inputPassword.value };
+	console.log(LogUser);
+	checkEmail();
+
+	if (correctEmail && correctPassword) {
+		return alert("Zostałeś zalogowany!");
+	}
+};
+
+const restorePassword = () => {
+	router.push({ name: "restorePassword" });
+};
+
+const errorEmail = () => {
+	toast.add({
+		severity: "error",
+		detail: "Konto zarejestrowane na taki adres email nie istnieje!",
+		life: 3000,
+	});
+};
+
+const errorPassword = () => {
+	toast.add({
+		severity: "error",
+		detail: "Błędne hasło!",
+		life: 6000,
+	});
 };
 </script>
 

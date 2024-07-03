@@ -16,14 +16,17 @@ import { onMounted } from "vue";
 import { tastyStore } from "./stores/tasty.js";
 import { tastyTagsListStore } from "./stores/tasty.js";
 import { useToast } from "primevue/usetoast";
+import { authStore } from "./stores/authStore";
 
 const toast = useToast();
 
+const useAuthStore = authStore();
 const useTastyStore = tastyStore();
 const useTastyTagsListStore = tastyTagsListStore();
 
 onMounted(() => {
 	getTags();
+	useAuthStore.init();
 });
 
 async function getTags() {

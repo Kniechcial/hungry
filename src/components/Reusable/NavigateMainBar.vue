@@ -8,7 +8,11 @@
 			@click="navigateToAuthorization()">
 			<Avatar
 				icon="pi pi-user"
-				class="avatar-design"
+				:class="
+					useAuthStore.user.uid
+						? 'avatar-design-enable'
+						: 'avatar-design-disable'
+				"
 				size="large"
 				shape="circle" />
 		</div>
@@ -21,6 +25,7 @@ import Avatar from "primevue/avatar";
 
 import Menubar from "primevue/menubar";
 import { useRouter } from "vue-router";
+import { authStore } from "@/stores/authStore";
 
 const navigateToAuthorization = () => {
 	router.push({
@@ -28,6 +33,7 @@ const navigateToAuthorization = () => {
 		params: { findBy: "register" },
 	});
 };
+const useAuthStore = authStore();
 
 const router = useRouter();
 const items = ref([
@@ -98,6 +104,14 @@ const items = ref([
 			router.push({ name: "user-panel" });
 		},
 	},
+	{
+		label: "",
+		class: "",
+		icon: "pi pi-sign-out",
+		command: () => {
+			useAuthStore.logoutUser();
+		},
+	},
 ]);
 </script>
 <style>
@@ -116,8 +130,12 @@ const items = ref([
 	top: 50%;
 	transform: translateY(-50%);
 }
-.avatar-design {
+.avatar-design-disable {
 	background-color: rgb(204, 206, 204);
+	cursor: pointer;
+}
+.avatar-design-enable {
+	background-color: rgb(132, 242, 132);
 	cursor: pointer;
 }
 </style>

@@ -1,8 +1,21 @@
 <template>
 	<main>
 		<div class="default-box">
-			<div class="about-us-box first">
-				<div class="disable"></div>
+			<div
+				:class="[
+					'about-us-box',
+					'first',
+					useAuthStore.user.uid ? 'pointer-cursor' : 'default-cursor',
+				]"
+				@click="useAuthStore.user.uid && navigateToFindByName()">
+				<div
+					v-if="useAuthStore.user.uid"
+					class="lets-go-try">
+					Let's go try!
+				</div>
+				<div
+					v-else
+					class="disable"></div>
 				<div class="about-us-text">
 					<p class="head-description">Create a list of your favorite dishes</p>
 					<p class="add-description">
@@ -27,8 +40,21 @@
 					</p>
 				</div>
 			</div>
-			<div class="about-us-box third">
-				<div class="disable"></div>
+			<div
+				:class="[
+					'about-us-box',
+					'third',
+					useAuthStore.user.uid ? 'pointer-cursor' : 'default-cursor',
+				]"
+				@click="useAuthStore.user.uid && navigateToCreateNewRecipe()">
+				<div
+					v-if="useAuthStore.user.uid"
+					class="lets-go-try">
+					Let's go try!
+				</div>
+				<div
+					v-else
+					class="disable"></div>
 				<div class="about-us-text">
 					<p class="head-description">Create your own recipe</p>
 					<p class="add-description">
@@ -72,8 +98,11 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
+import { authStore } from "@/stores/authStore";
 
 const router = useRouter();
+const useAuthStore = authStore();
+
 const navigateToFindByName = () => {
 	router.push({ name: "FindRecipe", params: { findBy: "name" } });
 };
@@ -87,6 +116,11 @@ const navigateToRandomRecipe = () => {
 	router.push({
 		name: "FindRecipe",
 		params: { findBy: "random" },
+	});
+};
+const navigateToCreateNewRecipe = () => {
+	router.push({
+		name: "CreateNewRecipe",
 	});
 };
 </script>
@@ -254,7 +288,10 @@ main {
 
 .first:hover .disable {
 	display: flex;
-	cursor: auto;
+}
+
+.first:hover .lets-go-try {
+	display: flex;
 }
 
 .second:hover {
@@ -267,7 +304,9 @@ main {
 
 .third:hover .disable {
 	display: flex;
-	cursor: auto;
+}
+.third:hover .lets-go-try {
+	display: flex;
 }
 
 .fourth:hover {
@@ -283,6 +322,14 @@ main {
 
 .five:hover .lets-go-try {
 	display: flex;
+}
+
+.pointer-cursor {
+	cursor: pointer;
+}
+
+.default-cursor {
+	cursor: auto;
 }
 
 @media (max-width: 1100px) {
