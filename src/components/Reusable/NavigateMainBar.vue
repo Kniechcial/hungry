@@ -1,7 +1,7 @@
 <template>
 	<div class="mainBar">
 		<div class="card firstObject">
-			<Menubar :model="items" />
+			<Menubar :model="filteredItems" />
 		</div>
 		<div
 			class="avatar"
@@ -19,13 +19,13 @@
 	</div>
 </template>
 <script setup>
-import { ref } from "vue";
-
+import { ref, computed } from "vue";
 import Avatar from "primevue/avatar";
-
 import Menubar from "primevue/menubar";
 import { useRouter } from "vue-router";
 import { authStore } from "@/stores/authStore";
+
+const useAuthStore = authStore();
 
 const navigateToAuthorization = () => {
 	router.push({
@@ -33,19 +33,9 @@ const navigateToAuthorization = () => {
 		params: { findBy: "register" },
 	});
 };
-const useAuthStore = authStore();
 
 const router = useRouter();
 const items = ref([
-	// {
-	// 	label: "Autorisation",
-	// 	command: () => {
-	// 		router.push({
-	// 			name: "Authorization",
-	// 			params: { findBy: "register" },
-	// 		});
-	// 	},
-	// },
 	{
 		label: "Home",
 		icon: "pi pi-home",
@@ -113,6 +103,15 @@ const items = ref([
 		},
 	},
 ]);
+
+const filteredItems = computed(() => {
+	if (useAuthStore.user.uid) {
+		return items.value;
+	}
+	return items.value.filter(
+		(item) => item.label === "Home" || item.label === "Find New Recipe"
+	);
+});
 </script>
 <style>
 .mainBar {

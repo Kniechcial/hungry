@@ -205,11 +205,9 @@ main {
 	bottom: 0px;
 	left: 0px;
 	transition: 0.3s filter;
-	cursor: auto;
 }
 .third:hover::before {
 	filter: brightness(0.6);
-	cursor: auto;
 }
 
 .fourth::before {

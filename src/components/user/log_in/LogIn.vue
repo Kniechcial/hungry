@@ -48,16 +48,10 @@ import { ref, reactive } from "vue";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-// import Toast from "primevue/toast";
-// import { useToast } from "primevue/usetoast";
-// import { useRouter } from "vue-router";
 import logIcon from "../../../assets/icon/log-icon.png";
 import { authStore } from "../../../stores/authStore.js";
 
 const useAuthStore = authStore();
-// const toast = useToast();
-// const router = useRouter();
-
 const loginUser = reactive({
 	email: "",
 	password: "",
@@ -82,7 +76,6 @@ const logInUser = () => {
 	margin-bottom: 1rem;
 	font-weight: bold;
 	color: red;
-	/* font-size: large; */
 }
 .content {
 	position: relative;
