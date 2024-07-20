@@ -4,8 +4,13 @@
 			<Menubar :model="filteredItems" />
 		</div>
 		<div
-			class="avatar"
+			class="avatar-container"
 			@click="navigateToAuthorization()">
+			<span
+				v-if="useAuthStore.user.uid"
+				class="avatar-text">
+				{{ useAuthStore.user.email }}</span
+			>
 			<Avatar
 				icon="pi pi-user"
 				:class="
@@ -122,17 +127,26 @@ const filteredItems = computed(() => {
 	position: relative;
 	flex-grow: 1;
 }
-.avatar {
+
+.avatar-container {
 	position: absolute;
 	z-index: 1;
 	right: 1rem;
 	top: 50%;
 	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
 }
+
+.avatar-text {
+	margin-right: 0.5rem;
+}
+
 .avatar-design-disable {
 	background-color: rgb(204, 206, 204);
 	cursor: pointer;
 }
+
 .avatar-design-enable {
 	background-color: rgb(132, 242, 132);
 	cursor: pointer;
