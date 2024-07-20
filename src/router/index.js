@@ -116,17 +116,12 @@ const router = createRouter({
 		{
 			path: "/authorization/register",
 			name: "Register",
-			component: SingIn,
+			component: Authorization,
 		},
 		{
 			path: "/authorization/login",
 			name: "Login",
-			component: LogIn,
-		},
-		{
-			path: "/authorization/random-recipe",
-			name: "Login",
-			component: LogIn,
+			component: Authorization,
 		},
 	],
 });
