@@ -12,6 +12,7 @@ import { useRouter } from "vue-router";
 export const authStore = defineStore("authStore", () => {
 	const user = ref({});
 	const router = useRouter();
+	const errorMessage = ref(null);
 	const init = () => {
 		onAuthStateChanged(auth, (userDetails) => {
 			// console.log("User changed state");
@@ -37,9 +38,8 @@ export const authStore = defineStore("authStore", () => {
 				console.log(user);
 			})
 			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(error.message);
+				console.log(error.code);
+				errorMessage.value = error.code;
 			});
 	};
 	const loginUser = (loginUser) => {
@@ -51,9 +51,8 @@ export const authStore = defineStore("authStore", () => {
 				// ...
 			})
 			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(error.message);
+				console.log(error.code);
+				errorMessage.value = error.code;
 			});
 	};
 	const logoutUser = () => {
@@ -73,5 +72,6 @@ export const authStore = defineStore("authStore", () => {
 		logoutUser,
 		init,
 		user,
+		errorMessage,
 	};
 });

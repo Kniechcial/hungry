@@ -1,4 +1,5 @@
 <template>
+	<Toast />
 	<div class="content">
 		<img
 			class="log-icon"
@@ -9,8 +10,9 @@
 				<p>E-mail:</p>
 				<div>
 					<div :class="{ redBorder: displayEmailError }">
-						<div class="card flex">
+						<div class="card flex justify-content-center">
 							<InputText
+								class="input-email"
 								v-model.trim="newUser.email"
 								type="text"
 								size="large" />
@@ -48,17 +50,19 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
 import { authStore } from "../../../stores/authStore.js";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Toast from "primevue/toast";
 import logIcon from "../../../assets/icon/log-icon.png";
+import { useToast } from "primevue/usetoast";
 
 const useAuthStore = authStore();
 const displayPasswordError = ref(false);
 const displayEmailError = ref(false);
+const toast = useToast();
 
 const newUser = reactive({
 	id: Date.now(),
@@ -67,9 +71,62 @@ const newUser = reactive({
 });
 
 const addUser = () => {
+	checkError();
 	console.log("name", newUser.email);
 	console.log("password", newUser.password);
 	useAuthStore.registerUser(newUser);
+};
+
+const formatedErrorCode = computed(() => {
+	switch (useAuthStore.errorMessage) {
+		case "auth/email-already-in-use":
+			return "Email already in use";
+			break;
+		case "auth/missing-email":
+			return "Missing email";
+			break;
+		case "auth/weak-password":
+			return "Weak password";
+			break;
+		case "auth/missing-password":
+			return "Missing password";
+			break;
+		default:
+			break;
+	}
+});
+const checkError = () => {
+	if (
+		formatedErrorCode.value === "Email already in use" ||
+		formatedErrorCode.value === "Missing email"
+	) {
+		return (
+			(displayEmailError.value = true),
+			(displayPasswordError.value = false),
+			showError(),
+			console.log(displayEmailError.value)
+		);
+	} else if (
+		formatedErrorCode.value === "Weak password add more characters" ||
+		formatedErrorCode.value === "Missing password"
+	) {
+		return (
+			(displayPasswordError.value = true),
+			(displayEmailError.value = false),
+			showError(),
+			console.log(displayPasswordError.value),
+			(formatedErrorCode.value = null)
+		);
+	}
+};
+
+const showError = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: formatedErrorCode.value,
+		life: 3000,
+	});
 };
 </script>
 
@@ -79,7 +136,10 @@ const addUser = () => {
 	margin: 0;
 	padding: 0;
 }
-
+.input-email {
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
 .content {
 	position: relative;
 	border: 1px solid;
