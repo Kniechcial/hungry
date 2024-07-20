@@ -1,8 +1,8 @@
 <template>
-	<div class="carrot-box">
-		<CarrotLoader
-			v-if="isLoading"
-			class="carrot"></CarrotLoader>
+	<div
+		v-if="isLoading"
+		class="carrot-box">
+		<CarrotLoader class="carrot"></CarrotLoader>
 	</div>
 	<div class="card flex justify-content-center">
 		<TabMenu
