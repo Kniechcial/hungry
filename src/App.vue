@@ -31,18 +31,7 @@ onMounted(() => {
 
 async function getTags() {
 	await useTastyTagsListStore.getTags();
-	if (!useTastyStore.fetchedRecipes) {
-		showError();
-	}
 }
-const showError = () => {
-	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: "Sorry, no results found. Try again ",
-		life: 3000,
-	});
-};
 </script>
 <style>
 body {

@@ -5,9 +5,7 @@
 			class="card flex scale"
 			v-model:activeIndex="indexId" />
 	</div>
-	<component
-		:is="currentComponent"
-		@setLoading="setLoading"></component>
+	<component :is="currentComponent"></component>
 </template>
 
 <script setup>
@@ -20,14 +18,9 @@ import LogIn from "../../components/user/log_in/LogIn.vue";
 
 const router = useRouter();
 const route = useRoute();
-const findBy = ref(route.params.findBy);
+const findBy = ref("login");
 const indexId = ref(0);
-const isLoading = ref(false);
 const newFindBy = ref(null);
-
-const setLoading = () => {
-	isLoading.value = !isLoading.value;
-};
 
 const currentComponent = computed(() => {
 	switch (findBy.value) {

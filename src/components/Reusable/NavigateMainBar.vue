@@ -7,16 +7,14 @@
 			class="avatar-container"
 			@click="navigateToAuthorization()">
 			<span
-				v-if="useAuthStore.user.uid"
+				v-if="useAuthStore.user"
 				class="avatar-text">
 				{{ useAuthStore.user.email }}</span
 			>
 			<Avatar
 				icon="pi pi-user"
 				:class="
-					useAuthStore.user.uid
-						? 'avatar-design-enable'
-						: 'avatar-design-disable'
+					useAuthStore.user ? 'avatar-design-enable' : 'avatar-design-disable'
 				"
 				size="large"
 				shape="circle" />
@@ -110,7 +108,7 @@ const items = ref([
 ]);
 
 const filteredItems = computed(() => {
-	if (useAuthStore.user.uid) {
+	if (useAuthStore.user) {
 		return items.value;
 	}
 	return items.value.filter(

@@ -5,11 +5,11 @@
 				:class="[
 					'about-us-box',
 					'first',
-					useAuthStore.user.uid ? 'pointer-cursor' : 'default-cursor',
+					useAuthStore.user ? 'pointer-cursor' : 'default-cursor',
 				]"
-				@click="useAuthStore.user.uid && navigateToFindByName()">
+				@click="useAuthStore.user && navigateToFindByName()">
 				<div
-					v-if="useAuthStore.user.uid"
+					v-if="useAuthStore.user"
 					class="lets-go-try">
 					Let's go try!
 				</div>
@@ -44,11 +44,11 @@
 				:class="[
 					'about-us-box',
 					'third',
-					useAuthStore.user.uid ? 'pointer-cursor' : 'default-cursor',
+					useAuthStore.user ? 'pointer-cursor' : 'default-cursor',
 				]"
-				@click="useAuthStore.user.uid && navigateToCreateNewRecipe()">
+				@click="useAuthStore.user && navigateToCreateNewRecipe()">
 				<div
-					v-if="useAuthStore.user.uid"
+					v-if="useAuthStore.user"
 					class="lets-go-try">
 					Let's go try!
 				</div>
