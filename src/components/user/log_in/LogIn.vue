@@ -11,29 +11,45 @@
 			<div class="flex flex-column gap-3">
 				<p>E-mail:</p>
 				<div>
-					<div class="card flex justify-content-center">
-						<InputText
-							class="input-email"
-							v-model.trim="loginUser.email"
-							type="text"
-							size="large" />
+					<div :class="{ redBorder: displayEmailError }">
+						<div class="card flex justify-content-center">
+							<InputText
+								class="input-email"
+								v-model.trim="loginUser.email"
+								type="text"
+								size="large" />
+						</div>
 					</div>
+					<span
+						class="showError"
+						v-if="displayEmailError"
+						>WRONG E-MAIL ADDRESS!</span
+					>
 				</div>
-
 				<p>Password:</p>
 				<div>
-					<div class="card flex justify-content-center">
-						<Password
-							:feedback="false"
-							v-model.trim="loginUser.password"
-							toggleMask />
+					<div :class="{ redBorder: displayPasswordError }">
+						<div class="card flex justify-content-center">
+							<Password
+								:feedback="false"
+								v-model.trim="loginUser.password"
+								toggleMask />
+						</div>
 					</div>
+					<span
+						class="showError"
+						v-if="displayPasswordError"
+						>WRONG PASSWORD!</span
+					>
 				</div>
 			</div>
 		</div>
 		<div class="button-box">
 			<div class="card relative inline-block mr-5 mt-4 ml-5 cursor-pointer">
-				<Button @click="logInUser()" label="Login" type:="submit"/>
+				<Button
+					@click="logInUser()"
+					label="Login"
+					:disabled="!loginUser.email || !loginUser.password" />
 			</div>
 		</div>
 	</div>
@@ -51,53 +67,59 @@ import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 const useAuthStore = authStore();
+const displayPasswordError = ref(false);
+const displayEmailError = ref(false);
+
 const loginUser = reactive({
 	email: "",
 	password: "",
 });
 
-const logInUser = () => {
+const logInUser = async () => {
+	// Sprawdza błędy po stronie frontend-u (puste pola)
 	if (!loginUser.email || !loginUser.password) {
-		showErrorEmptyInput();
-	} else {
-		checkError();
-		useAuthStore.loginUser(loginUser);
+		showError("Please enter email and password");
+		displayPasswordError.value = true;
+		displayEmailError.value = true;
+		return;
+	}
+	//  Sprawdza błędy po strone backend-u (odpowiedzi z firebase)
+	const response = await useAuthStore.loginUser(loginUser);
+	if (!response.result) {
+		checkError(response.error);
 	}
 };
 
-const formatedErrorCode = computed(() => {
-	switch (useAuthStore.errorMessage) {
-		case "auth/invalid-email":
-			return "Invalid email";
-			break;
-		case "auth/invalid-credential":
-			return "Invalid credential";
-			break;
-		default:
-			break;
-	}
-});
-const checkError = () => {
-	if (formatedErrorCode.value === "Invalid email") {
-		showError();
-	} else if (formatedErrorCode.value === "Invalid credential") {
-		showError();
+const checkError = (error) => {
+	if (error === "auth/invalid-email") {
+		return (
+			(displayEmailError.value = true),
+			(displayPasswordError.value = false),
+			showError("Invalid email"),
+			console.log("error in LogIn.vue " + error)
+		);
+	} else if (error === "auth/invalid-credential") {
+		return (
+			(displayEmailError.value = true),
+			(displayPasswordError.value = true),
+			showError("Invalid credential"),
+			console.log("error in LogIn.vue " + error)
+		);
+	} else if (error === "auth/too-many-requests") {
+		return (
+			(displayEmailError.value = true),
+			(displayPasswordError.value = true),
+			showError("Too many requests"),
+			console.log("error in LogIn.vue " + error)
+		);
 	}
 };
 
-const showErrorEmptyInput = () => {
+const showError = (message) => {
 	toast.add({
 		severity: "error",
 		summary: "Error Message",
-		detail: "Please enter email and password",
-		life: 3000,
-	});
-};
-const showError = () => {
-	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: formatedErrorCode.value,
+		detail: message,
 		life: 3000,
 	});
 };
@@ -119,6 +141,15 @@ const showError = () => {
 	margin-bottom: 1rem;
 	font-weight: bold;
 	color: red;
+}
+
+.showError {
+	color: red;
+	font-weight: bold;
+}
+.redBorder {
+	border: 2px solid red;
+	border-radius: 10px;
 }
 .content {
 	position: relative;

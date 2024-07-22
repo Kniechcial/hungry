@@ -10,51 +10,65 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 export const authStore = defineStore("authStore", () => {
-	const user = ref({});
+	const user = ref(null);
 	const router = useRouter();
-	const errorMessage = ref(null);
 	const init = () => {
 		onAuthStateChanged(auth, (userDetails) => {
-			// console.log("User changed state");
-			// console.log(user);
 			if (userDetails) {
 				const uid = userDetails.uid;
 				user.value = { email: userDetails.email, uid };
 				router.push({ name: "HomeView" });
 			} else {
-				user.value = {};
-				router.replace({
-					name: "Authorization",
-					params: { findBy: "login" },
-				});
+				user.value = null;
 			}
 		});
 	};
-	const registerUser = (newUser) => {
-		createUserWithEmailAndPassword(auth, newUser.email, newUser.password)
-			.then((userCredential) => {
-				// Signed up
-				const user = userCredential.user;
-				console.log(user);
-			})
-			.catch((error) => {
-				console.log(error.code);
-				errorMessage.value = error.code;
-			});
+	const registerUser = async (newUser) => {
+		try {
+			const response = await createUserWithEmailAndPassword(
+				auth,
+				newUser.email,
+				newUser.password
+			);
+			const responseData = await response.json();
+			// Signed up
+			const user = responseData.user;
+			console.log(user);
+			return { result: true };
+		} catch (error) {
+			console.log("Error in authStore.js " + error.code);
+			return { result: false, error: error.code };
+		}
 	};
-	const loginUser = (loginUser) => {
-		signInWithEmailAndPassword(auth, loginUser.email, loginUser.password)
-			.then((userCredential) => {
-				// Signed in
-				const user = userCredential.user;
-				console.log(user);
-				// ...
-			})
-			.catch((error) => {
-				console.log(error.code);
-				errorMessage.value = error.code;
-			});
+	const loginUser = async (loginUser) => {
+		try {
+			const response = await signInWithEmailAndPassword(
+				auth,
+				loginUser.email,
+				loginUser.password
+			);
+			const responseData = await response.json();
+			const user = responseData.user;
+			console.log(user);
+			return { result: true };
+		} catch (error) {
+			console.log("Error in authStore.js " + error.code);
+			return { result: false, error: error.code };
+		}
 	};
+	// const loginUser = (loginUser) => {
+	// 	signInWithEmailAndPassword(auth, loginUser.email, loginUser.password)
+	// 		.then((userCredential) => {
+	// 			// Signed in
+	// 			const user = userCredential.user;
+	// 			console.log(user);
+	// 			// ...
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error.code);
+	// 			errorMessage.value = error.code;
+	// 		});
+	// };
 	const logoutUser = () => {
 		signOut(auth)
 			.then(() => {
@@ -72,6 +86,5 @@ export const authStore = defineStore("authStore", () => {
 		logoutUser,
 		init,
 		user,
-		errorMessage,
 	};
 });
