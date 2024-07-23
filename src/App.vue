@@ -14,7 +14,6 @@ import NavigateMainBar from "./components/reusable/NavigateMainBar.vue";
 
 import { onMounted } from "vue";
 import { tastyStore } from "./stores/tasty.js";
-import { tastyTagsListStore } from "./stores/tasty.js";
 import { useToast } from "primevue/usetoast";
 import { authStore } from "./stores/authStore";
 import { auth } from "@/fireBase.js";
@@ -23,7 +22,6 @@ const toast = useToast();
 
 const useAuthStore = authStore();
 const useTastyStore = tastyStore();
-const useTastyTagsListStore = tastyTagsListStore();
 
 onMounted(() => {
 	getTags();
@@ -31,7 +29,7 @@ onMounted(() => {
 });
 
 async function getTags() {
-	await useTastyTagsListStore.getTags();
+	await useTastyStore.getTags();
 }
 
 onMounted(async () => {

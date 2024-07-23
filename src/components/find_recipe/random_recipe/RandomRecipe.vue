@@ -21,11 +21,9 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { tastyStore } from "../../../stores/tasty.js";
-import { tastyTagsListStore } from "../../../stores/tasty.js";
 
 const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
-const useTastyTagsListStore = tastyTagsListStore();
 const router = useRouter();
 const toast = useToast();
 // const recipesLoading = ref(false);
@@ -49,7 +47,7 @@ async function getRecipe() {
 
 function getRandomRecipe() {
 	const randomIndex = Math.floor(Math.random() * 500);
-	foodName = useTastyTagsListStore.fetchedTags[randomIndex];
+	foodName = useTastyStore.fetchedTags[randomIndex];
 	console.log(foodName.display_name);
 }
 

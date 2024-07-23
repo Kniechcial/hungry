@@ -9,7 +9,7 @@
 				<div class="category-box">
 					<button
 						class="button-chose"
-						v-for="item in useTastyTagsListStore.categorys"
+						v-for="item in useTastyStore.categorys"
 						:key="item"
 						@click="toggleShowCategory(item)">
 						{{ formatTagName(item) }}
@@ -84,13 +84,12 @@ import { computed } from "vue";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
 import { tastyStore } from "../../../stores/tasty.js";
-import { tastyTagsListStore } from "../../../stores/tasty.js";
+
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 
 const emit = defineEmits(["setLoading"]);
 
-const useTastyTagsListStore = tastyTagsListStore();
 const useTastyStore = tastyStore();
 const router = useRouter();
 // const isLoading = ref(false);
@@ -115,7 +114,7 @@ const toggleShowCategory = (category) => {
 	showAll.value = false;
 };
 const filteredTags = computed(() =>
-	useTastyTagsListStore.fetchedTags.filter(
+	useTastyStore.fetchedTags.filter(
 		(tag) => tag.root_tag_type === selectedCategory.value
 	)
 );
@@ -146,7 +145,7 @@ const toggleShow = () => {
 };
 
 const displayedItems = computed(() => {
-	return useTastyTagsListStore.fetchedTags.filter((item, index) => {
+	return useTastyStore.fetchedTags.filter((item, index) => {
 		return showAll.value || index < numberOfItemsToShow.value;
 	});
 });

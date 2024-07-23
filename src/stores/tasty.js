@@ -68,16 +68,9 @@ export const tastyStore = defineStore("recipe", () => {
 			console.error(error);
 		}
 	}
-
-	return {
-		fetchedRecipes,
-		getRecipes,
-	};
-});
-export const tastyTagsListStore = defineStore("tagsList", () => {
 	const fetchedTags = ref(null);
 	async function getTags() {
-		const url = `https://tasty.p.rapidapi.com/tags/list`;
+		const url_tag_list = `https://tasty.p.rapidapi.com/tags/list`;
 		const options = {
 			method: "GET",
 			headers: {
@@ -87,7 +80,7 @@ export const tastyTagsListStore = defineStore("tagsList", () => {
 		};
 
 		try {
-			const response = await fetch(url, options);
+			const response = await fetch(url_tag_list, options);
 			const responseData = await response.json();
 
 			fetchedTags.value = responseData.results;
@@ -103,6 +96,8 @@ export const tastyTagsListStore = defineStore("tagsList", () => {
 	);
 
 	return {
+		fetchedRecipes,
+		getRecipes,
 		fetchedTags,
 		getTags,
 		categorys,
