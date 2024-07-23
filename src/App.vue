@@ -17,6 +17,7 @@ import { tastyStore } from "./stores/tasty.js";
 import { tastyTagsListStore } from "./stores/tasty.js";
 import { useToast } from "primevue/usetoast";
 import { authStore } from "./stores/authStore";
+import { auth } from "@/fireBase.js";
 
 const toast = useToast();
 
@@ -32,6 +33,17 @@ onMounted(() => {
 async function getTags() {
 	await useTastyTagsListStore.getTags();
 }
+
+onMounted(async () => {
+	// Jeśli userDetails są wprowadzone, czyli użytkownik wprowadził dane to ta funkcja sprawdza czy są poprawne  i jeśli są to przypisuje je do user a jeśli ich nie ma to user ma null.
+	auth.onAuthStateChanged(async (userDetails) => {
+		if (userDetails) {
+			authStore.userDetails = user;
+		} else {
+			user = null;
+		}
+	});
+});
 </script>
 <style>
 body {

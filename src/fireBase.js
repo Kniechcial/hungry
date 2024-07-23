@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyD_cP19pev77jgwCrflWmETpJGIXqNLSEo",
@@ -17,4 +17,19 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-export { db, auth };
+// sprawdza czy uzytkownik jest zalogowany
+function getCurrentUser() {
+	const auth = getAuth();
+	return new Promise((resolve, reject) => {
+		const unsubscribe = onAuthStateChanged(
+			auth,
+			(user) => {
+				unsubscribe();
+				resolve(user);
+			},
+			reject
+		);
+	});
+}
+
+export { db, auth, getCurrentUser };

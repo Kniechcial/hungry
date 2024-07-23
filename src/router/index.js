@@ -12,17 +12,12 @@ import RecipeList from "../components/find_recipe/recipe_details/RecipeList.vue"
 
 import TopBarMenu from "../components/reusable/NavigateMainBar.vue";
 
-import LogIn from "../components/user/log_in/LogIn.vue";
-import SingIn from "../components/user/create_new_user/SingIn.vue";
-import UserPanel from "../components/user/user_panel/UserPanel.vue";
-import EditPassword from "../components/user/create_new_user/EditPassword.vue";
-import RestorePassword from "../components/user/log_in/RestorePassword.vue";
-import ConfirmRerstorePassword from "../components/user/log_in/ConfirmRestorePassword.vue";
-
 import Authorization from "@/views/authorization/Authorization.vue";
 import CreateNewRecipe from "../views/create_recipe/CreateNewRecipeView.vue";
 import FindRecipe from "../views/find_recipe/FindRecipe.vue";
 import HomeView from "../views/home/HomeView.vue";
+
+import { getCurrentUser } from "@/fireBase";
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,13 +28,9 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
-			path: "/user-panel",
-			name: "UserPanel",
-			component: UserPanel,
-		},
-		{
 			path: "/create-new-recipe",
 			name: "CreateNewRecipe",
+			meta: { requiresAuth: true },
 			component: CreateNewRecipe,
 		},
 		{
@@ -47,25 +38,11 @@ const router = createRouter({
 			name: "TopBarMenu",
 			component: TopBarMenu,
 		},
-		{
-			path: "/edit-password",
-			name: "editPassword",
-			component: EditPassword,
-		},
-		{
-			path: "/restore-password",
-			name: "restorePassword",
-			component: RestorePassword,
-		},
-		{
-			path: "/confirm-restore-password",
-			name: "confirmRestorePassword",
-			component: ConfirmRerstorePassword,
-		},
 
 		{
 			path: "/create-recipe-step-two",
 			name: "CreateRecipeStepTwo",
+			meta: { requiresAuth: true },
 			component: CreateRecipeStepTwo,
 		},
 		{
@@ -111,19 +88,33 @@ const router = createRouter({
 		{
 			path: "/authorization/:findBy",
 			name: "Authorization",
+			meta: { requiresUnAuth: true },
 			component: Authorization,
 		},
 		{
 			path: "/authorization/register",
 			name: "Register",
+			meta: { requiresUnAuth: true },
 			component: Authorization,
 		},
 		{
 			path: "/authorization/login",
 			name: "Login",
+			meta: { requiresUnAuth: true },
 			component: Authorization,
 		},
 	],
+});
+
+router.beforeEach(async (to, from, next) => {
+	const user = await getCurrentUser();
+	if (to.meta.requiresUnAuth && user) {
+		next("/"); // Przekieruj do strony głównej, jeśli użytkownik jest zalogowany
+	} else if (to.meta.requiresAuth && !user) {
+		next("/authorization/login"); // Przekieruj do strony logowania, jeśli użytkownik jest niezalogowany
+	} else {
+		next(); // Kontynuuj nawigację
+	}
 });
 
 export default router;
