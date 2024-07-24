@@ -19,6 +19,7 @@
 		</p>
 	</footer>
 </template>
+
 <style scoped>
 .image-small {
 	position: absolute;
@@ -57,21 +58,19 @@ footer {
 }
 
 .icon-box a {
-	margin: 0 5px;
-	font-size: 20px;
+	margin: 0 10px; /* Increase margin to prevent overlap */
 	color: white;
-	transition: color 0.5s;
-}
-.icon-box div {
-	margin: 0 5px;
-	font-size: 20px;
-	color: white;
-	transition: color 0.5s;
+	display: inline-block;
 }
 
-.icon-box a:hover {
-	font-size: 25px;
+.icon-box a:hover i {
+	transform: scale(2);
 	color: black;
+}
+
+.icon-box i {
+	font-size: 20px;
+	transition: transform 0.3s, color 0.3s;
 }
 
 @media (max-width: 1500px) {
@@ -85,20 +84,14 @@ footer {
 	.icon-box a {
 		font-size: 18px;
 	}
-
-	.icon-box div {
-		font-size: 18px;
-	}
-
-	.icon-box a:hover {
-		font-size: 22px;
-	}
 }
+
 @media (max-width: 1150px) {
 	.image-medium {
 		display: none;
 	}
 }
+
 @media (max-width: 650px) {
 	.icon-box a {
 		display: none;
