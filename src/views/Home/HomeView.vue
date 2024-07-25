@@ -31,12 +31,12 @@
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
 					<p class="head-description">
-						If you don't have an idea for dinner? That's no longer a problem
+						No idea for dinner that's no longer a problem
 					</p>
 					<p class="add-description">
-						Hungry will help you find a recipe for whatever you're craving right
-						now. Pizza, pasta, ramen? Use the built-in search function to find
-						exactly what you're in the mood for
+						Hungry will help you find a recipe for whatever you're craving.
+						Pizza, pasta, ramen? Use the built-in search function to find
+						exactly what you're in the mood for.
 					</p>
 				</div>
 			</div>
@@ -59,7 +59,7 @@
 					<p class="head-description">Create your own recipe</p>
 					<p class="add-description">
 						If you already have a recipe for your favorite dish, you can input
-						it and have it on hand whenever you want to use it
+						it and have it on hand whenever you want to use it.
 					</p>
 				</div>
 			</div>
@@ -72,10 +72,9 @@
 						Find a recipe using what you have on hand
 					</p>
 					<p class="add-description">
-						"Do you have ingredients in your fridge that you'd like to use, but
-						you're not sure how to combine them? Use the browser by providing
-						the ingredients you want to use, and Hungry will create a list of
-						dishes you can prepare with them
+						You have ingredients that you'd like to use, but you're not sure how
+						to combine them? Use the special component in Hungry to create
+						dishes you can prepare with them.
 					</p>
 				</div>
 			</div>
