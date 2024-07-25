@@ -184,6 +184,7 @@
 					</div>
 				</div>
 				<Button
+					v-if="useAuthStore.user"
 					class="button-add-to-book"
 					label="Add recipe to Your book" />
 			</li>
@@ -194,6 +195,9 @@
 <script setup>
 import { ref } from "vue";
 import Button from "primevue/button";
+import { authStore } from "@/stores/authStore";
+
+const useAuthStore = authStore();
 const props = defineProps({
 	recipe: Object,
 });
