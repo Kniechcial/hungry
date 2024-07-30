@@ -8,39 +8,24 @@
 				alt="Zdjęcie" />
 		</div>
 		<div class="card flex justify-content-center">
-			<div class="flex flex-column gap-3">
+			<div class="flex flex-column gap-1">
 				<p>E-mail:</p>
-				<div>
-					<div :class="{ redBorder: displayEmailError }">
-						<div class="card flex justify-content-center">
-							<InputText
-								class="input-email"
-								v-model.trim="loginUser.email"
-								type="text"
-								size="large" />
-						</div>
-					</div>
-					<span
-						class="showError"
-						v-if="displayEmailError"
-						>WRONG E-MAIL ADDRESS!</span
-					>
+				<div class="card flex justify-content-center">
+					<InputText
+						class="w-17rem"
+						v-model.trim="loginUser.email"
+						:invalid="displayError"
+						type="text" />
 				</div>
 				<p>Password:</p>
 				<div>
-					<div :class="{ redBorder: displayPasswordError }">
-						<div class="card flex justify-content-center">
-							<Password
-								:feedback="false"
-								v-model.trim="loginUser.password"
-								toggleMask />
-						</div>
+					<div class="card flex justify-content-center w-max">
+						<Password
+							:feedback="false"
+							v-model.trim="loginUser.password"
+							:invalid="displayError"
+							toggleMask />
 					</div>
-					<span
-						class="showError"
-						v-if="displayPasswordError"
-						>WRONG PASSWORD!</span
-					>
 				</div>
 			</div>
 		</div>
@@ -67,8 +52,8 @@ import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 const useAuthStore = authStore();
-const displayPasswordError = ref(false);
-const displayEmailError = ref(false);
+
+const displayError = ref(false);
 
 const loginUser = reactive({
 	email: "",
@@ -79,8 +64,6 @@ const logInUser = async () => {
 	// Sprawdza błędy po stronie frontend-u (puste pola)
 	if (!loginUser.email || !loginUser.password) {
 		showError("Please enter email and password");
-		displayPasswordError.value = true;
-		displayEmailError.value = true;
 		return;
 	}
 	//  Sprawdza błędy po strone backend-u (odpowiedzi z firebase)
@@ -91,27 +74,13 @@ const logInUser = async () => {
 };
 
 const checkError = (error) => {
-	if (error === "auth/invalid-email") {
-		return (
-			(displayEmailError.value = true),
-			(displayPasswordError.value = false),
-			showError("Invalid email"),
-			console.log("error in LogIn.vue " + error)
-		);
-	} else if (error === "auth/invalid-credential") {
-		return (
-			(displayEmailError.value = true),
-			(displayPasswordError.value = true),
-			showError("Invalid credential"),
-			console.log("error in LogIn.vue " + error)
-		);
+	displayError.value = true;
+	if (error === "auth/invalid-email" || error === "auth/invalid-credential") {
+		showError("Invalid credential"), console.log("error in LogIn.vue " + error);
+		console.log(displayError.value);
 	} else if (error === "auth/too-many-requests") {
-		return (
-			(displayEmailError.value = true),
-			(displayPasswordError.value = true),
-			showError("Too many requests"),
-			console.log("error in LogIn.vue " + error)
-		);
+		showError("Too many requests"), console.log("error in LogIn.vue " + error);
+		console.log(displayError.value);
 	}
 };
 
@@ -126,16 +95,13 @@ const showError = (message) => {
 </script>
 
 <style scoped>
-* {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+.input-width {
+	width: 25rem !important;
 }
-.input-email {
+.label-description {
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
 }
-
 .errorInput {
 	margin-top: 2rem;
 	margin-bottom: 1rem;
