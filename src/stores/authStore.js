@@ -6,6 +6,7 @@ import { ref } from "vue";
 
 export const authStore = defineStore("authStore", () => {
 	const user = ref(null);
+
 	const registerUser = async (newUser) => {
 		try {
 			const response = await createUserWithEmailAndPassword(
@@ -14,15 +15,12 @@ export const authStore = defineStore("authStore", () => {
 				newUser.password
 			);
 			const responseData = await response.json();
-			// Signed up
-			const user = responseData.user;
+			user.value = responseData.user;
 			console.log(user);
 			return { result: true };
 		} catch (error) {
-			if (!error === null) {
-				// console.log("Error in authStore.js " + error.code);
-				return { result: false, error: error.code };
-			}
+			// console.log("Error in authStore.js: " + error.code);
+			return { result: false, error: error.code };
 		}
 	};
 	const loginUser = async (loginUser) => {
@@ -33,7 +31,7 @@ export const authStore = defineStore("authStore", () => {
 				loginUser.password
 			);
 			const responseData = await response.json();
-			const user = responseData.user;
+			user.value = responseData.user;
 			console.log(user);
 			return { result: true };
 		} catch (error) {
