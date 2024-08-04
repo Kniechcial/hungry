@@ -12,9 +12,9 @@
 				<p>E-mail:</p>
 				<div class="card flex justify-content-center">
 					<InputText
+						:class="{ 'p-invalid': displayError }"
 						class="w-17rem"
 						v-model.trim="loginUser.email"
-						:invalid="displayError"
 						type="text" />
 				</div>
 				<p>Password:</p>
@@ -23,7 +23,9 @@
 						<Password
 							:feedback="false"
 							v-model.trim="loginUser.password"
-							:invalid="displayError"
+							:class="{
+								'p-invalid': displayError,
+							}"
 							toggleMask />
 					</div>
 				</div>
@@ -41,13 +43,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive } from "vue";
+import { authStore } from "../../../stores/authStore.js";
 import Password from "primevue/password";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
-import logIcon from "../../../assets/icon/log-icon.png";
-import { authStore } from "../../../stores/authStore.js";
 import Toast from "primevue/toast";
+import logIcon from "../../../assets/icon/log-icon.png";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
@@ -95,27 +97,10 @@ const showError = (message) => {
 </script>
 
 <style scoped>
-.input-width {
-	width: 25rem !important;
-}
-.label-description {
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-}
-.errorInput {
-	margin-top: 2rem;
-	margin-bottom: 1rem;
-	font-weight: bold;
-	color: red;
-}
-
-.showError {
-	color: red;
-	font-weight: bold;
-}
-.redBorder {
-	border: 2px solid red;
-	border-radius: 10px;
+.p-invalid {
+	border-color: red;
+	background-color: #fdd;
+	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
 }
 .content {
 	position: relative;
@@ -143,7 +128,7 @@ button {
 .log-icon {
 	margin-top: 3rem;
 	position: relative;
-	margin-bottom: -5rem;
+	margin-bottom: -4rem;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
