@@ -5,7 +5,7 @@
 			<img
 				class="log-icon"
 				:src="logIcon"
-				alt="Zdjęcie" />
+				alt="photo" />
 		</div>
 		<div class="card flex justify-content-center">
 			<div class="flex flex-column gap-1">
