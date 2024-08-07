@@ -73,7 +73,9 @@ const newUser = reactive({
 
 const addUser = async () => {
 	// Sprawdza błędy po stronie frontend-u (zgodność haseł)
-	validatePasswords();
+	if (!validatePasswords()) {
+		return;
+	}
 	//  Sprawdza błędy po strone backend-u (odpowiedzi z firebase)
 	const response = await useAuthStore.registerUser(newUser);
 	if (!response.result) {
@@ -88,10 +90,11 @@ const validatePasswords = () => {
 		password.value === confirmPassword.value && password.value;
 		newUser.password = password.value;
 		console.log("Validate Passwords " + newUser.password);
+		return true;
 	} else {
 		showError("Passwords do not match");
 		displayPasswordError.value = true;
-		return;
+		return false;
 	}
 };
 
