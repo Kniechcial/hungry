@@ -44,9 +44,11 @@ onMounted(async () => {
 });
 </script>
 <style>
+* {
+	box-sizing: border-box;
+}
 body {
 	min-height: 87vh;
-	box-sizing: border-box;
 	margin: 0;
 }
 </style>
