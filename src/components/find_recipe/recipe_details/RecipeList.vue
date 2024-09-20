@@ -7,7 +7,9 @@
 		:dismissableMask="true"
 		@setVisible="setVisible()"
 		:showHeader="false">
-		<RecipeDetails :recipe="activeRecipe" @setVisible="setVisible(false)"></RecipeDetails>
+		<RecipeDetails
+			:recipe="activeRecipe"
+			@setVisible="setVisible(false)"></RecipeDetails>
 	</Dialog>
 	<div class="header-text">Your five delicious recipes. Enjoy your meal !</div>
 	<div>
@@ -58,7 +60,6 @@ const activeRecipe = ref(null);
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
 	activeRecipe.value = recipe;
-	console.log(activeRecipe);
 };
 const setVisible = (visible) => {
 	recipeVisible.value = visible;
