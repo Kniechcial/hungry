@@ -15,7 +15,7 @@
 	<div>
 		<ul>
 			<li
-				v-for="(recipe, index) in useTastyStore.fetchedRecipes"
+				v-for="(recipe, index) in fetchedRecipes"
 				:key="index">
 				<div class="container">
 					<div class="recipe-box">
@@ -53,7 +53,9 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "./RecipeDetails.vue";
 import { tastyStore } from "../../../stores/tasty.js";
+import { storeToRefs } from "pinia";
 const useTastyStore = tastyStore();
+const { fetchedRecipes } = storeToRefs(useTastyStore);
 
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
