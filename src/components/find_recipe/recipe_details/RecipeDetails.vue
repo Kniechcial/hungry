@@ -186,6 +186,7 @@
 				<Button
 					v-if="useAuthStore.user"
 					class="button-add-to-book"
+					@click="addToBook()"
 					label="Add recipe to Your book" />
 			</li>
 		</ul>
@@ -196,13 +197,15 @@
 import { ref } from "vue";
 import Button from "primevue/button";
 import { authStore } from "@/stores/authStore";
-
+import { tastyStore } from "../../../stores/tasty.js";
+import { recipesStore } from "@/stores/recipesStore.js";
+const useTastyStore = tastyStore();
+const useRecipesStore = recipesStore();
 const useAuthStore = authStore();
 const props = defineProps({
 	recipe: Object,
 });
 const emit = defineEmits(["setVisible"]);
-
 const closeRecipe = () => {
 	emit("setVisible", false);
 	console.log("TAK");
@@ -217,6 +220,11 @@ const displayIngridients = () => {
 };
 const getIndexInArray = (index) => {
 	return index + 1;
+};
+
+const addToBook = () => {
+	useRecipesStore.addRecipe(props.recipe);
+	useRecipesStore.getRecipe();
 };
 </script>
 
