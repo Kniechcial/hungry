@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { auth } from "../fireBase.js";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { ref } from "vue";
 
 export const authStore = defineStore("authStore", () => {
@@ -19,7 +19,7 @@ export const authStore = defineStore("authStore", () => {
 			console.log(user);
 			return { result: true };
 		} catch (error) {
-			// console.log("Error in authStore.js: " + error.code);
+			console.log("Error in authStore.js in registerUser: " + error);
 			return { result: false, error: error.code };
 		}
 	};
@@ -30,26 +30,37 @@ export const authStore = defineStore("authStore", () => {
 				loginUser.email,
 				loginUser.password
 			);
-			const responseData = await response.json();
-			user.value = responseData.user;
-			console.log(user);
+			user.value = response.user;
+			console.log(user.value);
 			return { result: true };
 		} catch (error) {
-			// console.log("Error in authStore.js: " + error.code);
+			console.log("Error in authStore.js in loginUser: " + error);
 			return { result: false, error: error.code };
 		}
 	};
 	const logoutUser = () => {
 		signOut(auth)
 			.then(() => {
-				// Sign-out successful.
+				user.value = null;
 				console.log("loggedout");
 			})
 			.catch((error) => {
-				// An error happened.
+				console.log("Error in authStore.js in logoutUser", error);
 			});
 	};
 
+	const checkUserState = () => {
+		onAuthStateChanged(auth, (currentUser) => {
+			if (currentUser) {
+				user.value = currentUser;
+			} else {
+				user.value = null;
+				console.log("No user is logged in.");
+			}
+		});
+	};
+
+	checkUserState();
 	return {
 		registerUser,
 		loginUser,
