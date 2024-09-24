@@ -191,26 +191,33 @@
 			</li>
 		</ul>
 	</div>
+	<Toast />
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import Button from "primevue/button";
 import { authStore } from "@/stores/authStore";
 import { tastyStore } from "../../../stores/tasty.js";
 import { recipesStore } from "@/stores/recipesStore.js";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+import { useRouter } from "vue-router";
+
 const useTastyStore = tastyStore();
 const useRecipesStore = recipesStore();
 const useAuthStore = authStore();
 const props = defineProps({
 	recipe: Object,
 });
+const router = useRouter();
 const emit = defineEmits(["setVisible"]);
 const closeRecipe = () => {
 	emit("setVisible", false);
 	console.log("TAK");
 	console.log("setVisible");
 };
+const toast = useToast();
 const showIngridients = ref(false);
 const hiddenButton = ref(false);
 
@@ -225,6 +232,42 @@ const getIndexInArray = (index) => {
 const addToBook = () => {
 	useRecipesStore.addRecipe(props.recipe);
 	useRecipesStore.getRecipe();
+};
+
+watch(
+	() => useRecipesStore.addRecipeStatus,
+	(newStatus) => {
+		if (newStatus === true) {
+			console.log("Recipe was added successfully!");
+			showSuccess();
+			setTimeout(() => {
+				router.push({
+					name: "UserRecipes",
+				});
+			}, 1500);
+		} else if (newStatus === false) {
+			showError();
+			console.log("Failed to add recipe.");
+		}
+	}
+);
+
+const showError = () => {
+	toast.add({
+		severity: "error",
+		summary: "Error Message",
+		detail: "Sorry, failed to add recipe. Try again ",
+		life: 3000,
+	});
+};
+
+const showSuccess = () => {
+	toast.add({
+		severity: "success",
+		summary: "Success Message",
+		detail: "Recipe was added successfully!",
+		life: 3000,
+	});
 };
 </script>
 
