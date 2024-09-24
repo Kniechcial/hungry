@@ -8,6 +8,7 @@ export const recipesStore = defineStore("recipesStore", () => {
 	const useAuthStore = authStore();
 	const userRecipes = ref([]);
 	const user = useAuthStore.user;
+	const addRecipeStatus = ref(null);
 
 	const getRecipe = async () => {
 		try {
@@ -32,8 +33,10 @@ export const recipesStore = defineStore("recipesStore", () => {
 		try {
 			const recipesCollection = collection(db, "users", user.uid, "recipes");
 			await addDoc(recipesCollection, recipe);
+			addRecipeStatus.value = true;
 			console.log("Recipe added successfully");
 		} catch (error) {
+			addRecipeStatus.value = false;
 			console.log("Error in recipesStore.js in addRecipe", error);
 		}
 	};
@@ -42,5 +45,6 @@ export const recipesStore = defineStore("recipesStore", () => {
 		getRecipe,
 		addRecipe,
 		userRecipes,
+		addRecipeStatus,
 	};
 });
