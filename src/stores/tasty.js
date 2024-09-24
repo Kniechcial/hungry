@@ -8,8 +8,8 @@ export const tastyStore = defineStore("recipe", () => {
 		const options = {
 			method: "GET",
 			headers: {
-				"X-RapidAPI-Key": "ea3540f95fmsh8cb2b280fdc4b3fp18328bjsn7688d717e7ba",
-				"X-RapidAPI-Host": "tasty.p.rapidapi.com",
+				"x-rapidapi-key": "b7b6026050msh68a3a429253270ep18b0d4jsna6ced0ec83e1",
+				"x-rapidapi-host": "tasty.p.rapidapi.com",
 			},
 		};
 
@@ -74,8 +74,8 @@ export const tastyStore = defineStore("recipe", () => {
 		const options = {
 			method: "GET",
 			headers: {
-				"X-RapidAPI-Key": "ea3540f95fmsh8cb2b280fdc4b3fp18328bjsn7688d717e7ba",
-				"X-RapidAPI-Host": "tasty.p.rapidapi.com",
+				"x-rapidapi-key": "b7b6026050msh68a3a429253270ep18b0d4jsna6ced0ec83e1",
+				"x-rapidapi-host": "tasty.p.rapidapi.com",
 			},
 		};
 
