@@ -11,7 +11,7 @@
 			:recipe="activeRecipe"
 			@setVisible="setVisible(false)"></RecipeDetails>
 	</Dialog>
-	<div class="header-text">Your five delicious recipes. Enjoy your meal !</div>
+	<div class="header-text">{{ headerMessage }}</div>
 	<div>
 		<ul>
 			<li
@@ -48,17 +48,39 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "./RecipeDetails.vue";
-import { tastyStore } from "../../../stores/tasty.js";
 import { storeToRefs } from "pinia";
-const useTastyStore = tastyStore();
-const { fetchedRecipes } = storeToRefs(useTastyStore);
+import { useRoute } from "vue-router";
+import { tastyStore } from "../../../stores/tasty.js";
+import { recipesStore } from "../../../stores/recipesStore.js";
 
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
+const route = useRoute();
+const storeType = route.query.storeType;
+
+
+const headerMessage = ref(
+	route.query.headerMessage || "Your five delicious recipes. Enjoy!"
+);
+let fetchedRecipes = ref([]);
+
+onMounted(async () => {
+	if (storeType === "tasty") {
+		const useTastyStore = tastyStore(); 
+		
+		await useTastyStore.getRecipes(0, 1, route.query.foodName); 
+		fetchedRecipes.value = useTastyStore.fetchedRecipes; 
+	} else if (storeType === "recipes") {
+		const useRecipesStore = recipesStore();
+		await useRecipesStore.getRecipe();
+		fetchedRecipes.value = useRecipesStore.userRecipes;
+	}
+});
+
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
 	activeRecipe.value = recipe;
