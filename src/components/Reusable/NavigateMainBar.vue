@@ -63,13 +63,6 @@ const items = ref([
 					});
 				},
 			},
-			// {
-			// 	label: "My Recipes List",
-			// 	icon: "pi pi-book",
-			// 	command: () => {
-			// 		router.push({ name: "UserRecipes" });
-			// 	},
-			// },
 			{
 				label: "Add Recipe",
 				icon: "pi pi-file-import",
