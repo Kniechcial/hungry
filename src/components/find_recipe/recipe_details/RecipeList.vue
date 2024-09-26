@@ -23,6 +23,15 @@
 							<div class="recipe-name">
 								<strong>{{ index + 1 }}. {{ recipe.name || "no data" }}</strong>
 							</div>
+							<div
+								v-if="storeType === 'recipes'"
+								class="button-location">
+								<Button
+									class="button-class button-delete"
+									type="button"
+									icon="pi pi-trash" />
+							</div>
+
 							<div class="button-location">
 								<Button
 									@click="showRecipe(recipe)"
@@ -52,16 +61,16 @@ import { ref, onMounted } from "vue";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "./RecipeDetails.vue";
-import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import { tastyStore } from "../../../stores/tasty.js";
 import { recipesStore } from "../../../stores/recipesStore.js";
+
+// import { storeToRefs } from "pinia";
 
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
 const route = useRoute();
 const storeType = route.query.storeType;
-
 
 const headerMessage = ref(
 	route.query.headerMessage || "Your five delicious recipes. Enjoy!"
@@ -69,11 +78,12 @@ const headerMessage = ref(
 let fetchedRecipes = ref([]);
 
 onMounted(async () => {
+	console.log(storeType);
 	if (storeType === "tasty") {
-		const useTastyStore = tastyStore(); 
-		
-		await useTastyStore.getRecipes(0, 1, route.query.foodName); 
-		fetchedRecipes.value = useTastyStore.fetchedRecipes; 
+		const useTastyStore = tastyStore();
+
+		await useTastyStore.getRecipes(0, 1, route.query.foodName);
+		fetchedRecipes.value = useTastyStore.fetchedRecipes;
 	} else if (storeType === "recipes") {
 		const useRecipesStore = recipesStore();
 		await useRecipesStore.getRecipe();
@@ -186,10 +196,13 @@ const getItemClass = (index) => {
 	border-radius: 10px;
 	padding: 1rem;
 	margin-right: 0.5rem;
-	margin-left: 1rem;
 }
 .button-class {
 	padding: 1rem;
+}
+.button-delete {
+	background-color: #f92222;
+	margin-left: 0.5rem;
 }
 
 @media (max-width: 768px) {
