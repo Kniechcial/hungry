@@ -184,7 +184,7 @@
 					</div>
 				</div>
 				<Button
-					v-if="useAuthStore.user"
+					v-if="useAuthStore.user && storeType === 'tasty'"
 					class="button-add-to-book"
 					@click="addToBook()"
 					label="Add recipe to Your book" />
@@ -203,6 +203,7 @@ import { recipesStore } from "@/stores/recipesStore.js";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 const useTastyStore = tastyStore();
 const useRecipesStore = recipesStore();
@@ -218,6 +219,8 @@ const closeRecipe = () => {
 	console.log("setVisible");
 };
 const toast = useToast();
+const route = useRoute();
+const storeType = route.query.storeType;
 const showIngridients = ref(false);
 const hiddenButton = ref(false);
 
@@ -242,7 +245,11 @@ watch(
 			showSuccess();
 			setTimeout(() => {
 				router.push({
-					name: "UserRecipes",
+					name: "RecipeList",
+					query: {
+						storeType: "recipes",
+						headerMessage: "Your list of delicious recipes. Enjoy!",
+					},
 				});
 			}, 1500);
 		} else if (newStatus === false) {
