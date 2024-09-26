@@ -54,9 +54,22 @@ const items = ref([
 				label: "My Recipes List",
 				icon: "pi pi-book",
 				command: () => {
-					router.push({ name: "myRecipe" });
+					router.push({
+						name: "RecipeList",
+						query: {
+							storeType: "recipes",
+							headerMessage: "Your list of delicious recipes. Enjoy!",
+						},
+					});
 				},
 			},
+			// {
+			// 	label: "My Recipes List",
+			// 	icon: "pi pi-book",
+			// 	command: () => {
+			// 		router.push({ name: "UserRecipes" });
+			// 	},
+			// },
 			{
 				label: "Add Recipe",
 				icon: "pi pi-file-import",

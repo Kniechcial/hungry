@@ -11,6 +11,7 @@ import RecipeDetails from "../components/find_recipe/recipe_details/RecipeDetail
 import RecipeList from "../components/find_recipe/recipe_details/RecipeList.vue";
 
 import TopBarMenu from "../components/reusable/NavigateMainBar.vue";
+import UserRecipes from "@/components/user/user_recipes/UserRecipes.vue";
 
 import Authorization from "@/views/authorization/Authorization.vue";
 import CreateNewRecipe from "../views/create_recipe/CreateNewRecipeView.vue";
@@ -37,6 +38,11 @@ const router = createRouter({
 			path: "/top-bar-menu",
 			name: "TopBarMenu",
 			component: TopBarMenu,
+		},
+		{
+			path: "/user-recipes",
+			name: "UserRecipes",
+			component: UserRecipes,
 		},
 
 		{
