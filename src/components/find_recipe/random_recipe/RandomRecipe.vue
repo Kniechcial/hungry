@@ -26,11 +26,19 @@ const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
 const router = useRouter();
 const toast = useToast();
-// const recipesLoading = ref(false);
 
 let foodName = ref(null);
 
-const BaseRecipeList = () => router.push({ name: "RecipeList" });
+const BaseRecipeList = () =>
+	router.push({
+		name: "RecipeList",
+		query: {
+			storeType: "tasty",
+			headerMessage: "Your delicious random recipes. Enjoy!",
+			foodName: foodName.display_name,
+		},
+	});
+// const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
 async function getRecipe() {
 	emit("setLoading");

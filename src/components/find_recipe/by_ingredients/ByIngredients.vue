@@ -121,7 +121,13 @@ const showMoreTags = () => {
 	numberOfItemsToShow.value = numberOfItemsToShow.value = Infinity;
 };
 
-const BaseRecipeList = () => router.push({ name: "RecipeList" });
+const BaseRecipeList = () =>
+	router.push({
+		name: "RecipeList",
+		query: {
+			storeType: "tasty",
+		},
+	});
 
 const toggleToGetRecipes = () => {
 	getRecipe();

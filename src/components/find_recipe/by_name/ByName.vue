@@ -42,7 +42,14 @@ const router = useRouter();
 const foodName = ref(null);
 const toast = useToast();
 
-const BaseRecipeList = () => router.push({ name: "RecipeList" });
+const BaseRecipeList = () =>
+	router.push({
+		name: "RecipeList",
+		query: {
+			storeType: "tasty",
+			headerMessage: "Your delicious recipes. Enjoy!",
+		},
+	});
 
 async function getRecipe() {
 	emit("setLoading");

@@ -153,7 +153,13 @@ const displayedItems = computed(() => {
 
 // Get Recipe
 
-const BaseRecipeList = () => router.push({ name: "RecipeList" });
+const BaseRecipeList = () =>
+	router.push({
+		name: "RecipeList",
+		query: {
+			storeType: "tasty",
+		},
+	});
 
 const toggleToGetRecipes = () => {
 	getRecipe();
