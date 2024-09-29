@@ -80,6 +80,7 @@ const toast = useToast();
 const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
 const userChosed = ref([]);
+const foodName = ref(null);
 
 let ingredientName = ref(null);
 
@@ -126,6 +127,7 @@ const BaseRecipeList = () =>
 		name: "RecipeList",
 		query: {
 			storeType: "tasty",
+			foodName: foodName,
 		},
 	});
 
@@ -137,6 +139,7 @@ async function getRecipe() {
 	emit("setLoading");
 	const selectedIngredients = userChosed.value.join(",");
 	await useTastyStore.getRecipes(0, 5, selectedIngredients);
+	const foodName = selectedIngredients;
 	console.log(useTastyStore.fetchedRecipes);
 	// recipesLoading.value = false;
 	if (useTastyStore.fetchedRecipes.length === 0) {

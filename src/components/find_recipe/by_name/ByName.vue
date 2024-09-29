@@ -48,6 +48,7 @@ const BaseRecipeList = () =>
 		query: {
 			storeType: "tasty",
 			headerMessage: "Your delicious recipes. Enjoy!",
+			foodName: foodName,
 		},
 	});
 

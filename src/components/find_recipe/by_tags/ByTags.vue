@@ -102,6 +102,7 @@ const showAll = ref(false);
 const showAllCategory = ref(true);
 const userChosed = ref([]);
 const selectedCategory = ref(null);
+const foodName = ref(null);
 const formatTagName = (name) => {
 	let nameA = name.replaceAll("_", " ");
 	let nameB = nameA.charAt(0).toUpperCase() + nameA.slice(1);
@@ -158,6 +159,7 @@ const BaseRecipeList = () =>
 		name: "RecipeList",
 		query: {
 			storeType: "tasty",
+			foodName: foodName,
 		},
 	});
 
@@ -171,6 +173,7 @@ async function getRecipe() {
 		.map((tag) => tag.display_name)
 		.join(",");
 	await useTastyStore.getRecipes(0, 5, selectedTags);
+	const foodName = selectedTags;
 	console.log(useTastyStore.fetchedRecipes);
 	emit("setLoading");
 	if (useTastyStore.fetchedRecipes.length === 0) {
