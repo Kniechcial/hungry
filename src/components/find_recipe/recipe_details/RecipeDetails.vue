@@ -41,7 +41,9 @@
 										class="allergy-icon-box"
 										v-if="
 											!recipe.tags.some((tag) =>
-												['Chicken', 'Meats', 'Beef'].includes(tag.display_name)
+												['Chicken', 'Meats', 'Beef', 'Pork'].includes(
+													tag.display_name
+												)
 											)
 										">
 										<img
