@@ -406,10 +406,9 @@ img {
 }
 .recipe-image {
 	float: left;
-	margin-left: -1rem;
 	overflow: hidden;
-	width: 400px;
-	height: 400px;
+	width: 386px;
+	height: 386px;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
