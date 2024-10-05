@@ -41,12 +41,11 @@
 									label="Show recipe"
 									icon="pi pi-chevron-down" />
 							</div>
-							<div class="set-time bg-yellow-200">
+							<div
+								v-if="recipe.Time"
+								class="set-time bg-yellow-200">
 								<p class="time">
-									<strong
-										>Time: {{ recipe.Time || "no data"
-										}}<strong> min</strong></strong
-									>
+									<strong>Time: {{ recipe.Time }}<strong> min</strong></strong>
 								</p>
 							</div>
 						</div>

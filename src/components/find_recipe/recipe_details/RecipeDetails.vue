@@ -97,9 +97,13 @@
 									</div>
 								</div>
 
-								<div class="set-time bg-yellow-200">
+								<div
+									v-if="recipe.Time"
+									class="set-time bg-yellow-200">
 									<p class="time">
-										<strong>TIME: {{ recipe.Time || "no data" }} min</strong>
+										<strong
+											>Time: {{ recipe.Time }}<strong> min</strong></strong
+										>
 									</p>
 								</div>
 							</div>
