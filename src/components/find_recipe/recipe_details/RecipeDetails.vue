@@ -187,11 +187,25 @@
 						</div>
 					</div>
 				</div>
-				<Button
-					v-if="useAuthStore.user && storeType === 'tasty'"
-					class="button-add-to-book"
-					@click="addToBook()"
-					label="Add recipe to Your book" />
+				<div class="button-container">
+					<Button
+						v-if="useAuthStore.user && storeType === 'tasty'"
+						class="button-add-to-book"
+						@click="addToBook"
+						label="Add recipe to Your book" />
+
+					<Button
+						v-else-if="!useAuthStore.user"
+						disabled
+						class="button-add-to-book"
+						label="Add recipe to Your book" />
+
+					<div
+						v-if="!useAuthStore.user"
+						class="button-tooltip">
+						After logging in, the button will be available.
+					</div>
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -491,11 +505,39 @@ button {
 .description-step {
 	font-style: italic;
 }
-.button-add-to-book {
+.button-container {
 	float: right;
 	margin-top: 1rem;
 	margin-bottom: -1rem;
+	position: relative;
 }
+.button-add-to-book {
+	cursor: pointer;
+	margin-right: 10px;
+}
+.button-add-to-book[disabled] {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+.button-tooltip {
+	display: none;
+	position: absolute;
+	background-color: #333;
+	color: #fff;
+	padding: 0.5rem;
+	border-radius: 0.3rem;
+	font-size: 0.8rem;
+	bottom: 120%;
+	left: 50%;
+	transform: translateX(-100%);
+	white-space: nowrap;
+	z-index: 10;
+}
+
+.button-container:hover .button-tooltip {
+	display: block;
+}
+
 @media (max-width: 1100px) {
 	.recipe-box {
 		flex-direction: column;
@@ -552,6 +594,9 @@ button {
 	}
 	.closeRecipe {
 		visibility: visible;
+	}
+	.button-tooltip {
+		display: none !important;
 	}
 }
 </style>
