@@ -23,6 +23,16 @@
 							<div class="recipe-name">
 								<strong>{{ index + 1 }}. {{ recipe.name || "no data" }}</strong>
 							</div>
+							<div
+								v-if="storeType === 'recipes'"
+								class="button-location">
+								<Button
+									@click="handlerDeleteRecipe(recipe)"
+									class="button-class button-delete"
+									type="button"
+									icon="pi pi-trash" />
+							</div>
+
 							<div class="button-location">
 								<Button
 									@click="showRecipe(recipe)"
@@ -48,23 +58,51 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
-import RecipeDetails from "./RecipeDetails.vue";
-import { tastyStore } from "../../../stores/tasty.js";
+import RecipeDetails from "../find_recipe/recipe_details/RecipeDetails.vue";
+import { recipesStore } from "../../stores/recipesStore.js";
 import { storeToRefs } from "pinia";
-import { useRoute } from "vue-router";
 
 const route = useRoute();
-const useTastyStore = tastyStore();
-const { fetchedRecipes } = storeToRefs(useTastyStore);
+const useRecipesStore = recipesStore();
+// const {fetchedRecipes} = storeToRefs(useRecipesStore);
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
+const storeType = route.query.storeType;
 
 const headerMessage = ref(
-	route.query.headerMessage || "Your five delicious recipes. Enjoy!"
+	route.query.headerMessage || "Your delicious recipes. Enjoy!"
 );
+// let fetchedRecipes = ref([]);
+
+//
+
+// const useRecipesStore = recipesStore();
+// console.log("User Recipes: ", useRecipesStore.userRecipes); // Sprawdź, co jest w userRecipes
+
+const fetchedRecipes = computed(() => {
+	// Zwracamy pustą tablicę, jeśli userRecipes jest puste lub nie zainicjowane
+	return useRecipesStore.userRecipes.length > 0
+		? useRecipesStore.userRecipes
+		: [];
+});
+
+//
+// onMounted(async () => {
+// 	console.log(storeType);
+// 	if (storeType === "tasty") {
+// 		const useTastyStore = tastyStore();
+// 		await useTastyStore.getRecipes(0, 1, route.query.foodName);
+// 		fetchedRecipes.value = useTastyStore.fetchedRecipes;
+// 	} else if (storeType === "recipes") {
+// 		const useRecipesStore = recipesStore();
+// 		await useRecipesStore.getRecipe();
+// 		fetchedRecipes.value = useRecipesStore.userRecipes;
+// 	}
+// });
 
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
@@ -77,6 +115,10 @@ const setVisible = (visible) => {
 
 const getItemClass = (index) => {
 	return (index + 1) % 2 === 0 ? "even" : "odd";
+};
+const handlerDeleteRecipe = async (recipe) => {
+	const useRecipesStore = recipesStore();
+	await useRecipesStore.deleteRecipe(recipe);
 };
 </script>
 

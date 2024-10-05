@@ -247,10 +247,9 @@ watch(
 			showSuccess();
 			setTimeout(() => {
 				router.push({
-					name: "RecipeList",
+					name: "UserRecipesList",
 					query: {
 						storeType: "recipes",
-						headerMessage: "Your list of delicious recipes. Enjoy!",
 					},
 				});
 			}, 1500);

@@ -1,6 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import {
+	collection,
+	getDocs,
+	addDoc,
+	deleteDoc,
+	doc,
+	onSnapshot,
+} from "firebase/firestore";
 import { db } from "../fireBase.js";
 import { authStore } from "./authStore"; // Import authStore
 
@@ -40,11 +47,30 @@ export const recipesStore = defineStore("recipesStore", () => {
 			console.log("Error in recipesStore.js in addRecipe", error);
 		}
 	};
+	const deleteRecipe = async (recipe) => {
+		await deleteDoc(doc(db, "users", user.uid, "recipes", recipe.id));
+	};
+
+	const getChanges = onSnapshot(
+		collection(db, "users", user.uid, "recipes"),
+		(querySnapshot) => {
+			const updatedRecipes = [];
+			querySnapshot.forEach((doc) => {
+				updatedRecipes.push({
+					id: doc.id,
+					...doc.data(),
+				});
+			});
+			userRecipes.value = [...updatedRecipes];
+		}
+	);
 
 	return {
 		getRecipe,
 		addRecipe,
 		userRecipes,
 		addRecipeStatus,
+		deleteRecipe,
+		getChanges,
 	};
 });
