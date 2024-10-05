@@ -138,8 +138,9 @@ const toggleToGetRecipes = () => {
 async function getRecipe() {
 	emit("setLoading");
 	const selectedIngredients = userChosed.value.join(",");
-	await useTastyStore.getRecipes(0, 5, selectedIngredients);
-	const foodName = selectedIngredients;
+	// await useTastyStore.getRecipes(0, 5, selectedIngredients);
+	// const foodName = selectedIngredients;
+	foodName.value = selectedIngredients;
 	console.log(useTastyStore.fetchedRecipes);
 	// recipesLoading.value = false;
 	if (useTastyStore.fetchedRecipes.length === 0) {
