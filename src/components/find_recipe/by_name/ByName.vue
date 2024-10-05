@@ -7,6 +7,7 @@
 					class="input-text"
 					id="recipe"
 					v-model="foodName"
+					@keydown.enter="getRecipe"
 					:feedback="false"
 					aria-describedby="recipe-help" />
 				<small

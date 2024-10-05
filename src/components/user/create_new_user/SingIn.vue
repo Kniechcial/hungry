@@ -32,6 +32,7 @@
 						<Password
 							:class="{ 'p-invalid': displayPasswordError }"
 							v-model.trim="confirmPassword"
+							@keydown.enter="addUser"
 							toggleMask />
 					</div>
 				</div>

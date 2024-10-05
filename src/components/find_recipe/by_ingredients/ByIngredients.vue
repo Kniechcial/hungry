@@ -15,6 +15,7 @@
 							class="input-text"
 							id="ingredient"
 							v-model="ingredientName"
+							@keydown.enter="getChosedIngredient"
 							:feedback="false"
 							aria-describedby="recipe-help" />
 						<small id="recipe-help">Enter the ingredient</small>

@@ -26,6 +26,7 @@
 							:class="{
 								'p-invalid': displayError,
 							}"
+							@keydown.enter="logInUser"
 							toggleMask />
 					</div>
 				</div>
