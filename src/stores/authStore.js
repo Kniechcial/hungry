@@ -14,8 +14,7 @@ export const authStore = defineStore("authStore", () => {
 				newUser.email,
 				newUser.password
 			);
-			const responseData = await response.json();
-			user.value = responseData.user;
+			user.value = response.user;
 			console.log(user);
 			return { result: true };
 		} catch (error) {
