@@ -40,10 +40,8 @@
 									<div
 										class="allergy-icon-box"
 										v-if="
-											!recipe.tags.some((tag) =>
-												['Chicken', 'Meats', 'Beef', 'Pork'].includes(
-													tag.display_name
-												)
+											recipe.tags.some((tag) =>
+												['Vegan', 'Vegetarian'].includes(tag.display_name)
 											)
 										">
 										<img
