@@ -5,30 +5,52 @@
 		</div>
 		<div
 			class="avatar-container"
-			@click="navigateToAuthorization()">
+			ref="avatarContainer">
 			<span
 				v-if="useAuthStore.user"
 				class="avatar-text">
-				{{ useAuthStore.user.email }}</span
-			>
+				{{ useAuthStore.user.email }}
+			</span>
 			<Avatar
 				icon="pi pi-user"
 				:class="
 					useAuthStore.user ? 'avatar-design-enable' : 'avatar-design-disable'
 				"
 				size="large"
-				shape="circle" />
+				shape="circle"
+				@click="toggleMenu" />
+			<Menu
+				:model="avatarItems"
+				v-if="useAuthStore.user"
+				ref="avatarMenu"
+				popup
+				:baseZIndex="1000" />
 		</div>
 	</div>
 </template>
+
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import Avatar from "primevue/avatar";
 import Menubar from "primevue/menubar";
+import Menu from "primevue/menu";
 import { useRouter } from "vue-router";
 import { authStore } from "@/stores/authStore";
 
 const useAuthStore = authStore();
+const router = useRouter();
+
+const showMenu = ref(false);
+const avatarMenu = ref(null);
+const avatarContainer = ref(null);
+
+const toggleMenu = (event) => {
+	if (!useAuthStore.user) {
+		navigateToAuthorization();
+	} else {
+		avatarMenu.value.toggle(event);
+	}
+};
 
 const navigateToAuthorization = () => {
 	router.push({
@@ -36,8 +58,38 @@ const navigateToAuthorization = () => {
 		params: { findBy: "register" },
 	});
 };
+const handleClickOutside = (event) => {
+	if (avatarContainer.value && !avatarContainer.value.contains(event.target)) {
+		showMenu.value = false;
+	}
+};
 
-const router = useRouter();
+onMounted(() => {
+	document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+	document.removeEventListener("click", handleClickOutside);
+});
+
+const avatarItems = ref([
+	{
+		label: "Setting",
+		icon: "pi pi-user",
+		command: () => {
+			router.push({ name: "user-panel" });
+		},
+	},
+	{
+		label: "Logout",
+		icon: "pi pi-sign-out",
+		command: () => {
+			useAuthStore.logoutUser();
+			router.push({ name: "HomeView" });
+		},
+	},
+]);
+
 const items = ref([
 	{
 		label: "Home",
@@ -63,27 +115,13 @@ const items = ref([
 					});
 				},
 			},
-			{
-				label: "Add Recipe",
-				icon: "pi pi-file-import",
-				command: () => {
-					router.push({ name: "CreateNewRecipe" });
-				},
-			},
-			{
-				label: "Edit Recipe",
-				icon: "pi pi-file-edit",
-				// command: () => {
-				// 	router.push({ name: "newRecipe" });
-				// },
-			},
-			{
-				label: "Delete Recipe",
-				icon: "pi pi-eraser",
-				// command: () => {
-				// 	router.push({ name: "newRecipe" });
-				// },
-			},
+			// {
+			// 	label: "Add Recipe",
+			// 	icon: "pi pi-file-import",
+			// 	command: () => {
+			// 		router.push({ name: "CreateNewRecipe" });
+			// 	},
+			// },
 		],
 	},
 	{
@@ -94,21 +132,6 @@ const items = ref([
 				name: "FindRecipe",
 				params: { findBy: "base-description" },
 			});
-		},
-	},
-	{
-		label: "Setting",
-		icon: "pi pi-cog",
-		command: () => {
-			router.push({ name: "user-panel" });
-		},
-	},
-	{
-		label: "",
-		class: "",
-		icon: "pi pi-sign-out",
-		command: () => {
-			useAuthStore.logoutUser();
 		},
 	},
 ]);
@@ -122,11 +145,13 @@ const filteredItems = computed(() => {
 	);
 });
 </script>
-<style>
+
+<style scoped>
 .mainBar {
 	position: relative;
 	display: flex;
 }
+
 .firstObject {
 	position: relative;
 	flex-grow: 1;
@@ -134,16 +159,12 @@ const filteredItems = computed(() => {
 
 .avatar-container {
 	position: absolute;
-	z-index: 1;
-	right: 1rem;
+	padding: 1rem;
+	right: 1.5rem;
 	top: 50%;
 	transform: translateY(-50%);
 	display: flex;
 	align-items: center;
-}
-
-.avatar-text {
-	margin-right: 0.5rem;
 }
 
 .avatar-design-disable {
@@ -154,5 +175,9 @@ const filteredItems = computed(() => {
 .avatar-design-enable {
 	background-color: rgb(132, 242, 132);
 	cursor: pointer;
+}
+.avatar-text {
+	margin-right: 0.75rem;
+	font-style: italic;
 }
 </style>
