@@ -67,7 +67,6 @@ import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const useRecipesStore = recipesStore();
-// const {fetchedRecipes} = storeToRefs(useRecipesStore);
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
 const storeType = route.query.storeType;
@@ -75,33 +74,14 @@ const storeType = route.query.storeType;
 const headerMessage = ref(
 	route.query.headerMessage || "Your delicious recipes. Enjoy!"
 );
-// let fetchedRecipes = ref([]);
 
-//
-
-// const useRecipesStore = recipesStore();
-// console.log("User Recipes: ", useRecipesStore.userRecipes); // Sprawdź, co jest w userRecipes
 
 const fetchedRecipes = computed(() => {
-	// Zwracamy pustą tablicę, jeśli userRecipes jest puste lub nie zainicjowane
 	return useRecipesStore.userRecipes.length > 0
 		? useRecipesStore.userRecipes
 		: [];
 });
 
-//
-// onMounted(async () => {
-// 	console.log(storeType);
-// 	if (storeType === "tasty") {
-// 		const useTastyStore = tastyStore();
-// 		await useTastyStore.getRecipes(0, 1, route.query.foodName);
-// 		fetchedRecipes.value = useTastyStore.fetchedRecipes;
-// 	} else if (storeType === "recipes") {
-// 		const useRecipesStore = recipesStore();
-// 		await useRecipesStore.getRecipe();
-// 		fetchedRecipes.value = useRecipesStore.userRecipes;
-// 	}
-// });
 
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
