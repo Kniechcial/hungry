@@ -55,6 +55,7 @@
 				<div class="button-box-right">
 					<div class="card flex">
 						<Button
+							:disabled="disabledButtonFindRecipe"
 							@click="toggleToGetRecipes()"
 							label="Find recipe" />
 					</div>
@@ -66,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
@@ -111,6 +112,10 @@ const getChosedIngredient = () => {
 const deleteSelectedTag = (index) => {
 	userChosed.value.splice(index, 1);
 };
+
+const disabledButtonFindRecipe = computed(() => {
+	return userChosed.value.length === 0;
+});
 
 const toggleShow = () => {
 	showAll.value = !showAll.value;
