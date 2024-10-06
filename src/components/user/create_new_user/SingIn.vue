@@ -41,7 +41,7 @@
 		<div class="card flex justify-content-left mt-4">
 			<Button
 				@click="addUser()"
-				label="Add User"
+				label="Register"
 				:disabled="!newUser.email || !password || !confirmPassword" />
 		</div>
 	</div>
