@@ -92,9 +92,6 @@ const emit = defineEmits(["setLoading"]);
 
 const useTastyStore = tastyStore();
 const router = useRouter();
-// const isLoading = ref(false);
-// const recipesLoading = ref(false);
-
 const toast = useToast();
 
 const numberOfItemsToShow = ref(6);
@@ -150,9 +147,6 @@ const displayedItems = computed(() => {
 		return showAll.value || index < numberOfItemsToShow.value;
 	});
 });
-//
-
-// Get Recipe
 
 const BaseRecipeList = () =>
 	router.push({
@@ -182,9 +176,6 @@ async function getRecipe() {
 		BaseRecipeList();
 	}
 }
-//
-
-//  Error
 
 const showError = () => {
 	toast.add({
@@ -194,12 +185,9 @@ const showError = () => {
 		life: 3000,
 	});
 };
-
-//
 </script>
 
 <style scoped>
-/* */
 .main-box {
 	display: flex;
 	justify-content: space-between;
