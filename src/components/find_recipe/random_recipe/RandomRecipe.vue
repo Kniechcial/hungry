@@ -38,13 +38,11 @@ const BaseRecipeList = () =>
 			foodName: foodName.display_name,
 		},
 	});
-// const BaseRecipeList = () => router.push({ name: "RecipeList" });
 
 async function getRecipe() {
 	emit("setLoading");
 	getRandomRecipe();
 	await useTastyStore.getRecipes(0, 1, foodName.display_name);
-	// recipesLoading.value = false;
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 		emit("setLoading");
@@ -56,7 +54,7 @@ async function getRecipe() {
 function getRandomRecipe() {
 	const randomIndex = Math.floor(Math.random() * 500);
 	foodName = useTastyStore.fetchedTags[randomIndex];
-	console.log(foodName.display_name);
+	console.log(" getRandomRecipe " + foodName.display_name);
 }
 
 const showError = () => {
