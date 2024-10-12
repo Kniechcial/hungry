@@ -4,6 +4,7 @@
 		<div class="card flex mt-3">
 			<div class="flex flex-column p-3 gap-2">
 				<InputText
+					:class="{ 'p-invalid': displayError }"
 					class="input-text"
 					id="recipe"
 					v-model="foodName"
@@ -40,8 +41,9 @@ import { tastyStore } from "../../../stores/tasty.js";
 const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
 const router = useRouter();
-const foodName = ref(null);
 const toast = useToast();
+const foodName = ref(null);
+const displayError = ref(false);
 
 const BaseRecipeList = () =>
 	router.push({
@@ -57,9 +59,11 @@ async function getRecipe() {
 	emit("setLoading");
 	await useTastyStore.getRecipes(0, 2, foodName.value);
 	console.log(useTastyStore.fetchedRecipes);
+
 	if (foodName) {
 		if (useTastyStore.fetchedRecipes.length === 0) {
 			showError();
+			displayError.value = true;
 			emit("setLoading");
 		} else {
 			BaseRecipeList();
@@ -109,6 +113,12 @@ const showError = () => {
 .description-input {
 	font-style: italic;
 }
+.p-invalid {
+	border-color: red;
+	background-color: #fdd;
+	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
+}
+
 @keyframes moveUpDown {
 	from {
 		top: 0;
@@ -117,23 +127,7 @@ const showError = () => {
 		top: 20px;
 	}
 }
-/* @media (max-width: 1250px) {
-	.content {
-		flex-direction: column;
-		align-items: center;
-		font-size: 12px;
-		width: 100%;
-		max-width: none;
-		margin: 1rem 0;
-	}
-	.input-text {
-		width: 230px;
-	}
-	.button-box {
-		scale: 0.7;
-		margin-left: 8rem;
-	}
-} */
+
 @media (max-width: 650px) {
 	.content {
 		flex-direction: column;

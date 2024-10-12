@@ -2,7 +2,7 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const tastyStore = defineStore("recipe", () => {
-	const fetchedRecipes = ref(null);
+	const fetchedRecipes = ref([]);
 	async function getRecipes(from, size, q) {
 		const url = `https://tasty.p.rapidapi.com/recipes/list?from=${from}&size=${size}&q=${q}`;
 		const options = {
@@ -64,6 +64,7 @@ export const tastyStore = defineStore("recipe", () => {
 			}
 			console.log(result);
 			fetchedRecipes.value = modifiedRecipes;
+			console.log("Pierwsze wywołania Funkcji GetRecipe");
 		} catch (error) {
 			console.error(error);
 		}
