@@ -143,15 +143,16 @@ const toggleToGetRecipes = () => {
 
 async function getRecipe() {
 	emit("setLoading");
-	const selectedIngredients = userChosed.value.join(",");
-	// await useTastyStore.getRecipes(0, 5, selectedIngredients);
-	// const foodName = selectedIngredients;
+	const selectedIngredients = ref(userChosed.value.join(","));
+
+	await useTastyStore.getRecipes(0, 2, selectedIngredients.value);
+	const foodName = selectedIngredients;
 	foodName.value = selectedIngredients;
+	console.log("wyszukanie w ByIngredients");
 	console.log(useTastyStore.fetchedRecipes);
-	// recipesLoading.value = false;
+	emit("setLoading");
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
-		emit("setLoading");
 	} else {
 		BaseRecipeList();
 	}
