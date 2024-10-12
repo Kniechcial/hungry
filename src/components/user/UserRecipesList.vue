@@ -54,34 +54,59 @@
 			</li>
 		</ul>
 	</div>
+	<div
+		v-if="displayBaseDescription"
+		class="content">
+		<div class="card flex mt-3">
+			<div class="flex flex-column p-3 gap-2">
+				<label><strong>Your list is empty</strong></label>
+				<small class="description"
+					>You don't added any recipe yet. Add your first recipe and save it for
+					use if in the future.</small
+				>
+			</div>
+		</div>
+		<div class="button-box">
+			<Button
+				@click="addFirstRecipe()"
+				label="Add first recipe" />
+		</div>
+	</div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "../find_recipe/recipe_details/RecipeDetails.vue";
 import { recipesStore } from "../../stores/recipesStore.js";
-import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const route = useRoute();
 const useRecipesStore = recipesStore();
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
 const storeType = route.query.storeType;
+const displayBaseDescription = ref(false);
 
 const headerMessage = ref(
 	route.query.headerMessage || "Your delicious recipes. Enjoy!"
 );
 
-
 const fetchedRecipes = computed(() => {
-	return useRecipesStore.userRecipes.length > 0
-		? useRecipesStore.userRecipes
-		: [];
+	if (useRecipesStore.userRecipes.length > 0) {
+		displayBaseDescription.value = false;
+		return useRecipesStore.userRecipes;
+	} else {
+		displayBaseDescription.value = true;
+		return [];
+	}
 });
 
+const addFirstRecipe = () =>
+	router.push({ name: "FindRecipe", params: { findBy: "name" } });
 
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
@@ -122,12 +147,21 @@ const handlerDeleteRecipe = async (recipe) => {
 
 * {
 	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
+}
+ul,
+li {
+	list-style: none !important;
 }
 .dialog-class {
 	margin: 0;
 	padding: 0;
+}
+
+.description {
+	font-size: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	font-style: italic;
 }
 
 .container {
@@ -139,6 +173,22 @@ const handlerDeleteRecipe = async (recipe) => {
 	width: 100%;
 	border-color: aliceblue;
 	border-radius: 10px;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+	color: #44424d;
+}
+
+.content {
+	position: relative;
+	border: 1px solid;
+	border-color: aliceblue;
+	border-radius: 10px;
+	background-color: #fcffff;
+	padding: 1rem;
+	margin-top: 12rem;
+	width: 30rem;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 22px;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
 }
@@ -175,8 +225,8 @@ const handlerDeleteRecipe = async (recipe) => {
 	max-height: 4rem;
 	margin-top: 0.5rem;
 	border-radius: 10px;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding: 1rem;
+	margin-right: 0.5rem;
 	color: black;
 }
 .time {
@@ -199,6 +249,10 @@ const handlerDeleteRecipe = async (recipe) => {
 .button-delete {
 	background-color: #f92222;
 	margin-left: 0.5rem;
+}
+.button-box {
+	margin-top: 2rem;
+	margin-left: 18rem;
 }
 
 @media (max-width: 768px) {
