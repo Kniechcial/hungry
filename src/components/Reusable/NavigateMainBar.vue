@@ -85,7 +85,10 @@ const avatarItems = ref([
 		icon: "pi pi-sign-out",
 		command: () => {
 			useAuthStore.logoutUser();
-			router.push({ name: "HomeView" });
+			router.push({
+				name: "Authorization",
+				params: { findBy: "login" },
+			});
 		},
 	},
 ]);
