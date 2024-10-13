@@ -1,6 +1,10 @@
 import { defineStore } from "pinia";
 import { auth } from "../fireBase.js";
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+	createUserWithEmailAndPassword,
+	sendPasswordResetEmail,
+	signOut,
+} from "firebase/auth";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { ref } from "vue";
 
@@ -47,6 +51,14 @@ export const authStore = defineStore("authStore", () => {
 				console.log("Error in authStore.js in logoutUser", error);
 			});
 	};
+	const restorePassword = async (email) => {
+		try {
+			await sendPasswordResetEmail(auth, email);
+			console.log("Password reset email sent");
+		} catch (error) {
+			console.log("Error in authStore.js in restorePassword: " + error);
+		}
+	};
 
 	const checkUserState = () => {
 		onAuthStateChanged(auth, (currentUser) => {
@@ -64,6 +76,7 @@ export const authStore = defineStore("authStore", () => {
 		registerUser,
 		loginUser,
 		logoutUser,
+		restorePassword,
 		user,
 	};
 });

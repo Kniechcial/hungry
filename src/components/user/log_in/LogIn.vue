@@ -39,6 +39,13 @@
 					label="Login"
 					:disabled="!loginUser.email || !loginUser.password" />
 			</div>
+			<div
+				v-if="displayError"
+				class="card relative inline-block mr-5 mt-4 ml-5 cursor-pointer">
+				<Button
+					label="Restore password"
+					@click="restorePassword()" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -85,6 +92,14 @@ const checkError = (error) => {
 		showError("Too many requests"), console.log("error in LogIn.vue " + error);
 		console.log(displayError.value);
 	}
+};
+const restorePassword = async () => {
+	const email = loginUser.email;
+	if (!email) {
+		showError("Please enter your email");
+		return;
+	}
+	await useAuthStore.restorePassword(email);
 };
 
 const showError = (message) => {
