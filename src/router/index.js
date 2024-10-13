@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import CreateRecipeStepTwo from "../components/create_recipe/CreateRecipeStepTwo.vue";
+import CreateRecipe from "../components/create_recipe/CreateRecipe.vue";
 
 import BaseDescription from "../components/find_recipe/random_recipe/RandomRecipe.vue";
 import ByIngredients from "../components/find_recipe/by_ingredients/ByIngredients.vue";
@@ -30,10 +31,10 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
-			path: "/create-new-recipe",
-			name: "CreateNewRecipe",
+			path: "/create-recipe",
+			name: "CreateRecipe",
 			meta: { requiresAuth: true },
-			component: CreateNewRecipe,
+			component: CreateRecipe,
 		},
 		{
 			path: "/top-bar-menu",

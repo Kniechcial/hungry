@@ -119,7 +119,7 @@ const navigateToRandomRecipe = () => {
 };
 const navigateToCreateNewRecipe = () => {
 	router.push({
-		name: "CreateNewRecipe",
+		name: "CreateRecipe",
 	});
 };
 </script>
