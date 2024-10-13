@@ -17,37 +17,34 @@
 			<li
 				v-for="(recipe, index) in fetchedRecipes"
 				:key="index">
-				<div class="container">
-					<div class="recipe-box">
-						<div :class="['top-row', getItemClass(index)]">
-							<div class="recipe-name">
-								<strong>{{ index + 1 }}. {{ recipe.name || "no data" }}</strong>
-							</div>
-							<div
-								v-if="storeType === 'recipes'"
-								class="button-location">
-								<Button
-									@click="handlerDeleteRecipe(recipe)"
-									class="button-class button-delete"
-									type="button"
-									icon="pi pi-trash" />
-							</div>
-
-							<div class="button-location">
-								<Button
-									@click="showRecipe(recipe)"
-									class="button-class"
-									type="button"
-									label="Show recipe"
-									icon="pi pi-chevron-down" />
-							</div>
-							<div
-								v-if="recipe.Time"
-								class="set-time bg-yellow-200">
-								<p class="time">
-									<strong>Time: {{ recipe.Time }}<strong> min</strong></strong>
-								</p>
-							</div>
+				<div
+					class="container"
+					:class="[getItemClass(index)]">
+					<div class="recipe-name">
+						<strong>{{ index + 1 }}. {{ recipe.name || "no data" }}</strong>
+					</div>
+					<div class="right-elements">
+						<div
+							v-if="recipe.Time"
+							class="set-time">
+							<p class="time">
+								<strong>Time: {{ recipe.Time }}<strong> min</strong></strong>
+							</p>
+						</div>
+						<div class="button-show">
+							<Button
+								@click="showRecipe(recipe)"
+								class="button-class"
+								type="button"
+								label="Show recipe"
+								icon="pi pi-chevron-down" />
+						</div>
+						<div class="button-delete">
+							<Button
+								@click="handlerDeleteRecipe(recipe)"
+								class="button-class button-delete"
+								type="button"
+								icon="pi pi-trash" />
 						</div>
 					</div>
 				</div>
@@ -127,12 +124,18 @@ const handlerDeleteRecipe = async (recipe) => {
 </script>
 
 <style scoped>
+* {
+	box-sizing: border-box;
+}
+
 .even {
 	background-color: #fcffff;
 }
+
 .odd {
 	background-color: #a6ffea8c;
 }
+
 .header-text {
 	margin: 2rem auto 0 auto;
 	padding-left: 1rem;
@@ -145,13 +148,11 @@ const handlerDeleteRecipe = async (recipe) => {
 	color: #44424d;
 }
 
-* {
-	box-sizing: border-box;
-}
 ul,
 li {
 	list-style: none !important;
 }
+
 .dialog-class {
 	margin: 0;
 	padding: 0;
@@ -166,15 +167,98 @@ li {
 
 .container {
 	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 2rem;
+	position: relative;
+	margin: 2rem auto;
 	max-width: 65rem;
 	width: 100%;
 	border-color: aliceblue;
 	border-radius: 10px;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
+	padding: 1rem;
+	z-index: 1;
+}
+
+.recipe-box {
+	display: flex;
+	flex-wrap: wrap;
+	overflow: auto;
+	max-width: 65rem;
+	border-radius: 10px;
+	justify-content: space-between;
+	z-index: 1;
+}
+
+.top-row {
+	z-index: 2;
+	position: relative;
+	display: block;
+	width: 100%;
+	max-height: 5rem;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+	max-width: 100%;
+	border-radius: 10px;
+}
+
+.recipe-name {
+	display: inline-block;
+	vertical-align: middle;
+	width: 55%;
+	font-size: 18px;
+	padding: 1rem;
+	box-sizing: border-box;
+	word-wrap: break-word;
+}
+
+.right-elements {
+	display: inline-block;
+	vertical-align: middle;
+	width: 45%;
+	text-align: right;
+	padding-right: 1rem;
+	box-sizing: border-box;
+	white-space: nowrap;
+}
+
+.set-time {
+	display: inline-block;
+	vertical-align: middle;
+	background-color: #ffeb99;
+	text-align: right;
+	padding: 0.5rem 1rem;
+	margin-left: 1rem;
+	border-radius: 8px;
+	font-size: 16px;
+}
+
+.time {
+	font-size: 16px;
+	margin: 0;
+}
+
+.button-show {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 1rem;
+	padding: 0.5rem 1rem;
+}
+
+.button-delete {
+	display: inline-block;
+	vertical-align: middle;
+
+	padding: 0.5rem 0.5rem;
+	background-color: #f92222;
+	border: none;
+	border-radius: 4px;
+	color: white;
+	font-size: 16px;
+	width: auto;
+}
+
+.button-class {
+	padding: 0.5rem;
 }
 
 .content {
@@ -191,66 +275,9 @@ li {
 	font-size: 22px;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
-}
-.recipe-box {
-	display: flex;
-	flex-wrap: wrap;
-	overflow: auto;
-	max-width: 65rem;
-	border-radius: 10px;
-	justify-content: space-between;
-}
-.top-row {
 	z-index: 1;
-	position: relative;
-	display: block;
-	width: 100%;
-	max-height: 5rem;
-	min-height: 1px;
-	padding-right: 15px;
-	padding-left: 15px;
-	max-width: 100%;
-	border-radius: 10px;
-}
-.recipe-name {
-	float: left;
-	max-height: 100%;
-	font-size: 20px;
-	padding: 1.5rem;
 }
 
-.set-time {
-	display: block;
-	float: right;
-	height: 100%;
-	max-height: 4rem;
-	margin-top: 0.5rem;
-	border-radius: 10px;
-	padding: 1rem;
-	margin-right: 0.5rem;
-	color: black;
-}
-.time {
-	font-size: 16px;
-	padding-right: 0.5rem;
-	padding-left: 0.5rem;
-}
-
-.button-location {
-	display: block;
-	float: right;
-	height: 100%;
-	border-radius: 10px;
-	padding: 1rem;
-	margin-right: 0.5rem;
-}
-.button-class {
-	padding: 1rem;
-}
-.button-delete {
-	background-color: #f92222;
-	margin-left: 0.5rem;
-}
 .button-box {
 	margin-top: 2rem;
 	margin-left: 18rem;
@@ -267,26 +294,29 @@ li {
 	}
 
 	.recipe-name {
+		width: 100%;
 		font-size: 14px;
 	}
 
+	.right-elements {
+		width: 100%;
+		text-align: left;
+	}
+
 	.set-time {
-		display: none;
-	}
-
-	.button-location {
-		transform: scale(0.7);
+		display: block;
 		margin-left: 0;
-		margin-right: 0;
-		padding: 0.6rem;
-		float: none;
+		margin-bottom: 0.5rem;
+		padding: 0.5rem 1rem;
 	}
 
-	.top-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0.5rem;
+	.button-show,
+	.button-delete {
+		display: block;
+		width: auto;
+		margin-left: 0;
+		margin-bottom: 0.5rem;
+		padding: 0.5rem 1rem;
 	}
 }
 </style>
