@@ -254,17 +254,16 @@ const getIndexInArray = (index) => {
 	return index + 1;
 };
 
-const addToBook = () => {
-	useRecipesStore.addRecipe(props.recipe);
+const addToBook = async () => {
+	await useRecipesStore.addRecipe(props.recipe);
 	useRecipesStore.getRecipe();
 };
 
 watch(
 	() => useRecipesStore.addRecipeStatus,
-	(newStatus) => {
-		if (newStatus === true) {
-			console.log("Recipe was added successfully!");
-			showSuccess();
+	(success) => {
+		if (success === true) {
+			showSuccess(useRecipesStore.addRecipeMessage); 
 			setTimeout(() => {
 				router.push({
 					name: "UserRecipesList",
@@ -273,27 +272,26 @@ watch(
 					},
 				});
 			}, 1500);
-		} else if (newStatus === false) {
-			showError();
-			console.log("Failed to add recipe.");
+		} else if (success === false) {
+			showError(useRecipesStore.addRecipeMessage); 
 		}
 	}
 );
 
-const showError = () => {
+const showError = (message) => {
 	toast.add({
 		severity: "error",
 		summary: "Error Message",
-		detail: "Sorry, failed to add recipe. Try again ",
+		detail: message || "Sorry, failed to add recipe. Try again.", 
 		life: 3000,
 	});
 };
 
-const showSuccess = () => {
+const showSuccess = (message) => {
 	toast.add({
 		severity: "success",
 		summary: "Success Message",
-		detail: "Recipe was added successfully!",
+		detail: message || "Recipe was added successfully!",
 		life: 3000,
 	});
 };

@@ -7,15 +7,18 @@ import {
 	deleteDoc,
 	doc,
 	onSnapshot,
+	query,
+	where,
 } from "firebase/firestore";
 import { db } from "../fireBase.js";
-import { authStore } from "./authStore"; // Import authStore
+import { authStore } from "./authStore";
 
 export const recipesStore = defineStore("recipesStore", () => {
 	const useAuthStore = authStore();
 	const userRecipes = ref([]);
 	const user = useAuthStore.user;
 	const addRecipeStatus = ref(null);
+	const addRecipeMessage = ref("");
 
 	const getRecipe = async () => {
 		try {
@@ -37,16 +40,31 @@ export const recipesStore = defineStore("recipesStore", () => {
 	};
 
 	const addRecipe = async (recipe) => {
+		addRecipeStatus.value = null;
+		addRecipeMessage.value = "";
 		try {
 			const recipesCollection = collection(db, "users", user.uid, "recipes");
+			const q = query(recipesCollection, where("name", "==", recipe.name));
+			const querySnapshot = await getDocs(q);
+
+			if (!querySnapshot.empty) {
+				addRecipeStatus.value = false;
+				addRecipeMessage.value = "Recipe with this name already exists.";
+				return { success: false, message: "Recipe already exists." };
+			}
+
 			await addDoc(recipesCollection, recipe);
 			addRecipeStatus.value = true;
-			console.log("Recipe added successfully");
+			addRecipeMessage.value = "Recipe added successfully!";
+			return { success: true, message: "Recipe added successfully." };
 		} catch (error) {
 			addRecipeStatus.value = false;
-			console.log("Error in recipesStore.js in addRecipe", error);
+			addRecipeMessage.value = "Error adding recipe.";
+			console.error("Error in recipesStore.js in addRecipe:", error);
+			return { success: false, message: "Error adding recipe." };
 		}
 	};
+
 	const deleteRecipe = async (recipe) => {
 		await deleteDoc(doc(db, "users", user.uid, "recipes", recipe.id));
 	};
@@ -70,6 +88,7 @@ export const recipesStore = defineStore("recipesStore", () => {
 		addRecipe,
 		userRecipes,
 		addRecipeStatus,
+		addRecipeMessage,
 		deleteRecipe,
 		getChanges,
 	};
