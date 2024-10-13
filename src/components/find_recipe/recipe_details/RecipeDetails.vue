@@ -153,12 +153,16 @@
 											<div
 												v-for="name in recipe.ingridients"
 												:key="name">
-												<li>
-													{{ name.name || "no data" }}
-													<p>
+												<li class="ingredients">
+													<div class="ingredients-name">
+														{{ name.name || "no data" }}
+													</div>
+													<div class="ingredients-quantity">
 														{{ name.value || "no data" }}
-														<strong>{{ name.unit || "-" }}</strong>
-													</p>
+													</div>
+													<div class="ingredients-unit">
+														{{ name.unit || "-" }}
+													</div>
 												</li>
 											</div>
 										</ul>
@@ -476,6 +480,29 @@ img {
 .details li p {
 	float: right;
 	font-size: 16px;
+}
+
+li .ingredients {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ccc;
+	padding: 10px 0;
+}
+.ingredients-name {
+	flex: 1;
+	word-wrap: break-word;
+	padding-right: 10px;
+}
+.ingredients-quantity {
+	font-weight: bold;
+	padding-right: 5px;
+	text-align: right;
+}
+
+.ingredients-unit {
+	text-align: right;
+	padding-right: 5px;
 }
 ul {
 	list-style: none;
