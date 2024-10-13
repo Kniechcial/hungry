@@ -50,5 +50,29 @@ onMounted(async () => {
 body {
 	min-height: 87vh;
 	margin: 0;
+	--sb-track-color: #777777;
+	--sb-thumb-color: #22c55e;
+	--sb-size: 13px;
+}
+
+body::-webkit-scrollbar {
+	width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+	background: var(--sb-track-color);
+	border-radius: 9px;
+}
+
+body::-webkit-scrollbar-thumb {
+	background: var(--sb-thumb-color);
+	border-radius: 9px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+	body {
+		scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+		scrollbar-width: thin; /* Opcjonalnie, jeśli chcesz kontrolować szerokość paska przewijania w przeglądarkach innych niż WebKit */
+	}
 }
 </style>
