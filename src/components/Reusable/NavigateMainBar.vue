@@ -73,13 +73,13 @@ onBeforeUnmount(() => {
 });
 
 const avatarItems = ref([
-	{
-		label: "Setting",
-		icon: "pi pi-user",
-		command: () => {
-			router.push({ name: "user-panel" });
-		},
-	},
+	// {
+	// 	label: "Setting",
+	// 	icon: "pi pi-user",
+	// 	command: () => {
+	// 		router.push({ name: "user-panel" });
+	// 	},
+	// },
 	{
 		label: "Logout",
 		icon: "pi pi-sign-out",
