@@ -201,6 +201,7 @@ li {
 	justify-content: space-between;
 }
 .top-row {
+	z-index: 1;
 	position: relative;
 	display: block;
 	width: 100%;
