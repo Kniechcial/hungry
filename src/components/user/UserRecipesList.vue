@@ -11,7 +11,31 @@
 			:recipe="activeRecipe"
 			@setVisible="setVisible(false)"></RecipeDetails>
 	</Dialog>
-	<div class="header-text">{{ headerMessage }}</div>
+
+	<Dialog
+		class="confirm-delete-dialog"
+		v-model:visible="confirmDeleteRecipe"
+		modal
+		:closable="true"
+		:dismissableMask="true"
+		:showHeader="false">
+		<div class="content">
+			<div class="card flex mt-3">
+				<div class="flex flex-column p-3 gap-2">
+					Are you sure you want to delete this recipe?
+				</div>
+			</div>
+			<div class="button-box">
+				<div class="card flex">
+					<Button
+						@click="handlerDeleteRecipe(activeRecipe)"
+						label="Confirm" />
+				</div>
+			</div>
+		</div>
+	</Dialog>
+
+	<div class="header-text"></div>
 	<div>
 		<ul>
 			<li
@@ -41,7 +65,7 @@
 						</div>
 						<div class="button-delete">
 							<Button
-								@click="handlerDeleteRecipe(recipe)"
+								@click="showConfirmDeleteRecipe(recipe)"
 								class="button-class button-delete"
 								type="button"
 								icon="pi pi-trash" />
@@ -58,13 +82,14 @@
 			<div class="flex flex-column p-3 gap-2">
 				<label><strong>Your list is empty</strong></label>
 				<small class="description"
-					>You don't added any recipe yet. Add your first recipe and save it for
-					use if in the future.</small
+					>You haven't added any recipes yet. Add your first recipe and save it
+					for future use.</small
 				>
 			</div>
 		</div>
 		<div class="button-box">
 			<Button
+				class="button-class button-delete"
 				@click="addFirstRecipe()"
 				label="Add first recipe" />
 		</div>
@@ -84,6 +109,7 @@ const router = useRouter();
 const route = useRoute();
 const useRecipesStore = recipesStore();
 const recipeVisible = ref(false);
+const confirmDeleteRecipe = ref(false);
 const activeRecipe = ref(null);
 const storeType = route.query.storeType;
 const displayBaseDescription = ref(false);
@@ -91,6 +117,11 @@ const displayBaseDescription = ref(false);
 const headerMessage = ref(
 	route.query.headerMessage || "Your delicious recipes. Enjoy!"
 );
+
+const showConfirmDeleteRecipe = (recipe) => {
+	activeRecipe.value = recipe;
+	confirmDeleteRecipe.value = true;
+};
 
 const fetchedRecipes = computed(() => {
 	if (useRecipesStore.userRecipes.length > 0) {
@@ -109,6 +140,7 @@ const showRecipe = (recipe) => {
 	recipeVisible.value = true;
 	activeRecipe.value = recipe;
 };
+
 const setVisible = (visible) => {
 	recipeVisible.value = visible;
 	console.log("RecipeList");
@@ -117,13 +149,40 @@ const setVisible = (visible) => {
 const getItemClass = (index) => {
 	return (index + 1) % 2 === 0 ? "even" : "odd";
 };
+
 const handlerDeleteRecipe = async (recipe) => {
-	const useRecipesStore = recipesStore();
-	await useRecipesStore.deleteRecipe(recipe);
+	try {
+		await useRecipesStore.deleteRecipe(recipe);
+		confirmDeleteRecipe.value = false;
+	} catch (error) {
+		console.error("Failed to delete recipe:", error);
+	}
 };
 </script>
 
 <style scoped>
+.confirm-delete-dialog {
+	background-color: transparent;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.button-box .p-button {
+	width: 100%;
+	margin-top: 10px;
+	background-color: #e53935;
+	color: white;
+}
+
+.button-box .p-button:hover {
+	background-color: #ea9424;
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -283,40 +342,58 @@ li {
 	margin-left: 18rem;
 }
 
-@media (max-width: 768px) {
-	.container {
-		margin-left: 1rem;
-		margin-right: 1rem;
+@media (max-width: 650px) {
+	ul,
+	li {
+		padding: 0;
+		margin: 0;
 	}
-	.recipe-box {
-		flex-direction: column;
-		align-items: flex-start;
+
+	.container {
+		width: 100%;
+		max-width: 100%;
+		margin-left: 0;
+		margin-right: 0;
+		padding-left: 0;
+		padding-right: 0;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+	.set-time {
+		display: none;
 	}
 
 	.recipe-name {
 		width: 100%;
-		font-size: 14px;
+		font-size: 16px;
+		padding: 0.5rem;
 	}
 
 	.right-elements {
 		width: 100%;
 		text-align: left;
-	}
-
-	.set-time {
-		display: block;
-		margin-left: 0;
-		margin-bottom: 0.5rem;
-		padding: 0.5rem 1rem;
+		padding-right: 0;
+		display: flex;
+		justify-content: flex-end;
+		gap: 1rem;
 	}
 
 	.button-show,
 	.button-delete {
-		display: block;
+		display: inline-flex;
+		margin: 0;
+		padding: 0.5rem 0.75rem;
 		width: auto;
-		margin-left: 0;
-		margin-bottom: 0.5rem;
-		padding: 0.5rem 1rem;
+	}
+
+	.button-delete {
+		margin-right: 0.5rem;
+		padding: 0.25rem;
+		width: auto;
+		height: auto;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
 	}
 }
 </style>

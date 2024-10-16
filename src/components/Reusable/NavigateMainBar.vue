@@ -163,7 +163,7 @@ const filteredItems = computed(() => {
 .avatar-container {
 	position: absolute;
 	padding: 1rem;
-	right: 1.5rem;
+	right: 1rem;
 	top: 50%;
 	transform: translateY(-50%);
 	display: flex;
@@ -182,5 +182,19 @@ const filteredItems = computed(() => {
 .avatar-text {
 	margin-right: 0.75rem;
 	font-style: italic;
+}
+
+@media (max-width: 650px) {
+	.avatar-container {
+		padding-right: 0.5rem;
+		right: 0rem;
+	}
+	.avatar-text {
+		margin-right: 0.5rem;
+	}
+	.p-avatar.p-avatar-lg {
+		width: 2.3rem;
+		height: 2.3rem;
+	}
 }
 </style>

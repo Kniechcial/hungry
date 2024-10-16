@@ -92,27 +92,32 @@ const showError = () => {
 	background-color: #fcffff;
 	padding: 1rem;
 	margin-top: 12rem;
-	width: 30rem;
+	width: calc(30rem - 2rem);
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-size: 22px;
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	color: #44424d;
 }
+
 .input-text {
 	width: 350px;
 	margin-bottom: 1rem;
 }
+
 .button-box {
 	margin-top: 2rem;
 	margin-left: 18rem;
 }
+
 .content label {
 	padding: 1rem;
 }
+
 .description-input {
 	font-style: italic;
 }
+
 .p-invalid {
 	border-color: red;
 	background-color: #fdd;
@@ -133,15 +138,15 @@ const showError = () => {
 		flex-direction: column;
 		align-items: center;
 		font-size: 14px;
-		width: 100%;
+		width: calc(100% - 2rem);
 		max-width: 300px;
 	}
 	.button-box {
-		margin-left: 8rem;
-		scale: 0.9;
+		scale: 0.8;
+		margin-left: 7rem;
 	}
 	.input-text {
-		width: 230px;
+		width: 200px;
 	}
 }
 </style>

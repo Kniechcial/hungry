@@ -361,5 +361,12 @@ p {
 		max-width: none;
 		margin: 1rem 0;
 	}
+	.button-box-left,
+	.button-box-right {
+		bottom: 0.5rem;
+	}
+	.input-text {
+		width: 200px;
+	}
 }
 </style>

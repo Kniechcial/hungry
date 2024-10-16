@@ -101,13 +101,13 @@ p {
 	.content {
 		flex-direction: column;
 		align-items: center;
-		font-size: 18px;
-		width: 100%;
-
+		font-size: 14px;
+		width: calc(100% - 2rem);
 		max-width: 300px;
 	}
 	.button-box {
-		scale: 0.9;
+		scale: 0.8;
+		margin-bottom: 1rem;
 	}
 }
 </style>

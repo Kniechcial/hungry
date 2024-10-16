@@ -169,4 +169,23 @@ button {
 	top: 50%;
 	transform: translate(-50%, -50%);
 }
+
+@media (max-width: 650px) {
+	.content {
+		flex-direction: column;
+		align-items: center;
+		font-size: 14px;
+		width: 100%;
+		max-width: 300px;
+		margin-bottom: 1rem;
+		transform: translate(-50%, 3%);
+	}
+	.button-box {
+		margin-left: 8rem;
+		scale: 0.9;
+	}
+	.input-text {
+		width: 230px;
+	}
+}
 </style>

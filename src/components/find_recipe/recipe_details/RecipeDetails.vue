@@ -263,7 +263,7 @@ watch(
 	() => useRecipesStore.addRecipeStatus,
 	(success) => {
 		if (success === true) {
-			showSuccess(useRecipesStore.addRecipeMessage); 
+			showSuccess(useRecipesStore.addRecipeMessage);
 			setTimeout(() => {
 				router.push({
 					name: "UserRecipesList",
@@ -273,7 +273,7 @@ watch(
 				});
 			}, 1500);
 		} else if (success === false) {
-			showError(useRecipesStore.addRecipeMessage); 
+			showError(useRecipesStore.addRecipeMessage);
 		}
 	}
 );
@@ -282,7 +282,7 @@ const showError = (message) => {
 	toast.add({
 		severity: "error",
 		summary: "Error Message",
-		detail: message || "Sorry, failed to add recipe. Try again.", 
+		detail: message || "Sorry, failed to add recipe. Try again.",
 		life: 3000,
 	});
 };
@@ -622,6 +622,15 @@ button {
 	}
 	.button-tooltip {
 		display: none !important;
+	}
+}
+@media (max-width: 650px) {
+	.recipe-box {
+		max-width: 250px;
+	}
+	.right-top-row-box {
+		display: flex;
+		flex-direction: column;
 	}
 }
 </style>
