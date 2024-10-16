@@ -363,7 +363,7 @@ p {
 	}
 	.button-box-left,
 	.button-box-right {
-		bottom: 0.5rem;
+		bottom: 0.2rem;
 	}
 	.input-text {
 		width: 200px;
