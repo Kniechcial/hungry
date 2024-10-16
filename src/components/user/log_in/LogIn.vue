@@ -1,7 +1,20 @@
 <template>
-	<Toast
-		style="position: fixed; right: 0px"
-		class="p-toast-center" />
+	<Dialog
+		class="dialog-class"
+		v-model:visible="confirmRestore"
+		modal
+		:closable="true"
+		:dismissableMask="true"
+		:showHeader="false"
+		><div class="content">
+			<div class="card flex mt-3">
+				<div class="flex flex-column p-3 gap-2">
+					An email with a link to change your password has been sent.
+				</div>
+			</div>
+		</div>
+	</Dialog>
+	<Toast />
 	<div class="content">
 		<div>
 			<img
@@ -61,9 +74,11 @@ import InputText from "primevue/inputtext";
 import Toast from "primevue/toast";
 import logIcon from "../../../assets/icon/log-icon.png";
 import { useToast } from "primevue/usetoast";
+import Dialog from "primevue/dialog";
 
 const toast = useToast();
 const useAuthStore = authStore();
+const confirmRestore = ref(false);
 
 const displayError = ref(false);
 
@@ -73,12 +88,10 @@ const loginUser = reactive({
 });
 
 const logInUser = async () => {
-	// Sprawdza błędy po stronie frontend-u (puste pola)
 	if (!loginUser.email || !loginUser.password) {
 		showError("Please enter email and password");
 		return;
 	}
-	//  Sprawdza błędy po strone backend-u (odpowiedzi z firebase)
 	const response = await useAuthStore.loginUser(loginUser);
 	if (!response.result) {
 		checkError(response.error);
@@ -102,6 +115,13 @@ const restorePassword = async () => {
 		return;
 	}
 	await useAuthStore.restorePassword(email);
+	showConfirmRestore();
+};
+const showConfirmRestore = () => {
+	confirmRestore.value = true;
+	setTimeout(() => {
+		confirmRestore.value = false;
+	}, 3000);
 };
 
 const showError = (message) => {
@@ -121,6 +141,10 @@ const showError = (message) => {
 	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
 }
 
+.dialog-class {
+	margin: 0;
+	padding: 0;
+}
 .content {
 	position: relative;
 	border: 1px solid;
@@ -167,14 +191,6 @@ button {
 	width: 17rem !important;
 }
 
-.toast-container {
-	position: fixed;
-	top: 10px;
-	left: 50%;
-	transform: translateX(-50%);
-	max-width: 90%;
-}
-
 @media (max-width: 650px) {
 	.content {
 		flex-direction: column;
@@ -207,12 +223,6 @@ button {
 	p {
 		padding-right: 0.5rem;
 		padding-left: 0.5rem;
-	}
-
-	.p-toast {
-		right: 50% !important;
-		transform: translateX(50%) !important;
-		max-width: 90vw !important;
 	}
 }
 </style>
