@@ -237,29 +237,6 @@ li {
 	z-index: 1;
 }
 
-.recipe-box {
-	display: flex;
-	flex-wrap: wrap;
-	overflow: auto;
-	max-width: 65rem;
-	border-radius: 10px;
-	justify-content: space-between;
-	z-index: 1;
-}
-
-.top-row {
-	z-index: 2;
-	position: relative;
-	display: block;
-	width: 100%;
-	max-height: 5rem;
-	min-height: 1px;
-	padding-right: 15px;
-	padding-left: 15px;
-	max-width: 100%;
-	border-radius: 10px;
-}
-
 .recipe-name {
 	display: inline-block;
 	vertical-align: middle;
@@ -306,7 +283,6 @@ li {
 .button-delete {
 	display: inline-block;
 	vertical-align: middle;
-
 	padding: 0.5rem 0.5rem;
 	background-color: #f92222;
 	border: none;
