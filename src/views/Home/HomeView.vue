@@ -365,5 +365,15 @@ main {
 	.about-us-box:hover {
 		height: 190px;
 	}
+	.disable {
+		background-size: 70%;
+		top: calc(2rem - 20%);
+	}
+	.first .disable {
+		display: flex;
+	}
+	.third .disable {
+		display: flex;
+	}
 }
 </style>
