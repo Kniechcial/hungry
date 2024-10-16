@@ -94,6 +94,7 @@
 				label="Add first recipe" />
 		</div>
 	</div>
+	<Toast></Toast>
 </template>
 
 <script setup>
@@ -104,6 +105,9 @@ import Dialog from "primevue/dialog";
 import RecipeDetails from "../find_recipe/recipe_details/RecipeDetails.vue";
 import { recipesStore } from "../../stores/recipesStore.js";
 import { useRouter } from "vue-router";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 
 const router = useRouter();
 const route = useRoute();
@@ -154,9 +158,19 @@ const handlerDeleteRecipe = async (recipe) => {
 	try {
 		await useRecipesStore.deleteRecipe(recipe);
 		confirmDeleteRecipe.value = false;
+		showSuccess();
 	} catch (error) {
 		console.error("Failed to delete recipe:", error);
 	}
+};
+
+const showSuccess = () => {
+	toast.add({
+		severity: "success",
+		summary: "Success Message",
+		detail: "The recipe has been deleted",
+		life: 3000,
+	});
 };
 </script>
 
