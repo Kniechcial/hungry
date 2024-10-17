@@ -98,7 +98,10 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { authStore } from "@/stores/authStore";
+import { onMounted } from "vue";
+import { recipesStore } from "@/stores/recipesStore";
 
+const useRecipesStore = recipesStore();
 const router = useRouter();
 const useAuthStore = authStore();
 
@@ -122,6 +125,12 @@ const navigateToCreateNewRecipe = () => {
 		name: "CreateRecipe",
 	});
 };
+onMounted(() => {
+	if (useAuthStore.user) {
+		console.log(useAuthStore.user);
+		useRecipesStore.getRecipe();
+	}
+});
 </script>
 <style scoped>
 main {

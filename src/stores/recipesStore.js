@@ -68,20 +68,32 @@ export const recipesStore = defineStore("recipesStore", () => {
 	const deleteRecipe = async (recipe) => {
 		await deleteDoc(doc(db, "users", user.uid, "recipes", recipe.id));
 	};
-
-	const getChanges = onSnapshot(
-		collection(db, "users", user.uid, "recipes"),
-		(querySnapshot) => {
-			const updatedRecipes = [];
-			querySnapshot.forEach((doc) => {
-				updatedRecipes.push({
-					id: doc.id,
-					...doc.data(),
-				});
-			});
-			userRecipes.value = [...updatedRecipes];
+	let recipesListener = null;
+	async function addRecipesListener() {
+		removeRecipeListener();
+		if (!user) {
+			return;
 		}
-	);
+		recipesListener = onSnapshot(
+			collection(db, "users", user.uid, "recipes"),
+			(querySnapshot) => {
+				const updatedRecipes = [];
+				querySnapshot.forEach((doc) => {
+					updatedRecipes.push({
+						id: doc.id,
+						...doc.data(),
+					});
+				});
+				userRecipes.value = [...updatedRecipes];
+			}
+		);
+	}
+	function removeRecipeListener() {
+		if (recipesListener) {
+			recipesListener();
+			recipesListener = null;
+		}
+	}
 
 	return {
 		getRecipe,
@@ -90,6 +102,6 @@ export const recipesStore = defineStore("recipesStore", () => {
 		addRecipeStatus,
 		addRecipeMessage,
 		deleteRecipe,
-		getChanges,
+		addRecipesListener,
 	};
 });
