@@ -16,9 +16,10 @@
 		class="confirm-delete-dialog"
 		v-model:visible="confirmDeleteRecipe"
 		modal
+		:style="{ width: '25rem' }"
 		:closable="true"
 		:dismissableMask="true"
-		:showHeader="false">
+		:showHeader="true">
 		<div class="content">
 			<div class="card flex mt-3">
 				<div class="flex flex-column p-3 gap-2">
@@ -98,7 +99,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
@@ -172,6 +173,9 @@ const showSuccess = () => {
 		life: 3000,
 	});
 };
+onMounted(() => {
+	useRecipesStore.addRecipesListener();
+});
 </script>
 
 <style scoped>
