@@ -14,7 +14,10 @@
 				<a href="https://www.instagram.com/"
 					><i class="fa-brands fa-instagram"></i
 				></a>
-				<a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a>
+				<a href="https://github.com/Kniechcial"
+					><i class="fa-brands fa-github"></i
+				></a>
+				<!-- <a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a> -->
 			</span>
 		</p>
 	</footer>
@@ -95,6 +98,9 @@ footer {
 @media (max-width: 650px) {
 	.icon-box a {
 		display: none;
+	}
+	.footer {
+		scale: 0.8;
 	}
 }
 </style>
