@@ -3,10 +3,12 @@
 		class="dialog-class"
 		v-model:visible="confirmRestore"
 		modal
+		:style="{ width: '30rem' }"
+		:breakpoints="{ '650px': '80vw' }"
 		:closable="true"
 		:dismissableMask="true"
 		:showHeader="false"
-		><div class="content">
+		><div>
 			<div class="card flex mt-3">
 				<div class="flex flex-column p-3 gap-2">
 					An email with a link to change your password has been sent.

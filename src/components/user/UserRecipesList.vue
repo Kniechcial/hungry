@@ -16,22 +16,22 @@
 		class="confirm-delete-dialog"
 		v-model:visible="confirmDeleteRecipe"
 		modal
-		:style="{ width: '25rem' }"
+		:style="{ width: '30rem' }"
+		:breakpoints="{ '650px': '80vw' }"
 		:closable="true"
 		:dismissableMask="true"
 		:showHeader="true">
-		<div class="content">
-			<div class="card flex mt-3">
-				<div class="flex flex-column p-3 gap-2">
-					Are you sure you want to delete this recipe?
-				</div>
+		<div class="card flex mt-3">
+			<div class="flex flex-column p-3 gap-2">
+				Are you sure you want to delete this recipe?
 			</div>
-			<div class="button-box">
-				<div class="card flex">
-					<Button
-						@click="handlerDeleteRecipe(activeRecipe)"
-						label="Confirm" />
-				</div>
+		</div>
+
+		<div class="button-box">
+			<div class="card flex">
+				<Button
+					@click="handlerDeleteRecipe(activeRecipe)"
+					label="Confirm" />
 			</div>
 		</div>
 	</Dialog>
@@ -66,10 +66,10 @@
 						</div>
 						<div class="button-delete">
 							<Button
-								@click="showConfirmDeleteRecipe(recipe)"
-								class="button-class button-delete"
-								type="button"
-								icon="pi pi-trash" />
+								icon="pi pi-trash"
+								severity="danger"
+								aria-label="Cancel"
+								@click="showConfirmDeleteRecipe(recipe)" />
 						</div>
 					</div>
 				</div>
@@ -280,7 +280,7 @@ li {
 	vertical-align: middle;
 	background-color: #ffeb99;
 	text-align: right;
-	padding: 0.5rem 1rem;
+	padding: 1rem;
 	margin-left: 1rem;
 	border-radius: 8px;
 	font-size: 16px;
@@ -295,23 +295,20 @@ li {
 	display: inline-block;
 	vertical-align: middle;
 	margin-left: 1rem;
-	padding: 0.5rem 1rem;
+	padding: 1rem;
+}
+.p-button.p-button-icon-only {
+	padding: 1rem;
 }
 
 .button-delete {
 	display: inline-block;
 	vertical-align: middle;
-	padding: 0.5rem 0.5rem;
-	background-color: #f92222;
-	border: none;
 	border-radius: 4px;
-	color: white;
-	font-size: 16px;
-	width: auto;
 }
 
 .button-class {
-	padding: 0.5rem;
+	padding: 1rem;
 }
 
 .content {
@@ -388,6 +385,27 @@ li {
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
+	}
+	.button-box {
+		justify-content: center;
+		margin-left: 0;
+	}
+	.confirm-delete-dialog .flex-column {
+		font-size: calc(1rem + 5px);
+	}
+	.content {
+		width: 90%;
+		margin: 2rem auto;
+		left: auto;
+		transform: none;
+		font-size: 18px;
+	}
+
+	.description {
+		font-size: 20px;
+		margin-left: auto;
+		margin-right: auto;
+		font-style: italic;
 	}
 }
 </style>

@@ -628,9 +628,34 @@ button {
 	.recipe-box {
 		max-width: 250px;
 	}
+
 	.right-top-row-box {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
+		width: 100%;
+	}
+	.bottom-row {
+		margin-right: 0rem;
+	}
+	.recipe-tags {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		width: 100%;
+	}
+
+	.allergy-icon-box {
+		flex: 0 1 70px;
+	}
+
+	.set-time {
+		margin-top: 1rem;
+		width: 100%;
+		text-align: center;
+		justify-content: center;
+		display: flex;
 	}
 }
 </style>

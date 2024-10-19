@@ -73,17 +73,13 @@ const newUser = reactive({
 });
 
 const addUser = async () => {
-	// Sprawdza błędy po stronie frontend-u (zgodność haseł)
 	if (!validatePasswords()) {
 		return;
 	}
-	//  Sprawdza błędy po strone backend-u (odpowiedzi z firebase)
 	const response = await useAuthStore.registerUser(newUser);
 	if (!response.result) {
 		checkError(response.error);
 	}
-	// console.log("name", newUser.email);
-	// console.log("password", newUser.password);
 };
 
 const validatePasswords = () => {
@@ -104,6 +100,9 @@ const checkError = (error) => {
 		showError("Email already in use" || "Missing email"),
 			(displayEmailError.value = true),
 			(displayPasswordError.value = false);
+	} else if (error === "auth/invalid-email") {
+		showError("Invalid email");
+		(displayEmailError.value = true), (displayPasswordError.value = false);
 	} else if (error === "auth/weak-password" || error === "Missing password") {
 		showError("Weak password add more characters" || "Missing password"),
 			(displayPasswordError.value = true),

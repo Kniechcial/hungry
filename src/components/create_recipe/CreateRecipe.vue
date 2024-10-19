@@ -12,6 +12,7 @@
 
 <style scoped>
 .content {
+	padding: 5rem;
 	width: 25rem;
 	height: 25rem;
 	overflow: hidden;
@@ -31,7 +32,7 @@
 
 .text {
 	margin-top: 10px;
-	font-size: 3rem;
+	font-size: 20px;
 	color: #666;
 	text-align: center;
 }
