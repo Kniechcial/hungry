@@ -26,6 +26,11 @@
 			</div>
 		</div>
 	</div>
+	<div
+		v-if="isLoading"
+		class="loader">
+		<CarrotLoader></CarrotLoader>
+	</div>
 	<Toast />
 </template>
 
@@ -37,13 +42,14 @@ import Toast from "primevue/toast";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { tastyStore } from "../../../stores/tasty.js";
+import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
 
-const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
 const router = useRouter();
 const toast = useToast();
 const foodName = ref(null);
 const displayError = ref(false);
+const isLoading = ref(false);
 
 const BaseRecipeList = () =>
 	router.push({
@@ -56,15 +62,15 @@ const BaseRecipeList = () =>
 	});
 
 async function getRecipe() {
-	emit("setLoading");
+	isLoading.value = true;
 	await useTastyStore.getRecipes(0, 2, foodName.value);
 	console.log(useTastyStore.fetchedRecipes);
+	isLoading.value = false;
 
 	if (foodName) {
 		if (useTastyStore.fetchedRecipes.length === 0) {
 			showError();
 			displayError.value = true;
-			emit("setLoading");
 		} else {
 			BaseRecipeList();
 		}
@@ -122,15 +128,6 @@ const showError = () => {
 	border-color: red;
 	background-color: #fdd;
 	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
-}
-
-@keyframes moveUpDown {
-	from {
-		top: 0;
-	}
-	to {
-		top: 20px;
-	}
 }
 
 @media (max-width: 650px) {

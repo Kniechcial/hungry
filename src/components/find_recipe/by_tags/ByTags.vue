@@ -70,26 +70,31 @@
 			<div class="button-box">
 				<div class="card flex justify-content-center">
 					<Button
+						:disabled="disabledBUttonFindRecipe"
 						@click="toggleToGetRecipes()"
 						label="Find recipe" />
 				</div>
 			</div>
 		</div>
 	</div>
+	<div
+		v-if="isLoading"
+		class="loader">
+		<CarrotLoader></CarrotLoader>
+	</div>
+	<Toast />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
 import { tastyStore } from "../../../stores/tasty.js";
-
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
+import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
 
-const emit = defineEmits(["setLoading"]);
-
+const isLoading = ref(false);
 const useTastyStore = tastyStore();
 const router = useRouter();
 const toast = useToast();
@@ -100,24 +105,26 @@ const showAllCategory = ref(true);
 const userChosed = ref([]);
 const selectedCategory = ref(null);
 const foodName = ref(null);
+
 const formatTagName = (name) => {
 	let nameA = name.replaceAll("_", " ");
 	let nameB = nameA.charAt(0).toUpperCase() + nameA.slice(1);
 	return nameB;
 };
-//  Categorys List
 
+// Category List
 const toggleShowCategory = (category) => {
 	selectedCategory.value = category;
 	showAll.value = false;
 };
+
 const filteredTags = computed(() =>
 	useTastyStore.fetchedTags.filter(
 		(tag) => tag.root_tag_type === selectedCategory.value
 	)
 );
 
-// Chosed Tag
+// Chosen Tag
 const getChosedTag = (item) => {
 	if (userChosed.value.length < 5) {
 		const checkDuplicate = userChosed.value.some(
@@ -127,16 +134,21 @@ const getChosedTag = (item) => {
 			userChosed.value.push(item);
 			console.log(userChosed.value);
 		} else {
+			showError("That tag is already chose");
 			console.log("Ten element już istnieje w tabeli.");
 		}
 	} else {
 		console.log("Tabela zawiera już 5 elementów");
+		showError("You have already five tags");
 	}
 };
 
 const deleteSelectedTag = (index) => {
 	userChosed.value.splice(index, 1);
 };
+const disabledBUttonFindRecipe = computed(() => {
+	return userChosed.value.length === 0;
+});
 
 const toggleShow = () => {
 	showAll.value = !showAll.value;
@@ -162,14 +174,16 @@ const toggleToGetRecipes = () => {
 };
 
 async function getRecipe() {
-	emit("setLoading");
+	isLoading.value = true;
+
 	const selectedTags = userChosed.value
 		.map((tag) => tag.display_name)
 		.join(",");
+
 	await useTastyStore.getRecipes(0, 5, selectedTags);
-	const foodName = selectedTags;
+	foodName.value = selectedTags;
 	console.log(useTastyStore.fetchedRecipes);
-	emit("setLoading");
+	isLoading.value = false;
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 	} else {
@@ -177,11 +191,11 @@ async function getRecipe() {
 	}
 }
 
-const showError = () => {
+const showError = (message) => {
 	toast.add({
 		severity: "error",
 		summary: "Error Message",
-		detail: "Sorry, no results found. Try again ",
+		detail: message || "Sorry, no results found. Try again",
 		life: 3000,
 	});
 };

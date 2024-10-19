@@ -13,6 +13,11 @@
 			</div>
 		</div>
 	</div>
+	<div
+		v-if="isLoading"
+		class="loader">
+		<CarrotLoader></CarrotLoader>
+	</div>
 </template>
 
 <script setup>
@@ -21,8 +26,9 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { tastyStore } from "../../../stores/tasty.js";
+import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
 
-const emit = defineEmits(["setLoading"]);
+const isLoading = ref(false);
 const useTastyStore = tastyStore();
 const router = useRouter();
 const toast = useToast();
@@ -40,12 +46,12 @@ const BaseRecipeList = () =>
 	});
 
 async function getRecipe() {
-	emit("setLoading");
+	isLoading.value = true;
 	getRandomRecipe();
 	await useTastyStore.getRecipes(0, 1, foodName.display_name);
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
-		emit("setLoading");
+		isLoading.value = false;
 	} else {
 		BaseRecipeList();
 	}

@@ -12,7 +12,7 @@
 	</div>
 	<component
 		:is="currentComponent"
-		@setLoading="setLoading()"></component>
+		></component>
 </template>
 
 <script setup>
@@ -26,9 +26,7 @@ import ByTags from "../../components/find_recipe/by_tags/ByTags.vue";
 import Random from "../../components/find_recipe/random_recipe/RandomRecipe.vue";
 
 const isLoading = ref(false);
-const setLoading = () => {
-	isLoading.value = !isLoading.value;
-};
+
 //
 
 import { useRoute } from "vue-router";

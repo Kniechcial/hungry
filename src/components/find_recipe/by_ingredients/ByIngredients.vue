@@ -24,7 +24,7 @@
 				<div class="button-box-left">
 					<div class="card flex justify-content-center">
 						<Button
-							@click="getChosedIngredient()"
+							@click="getChosedIngredient"
 							label="Add ingredient" />
 					</div>
 				</div>
@@ -43,7 +43,7 @@
 					</p>
 				</div>
 
-				<div v-if="userChosed">
+				<div v-if="userChosed.length > 0">
 					<button
 						class="button-chose show-less"
 						v-for="(ingredient, index) in userChosed"
@@ -56,12 +56,17 @@
 					<div class="card flex">
 						<Button
 							:disabled="disabledButtonFindRecipe"
-							@click="toggleToGetRecipes()"
+							@click="toggleToGetRecipes"
 							label="Find recipe" />
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+	<div
+		v-if="isLoading"
+		class="loader">
+		<CarrotLoader></CarrotLoader>
 	</div>
 	<Toast />
 </template>
@@ -74,16 +79,17 @@ import Toast from "primevue/toast";
 import { tastyStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
+import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
 
-const emit = defineEmits(["setLoading"]);
 const useTastyStore = tastyStore();
 const router = useRouter();
 const toast = useToast();
+
+const isLoading = ref(false);
 const numberOfItemsToShow = ref(6);
 const showAll = ref(false);
 const userChosed = ref([]);
 const foodName = ref(null);
-
 let ingredientName = ref(null);
 
 const getChosedIngredient = () => {
@@ -133,7 +139,7 @@ const BaseRecipeList = () =>
 		name: "RecipeList",
 		query: {
 			storeType: "tasty",
-			foodName: foodName,
+			foodName: foodName.value,
 		},
 	});
 
@@ -142,15 +148,13 @@ const toggleToGetRecipes = () => {
 };
 
 async function getRecipe() {
-	emit("setLoading");
+	isLoading.value = true;
 	const selectedIngredients = ref(userChosed.value.join(","));
-
 	await useTastyStore.getRecipes(0, 2, selectedIngredients.value);
-	const foodName = selectedIngredients;
 	foodName.value = selectedIngredients;
-	console.log("wyszukanie w ByIngredients");
 	console.log(useTastyStore.fetchedRecipes);
-	emit("setLoading");
+	isLoading.value = false;
+
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 	} else {
