@@ -90,10 +90,15 @@
 		</div>
 		<div class="button-box">
 			<Button
-				class="button-class button-delete"
+				class="card flex"
 				@click="addFirstRecipe()"
 				label="Add first recipe" />
 		</div>
+		<!-- <Button
+				class="button-class button-delete"
+				@click="addFirstRecipe()"
+				label="Add first recipe" />
+		</div> -->
 	</div>
 	<Toast
 		class="w-18rem md:w-4"
@@ -141,7 +146,7 @@ const fetchedRecipes = computed(() => {
 });
 
 const addFirstRecipe = () =>
-	router.push({ name: "FindRecipe", params: { findBy: "name" } });
+	router.push({ name: "FindRecipe", params: { findBy: "base-description" } });
 
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
@@ -195,12 +200,6 @@ onMounted(() => {
 .button-box .p-button {
 	width: 100%;
 	margin-top: 10px;
-	background-color: #e53935;
-	color: white;
-}
-
-.button-box .p-button:hover {
-	background-color: #ea9424;
 }
 
 * {
