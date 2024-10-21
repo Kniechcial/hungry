@@ -3,6 +3,8 @@
 		class="dialog-class"
 		v-model:visible="recipeVisible"
 		modal
+		:style="{ width: '70rem' }"
+		:breakpoints="{ '650px': '90vw' }"
 		:closable="true"
 		:dismissableMask="true"
 		@setVisible="setVisible()"
@@ -94,11 +96,6 @@
 				@click="addFirstRecipe()"
 				label="Add first recipe" />
 		</div>
-		<!-- <Button
-				class="button-class button-delete"
-				@click="addFirstRecipe()"
-				label="Add first recipe" />
-		</div> -->
 	</div>
 	<Toast
 		class="w-18rem md:w-4"
@@ -337,7 +334,7 @@ li {
 @media (max-width: 650px) {
 	ul,
 	li {
-		padding: 0;
+		padding: 0.5rem;
 		margin: 0;
 	}
 

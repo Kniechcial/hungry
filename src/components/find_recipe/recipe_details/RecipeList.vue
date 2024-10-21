@@ -3,6 +3,8 @@
 		class="dialog-class"
 		v-model:visible="recipeVisible"
 		modal
+		:style="{ width: '70rem' }"
+		:breakpoints="{ '650px': '90vw' }"
 		:closable="true"
 		:dismissableMask="true"
 		@setVisible="setVisible()"
