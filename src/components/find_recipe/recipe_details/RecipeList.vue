@@ -157,11 +157,10 @@ li {
 	vertical-align: middle;
 	background-color: #ffeb99;
 	text-align: right;
-	padding: 0.5rem 1rem;
+	padding: 1rem;
 	margin-left: 1rem;
 	border-radius: 8px;
 	font-size: 16px;
-	padding: 1rem;
 }
 .time {
 	font-size: 16px;
@@ -172,7 +171,7 @@ li {
 	display: inline-block;
 	vertical-align: middle;
 	margin-left: 1rem;
-	padding: 0.5rem 1rem;
+	padding: 1rem;
 }
 .button-class {
 	padding: 1rem;
@@ -185,7 +184,7 @@ li {
 @media (max-width: 650px) {
 	ul,
 	li {
-		padding: 0;
+		padding: 0.5rem;
 		margin: 0;
 	}
 	.container {

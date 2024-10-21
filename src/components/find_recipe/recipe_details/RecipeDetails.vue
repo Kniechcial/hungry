@@ -436,6 +436,7 @@ img {
 	overflow: auto;
 	max-height: 15rem;
 	max-width: 20rem;
+	padding-left: 10px;
 }
 .description-recipe {
 	display: block;
@@ -448,6 +449,7 @@ img {
 	display: block;
 	max-width: 20rem;
 	font-size: 16px;
+	padding-left: 10px;
 }
 
 .left-part-description-recipe {
@@ -506,7 +508,6 @@ ul {
 }
 li {
 	display: inline-block;
-	margin-left: 10px;
 	font-size: 20px;
 	line-height: 20px;
 }
@@ -619,10 +620,6 @@ button {
 	}
 }
 @media (max-width: 650px) {
-	.recipe-box {
-		max-width: 250px;
-	}
-
 	.right-top-row-box {
 		display: flex;
 		flex-direction: column;
