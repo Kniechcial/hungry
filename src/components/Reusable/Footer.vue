@@ -11,13 +11,13 @@
 		<p>
 			@2024 Niechciał Karol Hungry
 			<span class="icon-box">
-				<a href="https://www.instagram.com/"
+				<a
+					href="https://www.instagram.com/traveler_karol/profilecard/?igsh=eGZkZ3AwcnRkaWd3"
 					><i class="fa-brands fa-instagram"></i
 				></a>
 				<a href="https://github.com/Kniechcial"
 					><i class="fa-brands fa-github"></i
 				></a>
-				<!-- <a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a> -->
 			</span>
 		</p>
 	</footer>
@@ -59,7 +59,7 @@ footer {
 }
 
 .icon-box a {
-	margin: 0 10px; /* Increase margin to prevent overlap */
+	margin: 0 10px;
 	color: white;
 	display: inline-block;
 }
