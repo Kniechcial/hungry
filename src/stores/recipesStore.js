@@ -16,14 +16,24 @@ import { authStore } from "./authStore";
 export const recipesStore = defineStore("recipesStore", () => {
 	const useAuthStore = authStore();
 	const userRecipes = ref([]);
-	const user = useAuthStore.user;
 	const addRecipeStatus = ref(null);
 	const addRecipeMessage = ref("");
+	const cleanStore = () => {
+		userRecipes.value = [];
+		addRecipeStatus.value = null;
+		addRecipeMessage.value = "";
+	};
 
 	const getRecipe = async () => {
+		console.log(useAuthStore.user);
 		try {
 			const recipes = [];
-			const recipesCollection = collection(db, "users", user.uid, "recipes");
+			const recipesCollection = collection(
+				db,
+				"users",
+				useAuthStore.user.uid,
+				"recipes"
+			);
 			const querySnapshot = await getDocs(recipesCollection);
 			querySnapshot.forEach((doc) => {
 				recipes.push({
@@ -43,7 +53,12 @@ export const recipesStore = defineStore("recipesStore", () => {
 		addRecipeStatus.value = null;
 		addRecipeMessage.value = "";
 		try {
-			const recipesCollection = collection(db, "users", user.uid, "recipes");
+			const recipesCollection = collection(
+				db,
+				"users",
+				useAuthStore.user.uid,
+				"recipes"
+			);
 			const q = query(recipesCollection, where("name", "==", recipe.name));
 			const querySnapshot = await getDocs(q);
 
@@ -66,16 +81,18 @@ export const recipesStore = defineStore("recipesStore", () => {
 	};
 
 	const deleteRecipe = async (recipe) => {
-		await deleteDoc(doc(db, "users", user.uid, "recipes", recipe.id));
+		await deleteDoc(
+			doc(db, "users", useAuthStore.user.uid, "recipes", recipe.id)
+		);
 	};
 	let recipesListener = null;
 	async function addRecipesListener() {
 		removeRecipeListener();
-		if (!user) {
+		if (!useAuthStore.user.uid) {
 			return;
 		}
 		recipesListener = onSnapshot(
-			collection(db, "users", user.uid, "recipes"),
+			collection(db, "users", useAuthStore.user.uid, "recipes"),
 			(querySnapshot) => {
 				const updatedRecipes = [];
 				querySnapshot.forEach((doc) => {
@@ -103,5 +120,6 @@ export const recipesStore = defineStore("recipesStore", () => {
 		addRecipeMessage,
 		deleteRecipe,
 		addRecipesListener,
+		cleanStore,
 	};
 });

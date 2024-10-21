@@ -7,8 +7,11 @@ import {
 } from "firebase/auth";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { ref } from "vue";
+import { recipesStore } from "./recipesStore.js";
 
 export const authStore = defineStore("authStore", () => {
+	const useRecipesStore = recipesStore();
+
 	const user = ref(null);
 
 	const registerUser = async (newUser) => {
@@ -45,6 +48,7 @@ export const authStore = defineStore("authStore", () => {
 		signOut(auth)
 			.then(() => {
 				user.value = null;
+				useRecipesStore.cleanStore();
 				console.log("loggedout");
 			})
 			.catch((error) => {
