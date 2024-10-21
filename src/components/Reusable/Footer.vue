@@ -29,9 +29,8 @@
 	width: 100px;
 	height: 100px;
 	top: -100px;
-	right: 7%;
+	right: 250px;
 	margin-right: 0.5rem;
-	transform: translateX(-50%);
 	z-index: 0;
 }
 .image-medium {
@@ -39,9 +38,8 @@
 	width: 200px;
 	height: 200px;
 	top: -200px;
-	right: -5%;
+	right: 50px;
 	overflow: hidden;
-	transform: translateX(-50%);
 	z-index: 0;
 }
 

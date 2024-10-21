@@ -49,6 +49,7 @@ onMounted(async () => {
 }
 body {
 	min-height: 87vh;
+	width: 100%;
 	margin: 0;
 	--sb-track-color: #777777;
 	--sb-thumb-color: #22c55e;

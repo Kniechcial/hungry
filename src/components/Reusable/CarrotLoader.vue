@@ -38,7 +38,7 @@
 
 .loading-text {
 	font-size: 1.2rem;
-	margin-top: 10px;
+	margin-top: 30px;
 	color: #333;
 }
 
