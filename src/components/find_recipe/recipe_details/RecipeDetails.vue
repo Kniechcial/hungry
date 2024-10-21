@@ -213,7 +213,9 @@
 			</li>
 		</ul>
 	</div>
-	<Toast />
+	<Toast
+		class="w-18rem md:w-4"
+		position="top-right" />
 </template>
 
 <script setup>
@@ -264,14 +266,6 @@ watch(
 	(success) => {
 		if (success === true) {
 			showSuccess(useRecipesStore.addRecipeMessage);
-			setTimeout(() => {
-				router.push({
-					name: "UserRecipesList",
-					query: {
-						storeType: "recipes",
-					},
-				});
-			}, 1500);
 		} else if (success === false) {
 			showError(useRecipesStore.addRecipeMessage);
 		}

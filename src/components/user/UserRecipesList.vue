@@ -95,7 +95,9 @@
 				label="Add first recipe" />
 		</div>
 	</div>
-	<Toast></Toast>
+	<Toast
+		class="w-18rem md:w-4"
+		position="top-right" />
 </template>
 
 <script setup>

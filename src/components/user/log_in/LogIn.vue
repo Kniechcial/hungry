@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	</Dialog>
-	<Toast />
+
 	<div class="content">
 		<div>
 			<img
@@ -31,20 +31,20 @@
 					<InputText
 						:class="{ 'p-invalid': displayError }"
 						v-model.trim="loginUser.email"
+						@keydown.enter="logInUser"
 						type="text" />
 				</div>
 				<p>Password:</p>
 				<div>
-					<div class="card flex justify-content-center w-max">
-						<Password
-							:feedback="false"
-							v-model.trim="loginUser.password"
+					<div class="card flex justify-content-center">
+						<InputText
 							:class="{
 								'p-invalid': displayError,
-								'input-text': true,
 							}"
+							v-model.trim="loginUser.password"
 							@keydown.enter="logInUser"
-							toggleMask />
+							toggleMask
+							type="password" />
 					</div>
 				</div>
 			</div>
@@ -65,6 +65,9 @@
 			</div>
 		</div>
 	</div>
+	<Toast
+		class="w-18rem md:w-4"
+		position="top-right" />
 </template>
 
 <script setup>

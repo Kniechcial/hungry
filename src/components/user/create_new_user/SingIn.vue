@@ -1,5 +1,4 @@
 <template>
-	<Toast />
 	<div class="content">
 		<img
 			class="log-icon"
@@ -12,28 +11,31 @@
 					<div class="card flex justify-content-center">
 						<InputText
 							:class="{ 'p-invalid': displayEmailError }"
-							class="w-17rem"
 							v-model.trim="newUser.email"
+							@keydown.enter="addUser"
 							type="text" />
 					</div>
 				</div>
 				<p>Password:</p>
 				<div>
 					<div class="card flex justify-content-center">
-						<Password
+						<InputText
 							:class="{ 'p-invalid': displayPasswordError }"
 							v-model.trim="password"
-							toggleMask />
+							@keydown.enter="addUser"
+							toggleMask
+							type="password" />
 					</div>
 				</div>
 				<p>Confirm password:</p>
 				<div>
 					<div class="card flex justify-content-center">
-						<Password
+						<InputText
 							:class="{ 'p-invalid': displayPasswordError }"
 							v-model.trim="confirmPassword"
 							@keydown.enter="addUser"
-							toggleMask />
+							toggleMask
+							type="password" />
 					</div>
 				</div>
 			</div>
@@ -45,6 +47,9 @@
 				:disabled="!newUser.email || !password || !confirmPassword" />
 		</div>
 	</div>
+	<Toast
+		class="w-18rem md:w-4"
+		position="top-right" />
 </template>
 
 <script setup>
