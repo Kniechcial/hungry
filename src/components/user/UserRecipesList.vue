@@ -38,7 +38,7 @@
 		</div>
 	</Dialog>
 
-	<div class="header-text"></div>
+	<div class="header-text">Your list of delicious recipes. Enjoy!</div>
 	<div>
 		<ul>
 			<li
