@@ -17,7 +17,7 @@
 	<div>
 		<ul>
 			<li
-				v-for="(recipe, index) in fetchedRecipes"
+				v-for="(recipe, index) in visibleRecipes"
 				:key="index">
 				<div
 					class="container"
@@ -45,6 +45,13 @@
 				</div>
 			</li>
 		</ul>
+		<div class="button-show-more-recipes">
+			<Button
+				v-if="visibleRecipes.length < fetchedRecipes.length"
+				@click="loadMore"
+				>Show five more</Button
+			>
+		</div>
 	</div>
 </template>
 
@@ -62,10 +69,24 @@ const useTastyStore = tastyStore();
 const { fetchedRecipes } = storeToRefs(useTastyStore);
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
+const visibleRecipes = ref([]);
+const currentIndex = ref(5);
 
 const headerMessage = ref(
 	route.query.headerMessage || "Your five delicious recipes. Enjoy!"
 );
+
+const loadMore = () => {
+	const nextRecipes = fetchedRecipes.value.slice(
+		currentIndex.value,
+		currentIndex.value + 5
+	);
+	visibleRecipes.value.push(...nextRecipes);
+	currentIndex.value += 5;
+};
+if (fetchedRecipes.value.length > 0) {
+	visibleRecipes.value = fetchedRecipes.value.slice(0, 5);
+}
 
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
@@ -82,34 +103,33 @@ const getItemClass = (index) => {
 </script>
 
 <style scoped>
-.even {
-	background-color: #fcffff;
-}
-.odd {
-	background-color: #a6ffea8c;
-}
-ul,
-li {
-	list-style: none !important;
-}
-.header-text {
-	margin: 2rem auto 0 auto;
-	padding-left: 1rem;
-	padding-right: 1rem;
-	display: block;
-	width: fit-content;
-	font-size: 26px;
-	font-weight: bold;
-	font-style: italic;
-	color: #44424d;
-}
-
 * {
 	box-sizing: border-box;
 }
-.dialog-class {
-	margin: 0;
-	padding: 0;
+
+.button-class {
+	padding: 1rem;
+}
+
+.button-delete {
+	background-color: #f92222;
+	margin-left: 0.5rem;
+}
+
+.button-show {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 1rem;
+	padding: 1rem;
+}
+
+.button-show-more-recipes {
+	display: flex;
+	position: relative;
+	justify-content: flex-end;
+	margin-right: 2rem;
+	margin-top: 20px;
+	z-index: 999 !important;
 }
 
 .container {
@@ -123,6 +143,31 @@ li {
 	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 	padding: 1rem;
 	z-index: 1;
+}
+
+.dialog-class {
+	margin: 0;
+	padding: 0;
+}
+
+.even {
+	background-color: #fcffffa6;
+}
+
+.header-text {
+	margin: 2rem auto 0 auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	display: block;
+	width: fit-content;
+	font-size: 26px;
+	font-weight: bold;
+	font-style: italic;
+	color: #44424d;
+}
+
+.odd {
+	background-color: #a6ffea8c;
 }
 
 .recipe-name {
@@ -144,15 +189,6 @@ li {
 	box-sizing: border-box;
 	white-space: nowrap;
 }
-.right-elements {
-	display: inline-block;
-	vertical-align: middle;
-	width: 45%;
-	text-align: right;
-	padding-right: 1rem;
-	box-sizing: border-box;
-	white-space: nowrap;
-}
 
 .set-time {
 	display: inline-block;
@@ -164,23 +200,15 @@ li {
 	border-radius: 8px;
 	font-size: 16px;
 }
+
 .time {
 	font-size: 16px;
 	margin: 0;
 }
 
-.button-show {
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 1rem;
-	padding: 1rem;
-}
-.button-class {
-	padding: 1rem;
-}
-.button-delete {
-	background-color: #f92222;
-	margin-left: 0.5rem;
+ul,
+li {
+	list-style: none !important;
 }
 
 @media (max-width: 650px) {
