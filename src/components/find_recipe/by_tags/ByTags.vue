@@ -180,7 +180,7 @@ async function getRecipe() {
 		.map((tag) => tag.display_name)
 		.join(",");
 
-	await useTastyStore.getRecipes(0, 5, selectedTags);
+	await useTastyStore.getRecipes(0, 100, selectedTags);
 	foodName.value = selectedTags;
 	console.log(useTastyStore.fetchedRecipes);
 	isLoading.value = false;

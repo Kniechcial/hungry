@@ -63,7 +63,7 @@ const BaseRecipeList = () =>
 
 async function getRecipe() {
 	isLoading.value = true;
-	await useTastyStore.getRecipes(0, 2, foodName.value);
+	await useTastyStore.getRecipes(0, 100, foodName.value);
 	console.log(useTastyStore.fetchedRecipes);
 	isLoading.value = false;
 

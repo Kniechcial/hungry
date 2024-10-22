@@ -48,7 +48,7 @@ const BaseRecipeList = () =>
 async function getRecipe() {
 	isLoading.value = true;
 	getRandomRecipe();
-	await useTastyStore.getRecipes(0, 1, foodName.display_name);
+	await useTastyStore.getRecipes(0, 10, foodName.display_name);
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 		isLoading.value = false;

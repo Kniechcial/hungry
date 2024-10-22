@@ -150,7 +150,7 @@ const toggleToGetRecipes = () => {
 async function getRecipe() {
 	isLoading.value = true;
 	const selectedIngredients = ref(userChosed.value.join(","));
-	await useTastyStore.getRecipes(0, 2, selectedIngredients.value);
+	await useTastyStore.getRecipes(0, 100, selectedIngredients.value);
 	foodName.value = selectedIngredients;
 	console.log(useTastyStore.fetchedRecipes);
 	isLoading.value = false;
