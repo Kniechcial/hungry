@@ -92,7 +92,7 @@ import Toast from "primevue/toast";
 import { tastyStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
+import CarrotLoader from "../../Reusable/CarrotLoader.vue";
 
 const isLoading = ref(false);
 const useTastyStore = tastyStore();
@@ -166,6 +166,7 @@ const BaseRecipeList = () =>
 		query: {
 			storeType: "tasty",
 			foodName: foodName,
+			buttonType: true,
 		},
 	});
 

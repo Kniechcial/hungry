@@ -45,12 +45,19 @@
 				</div>
 			</li>
 		</ul>
-		<div class="button-show-more-recipes">
+		<div
+			class="button-show-more-recipes"
+			v-if="buttonType">
 			<Button
 				v-if="visibleRecipes.length < fetchedRecipes.length"
 				@click="loadMore"
 				>Show five more</Button
 			>
+		</div>
+		<div
+			class="button-show-more-recipes"
+			v-if="!buttonType">
+			<Button @click="navigateToRandomRecipe()">Find another recipes</Button>
 		</div>
 	</div>
 </template>
@@ -63,6 +70,7 @@ import RecipeDetails from "./RecipeDetails.vue";
 import { tastyStore } from "../../../stores/tasty.js";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
+import router from "@/router";
 
 const route = useRoute();
 const useTastyStore = tastyStore();
@@ -71,11 +79,17 @@ const recipeVisible = ref(false);
 const activeRecipe = ref(null);
 const visibleRecipes = ref([]);
 const currentIndex = ref(5);
+const buttonType = ref(route.query.buttonType === "true");
 
 const headerMessage = ref(
 	route.query.headerMessage || "Your five delicious recipes. Enjoy!"
 );
-
+const navigateToRandomRecipe = () => {
+	router.push({
+		name: "FindRecipe",
+		params: { findBy: "random" },
+	});
+};
 const loadMore = () => {
 	const nextRecipes = fetchedRecipes.value.slice(
 		currentIndex.value,

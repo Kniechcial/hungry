@@ -26,7 +26,7 @@ import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { tastyStore } from "../../../stores/tasty.js";
-import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
+import CarrotLoader from "../../Reusable/CarrotLoader.vue";
 
 const isLoading = ref(false);
 const useTastyStore = tastyStore();
@@ -42,13 +42,14 @@ const BaseRecipeList = () =>
 			storeType: "tasty",
 			headerMessage: "Your delicious random recipes. Enjoy!",
 			foodName: foodName.display_name,
+			buttonType: false,
 		},
 	});
 
 async function getRecipe() {
 	isLoading.value = true;
 	getRandomRecipe();
-	await useTastyStore.getRecipes(0, 10, foodName.display_name);
+	await useTastyStore.getRecipes(0, 5, foodName.display_name);
 	if (useTastyStore.fetchedRecipes.length === 0) {
 		showError();
 		isLoading.value = false;
