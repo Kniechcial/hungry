@@ -31,7 +31,7 @@
 				<div class="lets-go-try">Let's go try!</div>
 				<div class="about-us-text">
 					<p class="head-description">
-						No idea for dinner that's no longer a problem
+						You have idea for a dinner but don't have a recipe
 					</p>
 					<p class="add-description">
 						Hungry will help you find a recipe for whatever you're craving.
