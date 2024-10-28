@@ -1,27 +1,27 @@
 <template>
 	<div class="mainBar">
 		<div class="card firstObject">
-			<Menubar :model="filteredItems" />
+			<Menubar :model="filteredMenuItems" />
 		</div>
 		<div
 			class="avatar-container"
 			ref="avatarContainer">
 			<span
-				v-if="useAuthStore.user"
+				v-if="authStore.user"
 				class="avatar-text">
-				{{ useAuthStore.user.email }}
+				{{ authStore.user.email }}
 			</span>
 			<Avatar
 				icon="pi pi-user"
 				:class="
-					useAuthStore.user ? 'avatar-design-enable' : 'avatar-design-disable'
+					authStore.user ? 'avatar-design-enable' : 'avatar-design-disable'
 				"
 				size="large"
 				shape="circle"
 				@click="toggleMenu" />
 			<Menu
 				:model="avatarItems"
-				v-if="useAuthStore.user"
+				v-if="authStore.user"
 				ref="avatarMenu"
 				popup
 				:baseZIndex="1000" />
@@ -35,9 +35,9 @@ import Avatar from "primevue/avatar";
 import Menubar from "primevue/menubar";
 import Menu from "primevue/menu";
 import { useRouter } from "vue-router";
-import { authStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 
-const useAuthStore = authStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const showMenu = ref(false);
@@ -45,7 +45,7 @@ const avatarMenu = ref(null);
 const avatarContainer = ref(null);
 
 const toggleMenu = (event) => {
-	if (!useAuthStore.user) {
+	if (!authStore.user) {
 		navigateToAuthorization();
 	} else {
 		avatarMenu.value.toggle(event);
@@ -73,18 +73,11 @@ onBeforeUnmount(() => {
 });
 
 const avatarItems = ref([
-	// {
-	// 	label: "Setting",
-	// 	icon: "pi pi-user",
-	// 	command: () => {
-	// 		router.push({ name: "user-panel" });
-	// 	},
-	// },
 	{
 		label: "Logout",
 		icon: "pi pi-sign-out",
 		command: () => {
-			useAuthStore.logoutUser();
+			authStore.logoutUser();
 			router.push({
 				name: "Authorization",
 				params: { findBy: "login" },
@@ -118,13 +111,7 @@ const items = ref([
 					});
 				},
 			},
-			// {
-			// 	label: "Add Recipe",
-			// 	icon: "pi pi-file-import",
-			// 	command: () => {
-			// 		router.push({ name: "CreateNewRecipe" });
-			// 	},
-			// },
+
 		],
 	},
 	{
@@ -139,8 +126,8 @@ const items = ref([
 	},
 ]);
 
-const filteredItems = computed(() => {
-	if (useAuthStore.user) {
+const filteredMenuItems = computed(() => {
+	if (authStore.user) {
 		return items.value;
 	}
 	return items.value.filter(

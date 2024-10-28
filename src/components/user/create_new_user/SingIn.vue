@@ -12,7 +12,7 @@
 						<InputText
 							:class="{ 'p-invalid': displayEmailError }"
 							v-model.trim="newUser.email"
-							@keydown.enter="addUser"
+							@keydown.enter="toggleToAddNewUser"
 							type="text" />
 					</div>
 				</div>
@@ -22,7 +22,7 @@
 						<InputText
 							:class="{ 'p-invalid': displayPasswordError }"
 							v-model.trim="password"
-							@keydown.enter="addUser"
+							@keydown.enter="toggleToAddNewUser"
 							toggleMask
 							type="password" />
 					</div>
@@ -33,7 +33,7 @@
 						<InputText
 							:class="{ 'p-invalid': displayPasswordError }"
 							v-model.trim="confirmPassword"
-							@keydown.enter="addUser"
+							@keydown.enter="toggleToAddNewUser"
 							toggleMask
 							type="password" />
 					</div>
@@ -42,7 +42,7 @@
 		</div>
 		<div class="card flex justify-content-left mt-4">
 			<Button
-				@click="addUser()"
+				@click="toggleToAddNewUser()"
 				label="Register"
 				:disabled="!newUser.email || !password || !confirmPassword" />
 		</div>
@@ -54,16 +54,15 @@
 
 <script setup>
 import { reactive, ref } from "vue";
-import { authStore } from "../../../stores/authStore.js";
-import Password from "primevue/password";
+import { useAuthStore } from "../../../stores/authStore.js";
+import { useToast } from "primevue/usetoast";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Toast from "primevue/toast";
 import logIcon from "../../../assets/icon/log-icon.png";
-import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
-const useAuthStore = authStore();
+const authStore = useAuthStore();
 
 const displayPasswordError = ref(false);
 const displayEmailError = ref(false);
@@ -77,11 +76,11 @@ const newUser = reactive({
 	password: "",
 });
 
-const addUser = async () => {
+const toggleToAddNewUser = async () => {
 	if (!validatePasswords()) {
 		return;
 	}
-	const response = await useAuthStore.registerUser(newUser);
+	const response = await authStore.registerUser(newUser);
 	if (!response.result) {
 		checkError(response.error);
 	}
@@ -91,7 +90,6 @@ const validatePasswords = () => {
 	if (confirmPassword.value === password.value) {
 		password.value === confirmPassword.value && password.value;
 		newUser.password = password.value;
-		console.log("Validate Passwords " + newUser.password);
 		return true;
 	} else {
 		showError("Passwords do not match");
@@ -126,24 +124,11 @@ const showError = (message) => {
 </script>
 
 <style scoped>
-/* * {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-} */
-
-/* */
 .p-invalid {
 	border-color: red;
 	background-color: #fdd;
 	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
 }
-/*  */
-
-/* .input-email {
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-} */
 .content {
 	position: relative;
 	border: 1px solid;

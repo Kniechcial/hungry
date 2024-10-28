@@ -142,13 +142,13 @@
 									</div>
 									<div class="ingridiens-recipe">
 										<div
-											v-if="!hiddenButton"
+											v-if="!displayButtonToShowIngrdients"
 											class="card flex justify-content-center mt-4 pl-5 cursor-pointer">
 											<Button
-												@click="displayIngridients"
+												@click="toggleToDisplayIngridients"
 												label="Show Ingridiens" />
 										</div>
-										<ul v-if="showIngridients">
+										<ul v-if="displayIngridients">
 											<div class="header-description">Ingridients:</div>
 											<div
 												v-for="name in recipe.ingridients"
@@ -178,7 +178,7 @@
 											:key="index">
 											<ul>
 												<div class="header-description">
-													Step: {{ getIndexInArray(index) }}
+													Step: {{ getIndexInDescription(index) }}
 												</div>
 												<li class="description-step">
 													{{ step.step }}
@@ -193,19 +193,19 @@
 				</div>
 				<div class="button-container">
 					<Button
-						v-if="useAuthStore.user && storeType === 'tasty'"
+						v-if="authStore.user && storeType === 'tasty'"
 						class="button-add-to-book"
-						@click="addToBook"
+						@click="toggleToAddToUserBook"
 						label="Add recipe to Your book" />
 
 					<Button
-						v-else-if="!useAuthStore.user"
+						v-else-if="!authStore.user"
 						disabled
 						class="button-add-to-book"
 						label="Add recipe to Your book" />
 
 					<div
-						v-if="!useAuthStore.user"
+						v-if="!authStore.user"
 						class="button-tooltip">
 						After logging in, the button will be available.
 					</div>
@@ -220,54 +220,50 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import Button from "primevue/button";
-import { authStore } from "@/stores/authStore";
-import { tastyStore } from "../../../stores/tasty.js";
-import { recipesStore } from "@/stores/recipesStore.js";
-import Toast from "primevue/toast";
+import { useAuthStore } from "@/stores/authStore";
+import { useRecipesStore } from "@/stores/recipesStore.js";
 import { useToast } from "primevue/usetoast";
-import { useRouter } from "vue-router";
-import { useRoute } from "vue-router";
 
-const useTastyStore = tastyStore();
-const useRecipesStore = recipesStore();
-const useAuthStore = authStore();
+import { useRoute } from "vue-router";
+import Button from "primevue/button";
+import Toast from "primevue/toast";
+
+const recipesStore = useRecipesStore();
+const authStore = useAuthStore();
 const props = defineProps({
 	recipe: Object,
 });
-const router = useRouter();
 const emit = defineEmits(["setVisible"]);
 const closeRecipe = () => {
 	emit("setVisible", false);
-	console.log("TAK");
-	console.log("setVisible");
+
 };
 const toast = useToast();
 const route = useRoute();
 const storeType = route.query.storeType;
-const showIngridients = ref(false);
-const hiddenButton = ref(false);
+const displayIngridients = ref(false);
+const displayButtonToShowIngrdients = ref(false);
 
-const displayIngridients = () => {
-	showIngridients.value = true;
-	hiddenButton.value = true;
+const toggleToDisplayIngridients = () => {
+	displayIngridients.value = true;
+	displayButtonToShowIngrdients.value = true;
 };
-const getIndexInArray = (index) => {
+const getIndexInDescription = (index) => {
 	return index + 1;
 };
 
-const addToBook = async () => {
-	await useRecipesStore.addRecipe(props.recipe);
-	useRecipesStore.getRecipe();
+const toggleToAddToUserBook = async () => {
+	await recipesStore.addRecipe(props.recipe);
+	recipesStore.getRecipe();
 };
 
 watch(
-	() => useRecipesStore.addRecipeStatus,
+	() => recipesStore.addRecipeStatus,
 	(success) => {
 		if (success === true) {
-			showSuccess(useRecipesStore.addRecipeMessage);
+			showSuccess(recipesStore.addRecipeMessage);
 		} else if (success === false) {
-			showError(useRecipesStore.addRecipeMessage);
+			showError(recipesStore.addRecipeMessage);
 		}
 	}
 );

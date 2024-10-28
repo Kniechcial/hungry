@@ -8,36 +8,36 @@
 </template>
 
 <script setup>
-import Header from "./components/reusable/Header.vue";
-import Footer from "./components/reusable/Footer.vue";
-import NavigateMainBar from "./components/reusable/NavigateMainBar.vue";
+import Header from "./components/Reusable/Header.vue";
+import Footer from "./components/Reusable/Footer.vue";
+import NavigateMainBar from "./components/Reusable/NavigateMainBar.vue";
+
 
 import { onMounted } from "vue";
-import { tastyStore } from "./stores/tasty.js";
-import { authStore } from "./stores/authStore";
+import { useTastyStore } from "./stores/tasty.js";
+import { useAuthStore } from "./stores/authStore";
 import { auth } from "@/fireBase.js";
 import { useRouter } from "vue-router";
 
-const useAuthStore = authStore();
-const useTastyStore = tastyStore();
+const authStore = useAuthStore();
+const tastyStore = useTastyStore();
 const router = useRouter();
 
 async function getTags() {
-	await useTastyStore.getTags();
+	await tastyStore.getTags();
 }
 
 onMounted(async () => {
-	// Jeśli userDetails są wprowadzone, czyli użytkownik wprowadził dane to ta funkcja sprawdza czy są poprawne  i jeśli są to przypisuje je do user a jeśli ich nie ma to user ma null.
 	auth.onAuthStateChanged(async (userDetails) => {
 		if (userDetails) {
-			useAuthStore.user = {
+			authStore.user = {
 				email: userDetails.email,
 				password: userDetails.password,
 				uid: userDetails.uid,
 			};
 			router.push({ name: "HomeView" });
 		} else {
-			useAuthStore.user = null;
+			authStore.user = null;
 		}
 	});
 	getTags();
@@ -73,7 +73,7 @@ body::-webkit-scrollbar-thumb {
 @supports not selector(::-webkit-scrollbar) {
 	body {
 		scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
-		scrollbar-width: thin; /* Opcjonalnie, jeśli chcesz kontrolować szerokość paska przewijania w przeglądarkach innych niż WebKit */
+		scrollbar-width: thin;
 	}
 }
 </style>

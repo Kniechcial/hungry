@@ -2,7 +2,7 @@
 	<header>
 		<div
 			class="header-img"
-			@click="goHome()">
+			@click="toggleToHomeView()">
 			<div class="header-bg"></div>
 		</div>
 	</header>
@@ -11,7 +11,7 @@
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const goHome = () => {
+const toggleToHomeView = () => {
 	router.push({ name: "HomeView" });
 };
 </script>

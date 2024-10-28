@@ -1,5 +1,5 @@
 <template>
-	<div class="base-description">
+	<div class="description-component">
 		<div class="description">
 			<h3>Select how you want to search for a recipe</h3>
 		</div>
@@ -13,7 +13,7 @@
 </template>
 
 <style scoped>
-.base-description {
+.description-component {
 	position: relative;
 	padding: 1rem;
 	border: 1px solid;
@@ -38,7 +38,7 @@ p {
 	margin-right: auto;
 }
 @media (max-width: 900px) {
-	.base-description {
+	.description-component {
 		margin-top: 1rem;
 		margin-left: 1rem;
 		margin-right: 1rem;

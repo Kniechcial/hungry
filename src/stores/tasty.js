@@ -1,14 +1,14 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 
-export const tastyStore = defineStore("recipe", () => {
+export const useTastyStore = defineStore("recipe", () => {
 	const fetchedRecipes = ref([]);
 	async function getRecipes(from, size, q) {
 		const url = `https://tasty.p.rapidapi.com/recipes/list?from=${from}&size=${size}&q=${q}`;
 		const options = {
 			method: "GET",
 			headers: {
-				"x-rapidapi-key": "21c1821ffcmsha7990fd4d3e010bp1099d7jsn3580fc4e61de",
+				"x-rapidapi-key": "e75b35b145mshe68490a03c8656ap1b28a4jsn27f4176d2b8a",
 				"x-rapidapi-host": "tasty.p.rapidapi.com",
 			},
 		};
@@ -62,9 +62,7 @@ export const tastyStore = defineStore("recipe", () => {
 				});
 				modifiedRecipes.push(modifiedRecipe);
 			}
-			console.log(result);
 			fetchedRecipes.value = modifiedRecipes;
-			console.log("Pierwsze wywołania Funkcji GetRecipe");
 		} catch (error) {
 			console.error(error);
 		}
@@ -75,7 +73,7 @@ export const tastyStore = defineStore("recipe", () => {
 		const options = {
 			method: "GET",
 			headers: {
-				"x-rapidapi-key": "21c1821ffcmsha7990fd4d3e010bp1099d7jsn3580fc4e61de",
+				"x-rapidapi-key": "e75b35b145mshe68490a03c8656ap1b28a4jsn27f4176d2b8a",
 				"x-rapidapi-host": "tasty.p.rapidapi.com",
 			},
 		};
@@ -83,9 +81,7 @@ export const tastyStore = defineStore("recipe", () => {
 		try {
 			const response = await fetch(url_tag_list, options);
 			const responseData = await response.json();
-
 			fetchedTags.value = responseData.results;
-			console.log(fetchedTags.value);
 		} catch (error) {
 			console.error(error);
 		}

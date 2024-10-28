@@ -7,10 +7,10 @@ import {
 } from "firebase/auth";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { ref } from "vue";
-import { recipesStore } from "./recipesStore.js";
+import { useRecipesStore } from "./recipesStore.js";
 
-export const authStore = defineStore("authStore", () => {
-	const useRecipesStore = recipesStore();
+export const useAuthStore = defineStore("authStore", () => {
+	const recipesStore = useRecipesStore();
 
 	const user = ref(null);
 
@@ -22,10 +22,10 @@ export const authStore = defineStore("authStore", () => {
 				newUser.password
 			);
 			user.value = response.user;
-			console.log(user);
+
 			return { result: true };
 		} catch (error) {
-			console.log("Error in authStore.js in registerUser: " + error);
+			console.log(error);
 			return { result: false, error: error.code };
 		}
 	};
@@ -37,10 +37,9 @@ export const authStore = defineStore("authStore", () => {
 				loginUser.password
 			);
 			user.value = response.user;
-			console.log(user.value);
 			return { result: true };
 		} catch (error) {
-			console.log("Error in authStore.js in loginUser: " + error);
+			console.log(error);
 			return { result: false, error: error.code };
 		}
 	};
@@ -48,19 +47,17 @@ export const authStore = defineStore("authStore", () => {
 		signOut(auth)
 			.then(() => {
 				user.value = null;
-				useRecipesStore.cleanStore();
-				console.log("loggedout");
+				recipesStore.cleanStore();
 			})
 			.catch((error) => {
-				console.log("Error in authStore.js in logoutUser", error);
+				console.log(error);
 			});
 	};
 	const restorePassword = async (email) => {
 		try {
 			await sendPasswordResetEmail(auth, email);
-			console.log("Password reset email sent");
 		} catch (error) {
-			console.log("Error in authStore.js in restorePassword: " + error);
+			console.log(error);
 		}
 	};
 
@@ -70,7 +67,6 @@ export const authStore = defineStore("authStore", () => {
 				user.value = currentUser;
 			} else {
 				user.value = null;
-				console.log("No user is logged in.");
 			}
 		});
 	};

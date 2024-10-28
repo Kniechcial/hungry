@@ -1,5 +1,5 @@
 <template>
-	<div class="main-box">
+	<div class="main-component">
 		<div class="left-box box-content">
 			<div class="box-property-left">
 				<strong class="paragraph">
@@ -48,7 +48,7 @@
 						class="button-chose show-less"
 						v-for="(ingredient, index) in userChosed"
 						:key="index"
-						@click="deleteSelectedTag(index)">
+						@click="toggleToDeleteSelectedIngredient(index)">
 						{{ ingredient }}
 					</button>
 				</div>
@@ -64,33 +64,34 @@
 		</div>
 	</div>
 	<div
-		v-if="isLoading"
+		v-if="isLoadingLoader"
 		class="loader">
 		<CarrotLoader></CarrotLoader>
 	</div>
-	<Toast />
+	<Toast
+		class="w-18rem md:w-4"
+		position="top-right" />
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
-import { tastyStore } from "../../../stores/tasty.js";
+import { ref, computed } from "vue";
+import { useTastyStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
+
 import CarrotLoader from "../../Reusable/CarrotLoader.vue";
 
-const useTastyStore = tastyStore();
+const tastyStore = useTastyStore();
 const router = useRouter();
 const toast = useToast();
 
-const isLoading = ref(false);
-const numberOfItemsToShow = ref(6);
-const showAll = ref(false);
 const userChosed = ref([]);
 const foodName = ref(null);
 let ingredientName = ref(null);
+const isLoadingLoader = ref(false);
 
 const getChosedIngredient = () => {
 	if (ingredientName.value) {
@@ -100,13 +101,10 @@ const getChosedIngredient = () => {
 			);
 			if (!checkDuplicate) {
 				userChosed.value.push(ingredientName.value);
-				console.log(userChosed.value);
 			} else {
-				console.log("Ten element już istnieje w tabeli.");
 				showErrorItemExist();
 			}
 		} else {
-			console.log("Tabela zawiera już 5 elementów");
 			showErrorOverFiveElements();
 		}
 	} else {
@@ -115,7 +113,7 @@ const getChosedIngredient = () => {
 	ingredientName.value = "";
 };
 
-const deleteSelectedTag = (index) => {
+const toggleToDeleteSelectedIngredient = (index) => {
 	userChosed.value.splice(index, 1);
 };
 
@@ -123,18 +121,7 @@ const disabledButtonFindRecipe = computed(() => {
 	return userChosed.value.length === 0;
 });
 
-const toggleShow = () => {
-	showAll.value = !showAll.value;
-	if (!showAll.value) {
-		numberOfItemsToShow.value = 6;
-	}
-};
-
-const showMoreTags = () => {
-	numberOfItemsToShow.value = numberOfItemsToShow.value = Infinity;
-};
-
-const BaseRecipeList = () =>
+const NavigateToBaseRecipeList = () =>
 	router.push({
 		name: "RecipeList",
 		query: {
@@ -149,17 +136,17 @@ const toggleToGetRecipes = () => {
 };
 
 async function getRecipe() {
-	isLoading.value = true;
+	isLoadingLoader.value = true;
 	const selectedIngredients = ref(userChosed.value.join(","));
-	await useTastyStore.getRecipes(0, 100, selectedIngredients.value);
+	await tastyStore.getRecipes(0, 100, selectedIngredients.value);
 	foodName.value = selectedIngredients;
-	console.log(useTastyStore.fetchedRecipes);
-	isLoading.value = false;
+	
+	isLoadingLoader.value = false;
 
-	if (useTastyStore.fetchedRecipes.length === 0) {
+	if (tastyStore.fetchedRecipes.length === 0) {
 		showError();
 	} else {
-		BaseRecipeList();
+		NavigateToBaseRecipeList();
 	}
 }
 
@@ -198,7 +185,7 @@ const showError = () => {
 </script>
 
 <style scoped>
-.main-box {
+.main-component {
 	display: flex;
 	justify-content: space-between;
 	margin: 0 2rem;
@@ -309,7 +296,7 @@ p {
 	}
 }
 @media (max-width: 1250px) {
-	.main-box {
+	.main-component {
 		flex-direction: column;
 		align-items: center;
 		margin: 0 1rem;

@@ -11,10 +11,10 @@ import {
 	where,
 } from "firebase/firestore";
 import { db } from "../fireBase.js";
-import { authStore } from "./authStore";
+import { useAuthStore } from "./authStore";
 
-export const recipesStore = defineStore("recipesStore", () => {
-	const useAuthStore = authStore();
+export const useRecipesStore = defineStore("recipesStore", () => {
+	const authStore = useAuthStore();
 	const userRecipes = ref([]);
 	const addRecipeStatus = ref(null);
 	const addRecipeMessage = ref("");
@@ -25,13 +25,12 @@ export const recipesStore = defineStore("recipesStore", () => {
 	};
 
 	const getRecipe = async () => {
-		console.log(useAuthStore.user);
 		try {
 			const recipes = [];
 			const recipesCollection = collection(
 				db,
 				"users",
-				useAuthStore.user.uid,
+				authStore.user.uid,
 				"recipes"
 			);
 			const querySnapshot = await getDocs(recipesCollection);
@@ -42,10 +41,10 @@ export const recipesStore = defineStore("recipesStore", () => {
 				});
 			});
 			userRecipes.value = recipes;
-			console.log("GetRecipes is Working");
-			console.log(recipes);
+			
+			
 		} catch (error) {
-			console.log("Error in recipesStore.js in getRecipe", error);
+			console.log(error);
 		}
 	};
 
@@ -56,7 +55,7 @@ export const recipesStore = defineStore("recipesStore", () => {
 			const recipesCollection = collection(
 				db,
 				"users",
-				useAuthStore.user.uid,
+				authStore.user.uid,
 				"recipes"
 			);
 			const q = query(recipesCollection, where("name", "==", recipe.name));
@@ -75,24 +74,24 @@ export const recipesStore = defineStore("recipesStore", () => {
 		} catch (error) {
 			addRecipeStatus.value = false;
 			addRecipeMessage.value = "Error adding recipe.";
-			console.error("Error in recipesStore.js in addRecipe:", error);
+			console.error(error);
 			return { success: false, message: "Error adding recipe." };
 		}
 	};
 
 	const deleteRecipe = async (recipe) => {
 		await deleteDoc(
-			doc(db, "users", useAuthStore.user.uid, "recipes", recipe.id)
+			doc(db, "users", authStore.user.uid, "recipes", recipe.id)
 		);
 	};
 	let recipesListener = null;
 	async function addRecipesListener() {
 		removeRecipeListener();
-		if (!useAuthStore.user.uid) {
+		if (!authStore.user.uid) {
 			return;
 		}
 		recipesListener = onSnapshot(
-			collection(db, "users", useAuthStore.user.uid, "recipes"),
+			collection(db, "users", authStore.user.uid, "recipes"),
 			(querySnapshot) => {
 				const updatedRecipes = [];
 				querySnapshot.forEach((doc) => {

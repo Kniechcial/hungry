@@ -35,7 +35,7 @@
 						</div>
 						<div class="button-show">
 							<Button
-								@click="showRecipe(recipe)"
+								@click="toggleToShowRecipe(recipe)"
 								class="button-class"
 								type="button"
 								label="Show recipe"
@@ -50,7 +50,7 @@
 			v-if="buttonType">
 			<Button
 				v-if="visibleRecipes.length < fetchedRecipes.length"
-				@click="loadMore"
+				@click="toggleToLoadMoreRecipes"
 				>Show five more</Button
 			>
 		</div>
@@ -64,22 +64,22 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+import { useTastyStore } from "../../../stores/tasty.js";
+import { storeToRefs } from "pinia";
+import router from "@/router";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "./RecipeDetails.vue";
-import { tastyStore } from "../../../stores/tasty.js";
-import { storeToRefs } from "pinia";
-import { useRoute } from "vue-router";
-import router from "@/router";
 
+const tastyStore = useTastyStore();
 const route = useRoute();
-const useTastyStore = tastyStore();
-const { fetchedRecipes } = storeToRefs(useTastyStore);
+const { fetchedRecipes } = storeToRefs(tastyStore);
+const buttonType = ref(route.query.buttonType === "true");
 const recipeVisible = ref(false);
 const activeRecipe = ref(null);
 const visibleRecipes = ref([]);
 const currentIndex = ref(5);
-const buttonType = ref(route.query.buttonType === "true");
 
 const headerMessage = ref(
 	route.query.headerMessage || "Your five delicious recipes. Enjoy!"
@@ -90,7 +90,7 @@ const navigateToRandomRecipe = () => {
 		params: { findBy: "random" },
 	});
 };
-const loadMore = () => {
+const toggleToLoadMoreRecipes = () => {
 	const nextRecipes = fetchedRecipes.value.slice(
 		currentIndex.value,
 		currentIndex.value + 5
@@ -102,13 +102,12 @@ if (fetchedRecipes.value.length > 0) {
 	visibleRecipes.value = fetchedRecipes.value.slice(0, 5);
 }
 
-const showRecipe = (recipe) => {
+const toggleToShowRecipe = (recipe) => {
 	recipeVisible.value = true;
 	activeRecipe.value = recipe;
 };
 const setVisible = (visible) => {
 	recipeVisible.value = visible;
-	console.log("RecipeList");
 };
 
 const getItemClass = (index) => {

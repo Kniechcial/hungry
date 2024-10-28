@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-if="isLoading"
+		v-if="isLoadingLoader"
 		class="carrot-box">
 		<CarrotLoader class="carrot"></CarrotLoader>
 	</div>
@@ -10,14 +10,12 @@
 			class="card flex scale recipe-tabmenu"
 			v-model:activeIndex="indexId" />
 	</div>
-	<component
-		:is="currentComponent"
-		></component>
+	<component :is="currentComponent"></component>
 </template>
 
 <script setup>
 import { ref, defineComponent } from "vue";
-import CarrotLoader from "@/components/reusable/CarrotLoader.vue";
+import CarrotLoader from "../../components/Reusable/CarrotLoader.vue";
 import TabMenu from "primevue/tabmenu";
 import BaseDescription from "@/components/find_recipe/base_descrtiption/BaseDescription.vue";
 import ByIngredients from "../../components/find_recipe/by_ingredients/ByIngredients.vue";
@@ -25,7 +23,7 @@ import ByName from "../../components/find_recipe/by_name/ByName.vue";
 import ByTags from "../../components/find_recipe/by_tags/ByTags.vue";
 import Random from "../../components/find_recipe/random_recipe/RandomRecipe.vue";
 
-const isLoading = ref(false);
+const isLoadingLoader = ref(false);
 
 //
 

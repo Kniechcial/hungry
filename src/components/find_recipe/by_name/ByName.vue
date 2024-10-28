@@ -21,17 +21,19 @@
 		<div class="button-box">
 			<div class="card flex">
 				<Button
-					@click="getRecipe()"
+					@click="toggleToGetRecipes"
 					label="Find recipe" />
 			</div>
 		</div>
 	</div>
 	<div
-		v-if="isLoading"
+		v-if="isLoadingLoader"
 		class="loader">
 		<CarrotLoader></CarrotLoader>
 	</div>
-	<Toast />
+	<Toast
+		class="w-18rem md:w-4"
+		position="top-right" />
 </template>
 
 <script setup>
@@ -41,17 +43,17 @@ import Button from "primevue/button";
 import Toast from "primevue/toast";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import { tastyStore } from "../../../stores/tasty.js";
+import { useTastyStore } from "../../../stores/tasty.js";
 import CarrotLoader from "../../Reusable/CarrotLoader.vue";
 
-const useTastyStore = tastyStore();
+const tastyStore = useTastyStore();
 const router = useRouter();
 const toast = useToast();
 const foodName = ref(null);
 const displayError = ref(false);
-const isLoading = ref(false);
+const isLoadingLoader = ref(false);
 
-const BaseRecipeList = () =>
+const NavigateToBaseRecipeList = () =>
 	router.push({
 		name: "RecipeList",
 		query: {
@@ -63,22 +65,24 @@ const BaseRecipeList = () =>
 	});
 
 async function getRecipe() {
-	isLoading.value = true;
-	await useTastyStore.getRecipes(0, 100, foodName.value);
-	console.log(useTastyStore.fetchedRecipes);
-	isLoading.value = false;
+	isLoadingLoader.value = true;
+	await tastyStore.getRecipes(0, 100, foodName.value);
+	isLoadingLoader.value = false;
 
 	if (foodName) {
-		if (useTastyStore.fetchedRecipes.length === 0) {
+		if (tastyStore.fetchedRecipes.length === 0) {
 			showError();
 			displayError.value = true;
 		} else {
-			BaseRecipeList();
+			NavigateToBaseRecipeList();
 		}
 	} else {
 		showError();
 	}
 }
+const toggleToGetRecipes = () => {
+	getRecipe();
+};
 
 const showError = () => {
 	toast.add({

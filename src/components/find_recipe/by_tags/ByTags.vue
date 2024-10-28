@@ -9,7 +9,7 @@
 				<div class="category-box">
 					<button
 						class="button-chose"
-						v-for="item in useTastyStore.categorys"
+						v-for="item in tastyStore.categorys"
 						:key="item"
 						@click="toggleShowCategory(item)">
 						{{ formatTagName(item) }}
@@ -25,7 +25,7 @@
 						v-for="(item, index) in filteredTags"
 						:key="index">
 						<button
-							v-if="showAll || (!showAll && index < 5)"
+							v-if="showAllCategory || (!showAllCategory && index < 5)"
 							class="button-chose"
 							@click="getChosedTag(item)">
 							{{ item.display_name }}
@@ -35,7 +35,7 @@
 				<button
 					class="button-chose show-less"
 					@click="toggleShow">
-					{{ showAll ? "Show less" : "Show more" }}
+					{{ showAllCategory ? "Show less" : "Show more" }}
 				</button>
 				<button
 					class="button-chose show-less"
@@ -66,7 +66,6 @@
 					</button>
 				</div>
 			</div>
-			<Toast />
 			<div class="button-box">
 				<div class="card flex justify-content-center">
 					<Button
@@ -78,33 +77,34 @@
 		</div>
 	</div>
 	<div
-		v-if="isLoading"
+		v-if="isLoadingLoader"
 		class="loader">
 		<CarrotLoader></CarrotLoader>
 	</div>
-	<Toast />
+	<Toast
+		class="w-18rem md:w-4"
+		position="top-right" />
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import Button from "primevue/button";
 import Toast from "primevue/toast";
-import { tastyStore } from "../../../stores/tasty.js";
+import { useTastyStore } from "../../../stores/tasty.js";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import CarrotLoader from "../../Reusable/CarrotLoader.vue";
 
-const isLoading = ref(false);
-const useTastyStore = tastyStore();
-const router = useRouter();
+const tastyStore = useTastyStore();
 const toast = useToast();
+const router = useRouter();
 
 const numberOfItemsToShow = ref(6);
-const showAll = ref(false);
-const showAllCategory = ref(true);
 const userChosed = ref([]);
 const selectedCategory = ref(null);
 const foodName = ref(null);
+const showAllCategory = ref(false);
+const isLoadingLoader = ref(false);
 
 const formatTagName = (name) => {
 	let nameA = name.replaceAll("_", " ");
@@ -115,11 +115,11 @@ const formatTagName = (name) => {
 // Category List
 const toggleShowCategory = (category) => {
 	selectedCategory.value = category;
-	showAll.value = false;
+	showAllCategory.value = false;
 };
 
 const filteredTags = computed(() =>
-	useTastyStore.fetchedTags.filter(
+	tastyStore.fetchedTags.filter(
 		(tag) => tag.root_tag_type === selectedCategory.value
 	)
 );
@@ -132,13 +132,10 @@ const getChosedTag = (item) => {
 		);
 		if (!checkDuplicate) {
 			userChosed.value.push(item);
-			console.log(userChosed.value);
 		} else {
 			showError("That tag is already chose");
-			console.log("Ten element już istnieje w tabeli.");
 		}
 	} else {
-		console.log("Tabela zawiera już 5 elementów");
 		showError("You have already five tags");
 	}
 };
@@ -151,16 +148,16 @@ const disabledBUttonFindRecipe = computed(() => {
 });
 
 const toggleShow = () => {
-	showAll.value = !showAll.value;
+	showAllCategory.value = !showAllCategory.value;
 };
 
 const displayedItems = computed(() => {
-	return useTastyStore.fetchedTags.filter((item, index) => {
-		return showAll.value || index < numberOfItemsToShow.value;
+	return tastyStore.fetchedTags.filter((item, index) => {
+		return showAllCategory.value || index < numberOfItemsToShow.value;
 	});
 });
 
-const BaseRecipeList = () =>
+const NavigateToBaseRecipeList = () =>
 	router.push({
 		name: "RecipeList",
 		query: {
@@ -175,20 +172,19 @@ const toggleToGetRecipes = () => {
 };
 
 async function getRecipe() {
-	isLoading.value = true;
-
+	isLoadingLoader.value = true;
 	const selectedTags = userChosed.value
 		.map((tag) => tag.display_name)
 		.join(",");
 
-	await useTastyStore.getRecipes(0, 100, selectedTags);
+	await tastyStore.getRecipes(0, 100, selectedTags);
 	foodName.value = selectedTags;
-	console.log(useTastyStore.fetchedRecipes);
-	isLoading.value = false;
-	if (useTastyStore.fetchedRecipes.length === 0) {
+	console.log(tastyStore.fetchedRecipes);
+	isLoadingLoader.value = false;
+	if (tastyStore.fetchedRecipes.length === 0) {
 		showError();
 	} else {
-		BaseRecipeList();
+		NavigateToBaseRecipeList();
 	}
 }
 

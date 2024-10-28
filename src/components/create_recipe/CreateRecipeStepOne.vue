@@ -203,7 +203,6 @@ const load = () => {
 			description: description.value,
 			url: adresURL.value,
 		};
-		console.log(newRecipe.value);
 		CreateRecipeStepTwo();
 	} else {
 		showError();

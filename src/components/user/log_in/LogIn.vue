@@ -1,7 +1,7 @@
 <template>
 	<Dialog
 		class="dialog-class"
-		v-model:visible="confirmRestore"
+		v-model:visible="confirmRestorePassword"
 		modal
 		:style="{ width: '30rem' }"
 		:breakpoints="{ '650px': '80vw' }"
@@ -31,7 +31,7 @@
 					<InputText
 						:class="{ 'p-invalid': displayError }"
 						v-model.trim="loginUser.email"
-						@keydown.enter="logInUser"
+						@keydown.enter="toggleToLoginUser"
 						type="text" />
 				</div>
 				<p>Password:</p>
@@ -42,7 +42,7 @@
 								'p-invalid': displayError,
 							}"
 							v-model.trim="loginUser.password"
-							@keydown.enter="logInUser"
+							@keydown.enter="toggleToLoginUser"
 							toggleMask
 							type="password" />
 					</div>
@@ -52,7 +52,7 @@
 		<div class="button-box">
 			<div class="card relative inline-block cursor-pointer">
 				<Button
-					@click="logInUser()"
+					@click="toggleToLoginUser()"
 					label="Login account"
 					:disabled="!loginUser.email || !loginUser.password" />
 			</div>
@@ -61,7 +61,7 @@
 				class="card relative inline-block cursor-pointer">
 				<Button
 					label="Restore password"
-					@click="restorePassword()" />
+					@click="toggleToRestorePassword()" />
 			</div>
 		</div>
 	</div>
@@ -72,18 +72,17 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import { authStore } from "../../../stores/authStore.js";
-import Password from "primevue/password";
+import { useAuthStore } from "../../../stores/authStore.js";
+import { useToast } from "primevue/usetoast";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 import Toast from "primevue/toast";
-import logIcon from "../../../assets/icon/log-icon.png";
-import { useToast } from "primevue/usetoast";
 import Dialog from "primevue/dialog";
+import logIcon from "../../../assets/icon/log-icon.png";
 
 const toast = useToast();
-const useAuthStore = authStore();
-const confirmRestore = ref(false);
+const authStore = useAuthStore();
+const confirmRestorePassword = ref(false);
 
 const displayError = ref(false);
 
@@ -92,40 +91,40 @@ const loginUser = reactive({
 	password: "",
 });
 
-const logInUser = async () => {
+const toggleToLoginUser = async () => {
 	if (!loginUser.email || !loginUser.password) {
 		showError("Please enter email and password");
 		return;
 	}
-	const response = await useAuthStore.loginUser(loginUser);
+	const response = await authStore.loginUser(loginUser);
 	if (!response.result) {
 		checkError(response.error);
 	}
 };
 
-const checkError = (error) => {
-	displayError.value = true;
-	if (error === "auth/invalid-email" || error === "auth/invalid-credential") {
-		showError("Invalid credential"), console.log("error in LogIn.vue " + error);
-		console.log(displayError.value);
-	} else if (error === "auth/too-many-requests") {
-		showError("Too many requests"), console.log("error in LogIn.vue " + error);
-		console.log(displayError.value);
-	}
-};
-const restorePassword = async () => {
+const toggleToRestorePassword = async () => {
 	const email = loginUser.email;
 	if (!email) {
 		showError("Please enter your email");
 		return;
 	}
-	await useAuthStore.restorePassword(email);
+	await authStore.restorePassword(email);
 	showConfirmRestore();
 };
+
+const checkError = (error) => {
+	displayError.value = true;
+	if (error === "auth/invalid-email" || error === "auth/invalid-credential") {
+		showError("Invalid credential"), console.log(error);
+	} else if (error === "auth/too-many-requests") {
+		showError("Too many requests"), console.log(error);
+	}
+};
+
 const showConfirmRestore = () => {
-	confirmRestore.value = true;
+	confirmRestorePassword.value = true;
 	setTimeout(() => {
-		confirmRestore.value = false;
+		confirmRestorePassword.value = false;
 	}, 3000);
 };
 

@@ -5,11 +5,11 @@
 				:class="[
 					'about-us-box',
 					'first',
-					useAuthStore.user ? 'pointer-cursor' : 'default-cursor',
+					authStore.user ? 'pointer-cursor' : 'default-cursor',
 				]"
-				@click="useAuthStore.user && navigateToFindByName()">
+				@click="authStore.user && navigateToFindByName()">
 				<div
-					v-if="useAuthStore.user"
+					v-if="authStore.user"
 					class="lets-go-try">
 					Let's go try!
 				</div>
@@ -44,11 +44,11 @@
 				:class="[
 					'about-us-box',
 					'third',
-					useAuthStore.user ? 'pointer-cursor' : 'default-cursor',
+					authStore.user ? 'pointer-cursor' : 'default-cursor',
 				]"
-				@click="useAuthStore.user && navigateToCreateNewRecipe()">
+				@click="authStore.user && navigateToCreateNewRecipe()">
 				<div
-					v-if="useAuthStore.user"
+					v-if="authStore.user"
 					class="lets-go-try">
 					Let's go try!
 				</div>
@@ -97,13 +97,13 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
-import { authStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 import { onMounted } from "vue";
-import { recipesStore } from "@/stores/recipesStore";
+import { useRecipesStore } from "@/stores/recipesStore";
 
-const useRecipesStore = recipesStore();
+const recipesStore = useRecipesStore();
 const router = useRouter();
-const useAuthStore = authStore();
+const authStore = useAuthStore();
 
 const navigateToFindByName = () => {
 	router.push({ name: "FindRecipe", params: { findBy: "name" } });
@@ -126,9 +126,8 @@ const navigateToCreateNewRecipe = () => {
 	});
 };
 onMounted(() => {
-	if (useAuthStore.user) {
-		console.log(useAuthStore.user);
-		useRecipesStore.getRecipe();
+	if (authStore.user) {
+		recipesStore.getRecipe();
 	}
 });
 </script>

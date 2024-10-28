@@ -1,8 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import CreateRecipeStepTwo from "../components/create_recipe/CreateRecipeStepTwo.vue";
-import CreateRecipe from "../components/create_recipe/CreateRecipe.vue";
-
 import BaseDescription from "../components/find_recipe/random_recipe/RandomRecipe.vue";
 import ByIngredients from "../components/find_recipe/by_ingredients/ByIngredients.vue";
 import ByName from "../components/find_recipe/by_name/ByName.vue";
@@ -11,14 +8,14 @@ import RandomRecipe from "../components/find_recipe/random_recipe/RandomRecipe.v
 import RecipeDetails from "../components/find_recipe/recipe_details/RecipeDetails.vue";
 import RecipeList from "../components/find_recipe/recipe_details/RecipeList.vue";
 
-import TopBarMenu from "../components/reusable/NavigateMainBar.vue";
+import TopBarMenu from "../components/Reusable/NavigateMainBar.vue";
 
 import UserRecipesList from "@/components/user/UserRecipesList.vue";
+import CreateRecipe from "../views/create_recipe/CreateRecipe.vue";
 
 import Authorization from "@/views/authorization/Authorization.vue";
-import CreateNewRecipe from "../views/create_recipe/CreateNewRecipeView.vue";
 import FindRecipe from "../views/find_recipe/FindRecipe.vue";
-import HomeView from "../views/home/HomeView.vue";
+import HomeView from "../views/Home/HomeView.vue";
 
 import { getCurrentUser } from "@/fireBase";
 
@@ -31,12 +28,6 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
-			path: "/create-recipe",
-			name: "CreateRecipe",
-			meta: { requiresAuth: true },
-			component: CreateRecipe,
-		},
-		{
 			path: "/top-bar-menu",
 			name: "TopBarMenu",
 			component: TopBarMenu,
@@ -47,12 +38,6 @@ const router = createRouter({
 			component: UserRecipesList,
 		},
 
-		{
-			path: "/create-recipe-step-two",
-			name: "CreateRecipeStepTwo",
-			meta: { requiresAuth: true },
-			component: CreateRecipeStepTwo,
-		},
 		{
 			path: "/recipe-details",
 			name: "RecipeDetails",
@@ -94,6 +79,11 @@ const router = createRouter({
 			component: FindRecipe,
 		},
 		{
+			path: "/create-recipe",
+			name: "CreateRecipe",
+			component: CreateRecipe,
+		},
+		{
 			path: "/authorization/:findBy",
 			name: "Authorization",
 			meta: { requiresUnAuth: true },
@@ -117,11 +107,11 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
 	const user = await getCurrentUser();
 	if (to.meta.requiresUnAuth && user) {
-		next("/"); // Przekieruj do strony głównej, jeśli użytkownik jest zalogowany
+		next("/");
 	} else if (to.meta.requiresAuth && !user) {
-		next("/authorization/login"); // Przekieruj do strony logowania, jeśli użytkownik jest niezalogowany
+		next("/authorization/login");
 	} else {
-		next(); // Kontynuuj nawigację
+		next();
 	}
 });
 

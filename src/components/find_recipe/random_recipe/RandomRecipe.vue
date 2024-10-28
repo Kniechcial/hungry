@@ -8,13 +8,13 @@
 		<div class="button-box">
 			<div class="card flex justify-content-center">
 				<Button
-					@click="getRecipe()"
+					@click="toggleToGetRecipes"
 					label="Get random recipe" />
 			</div>
 		</div>
 	</div>
 	<div
-		v-if="isLoading"
+		v-if="isLoadingLoader"
 		class="loader">
 		<CarrotLoader></CarrotLoader>
 	</div>
@@ -25,17 +25,17 @@ import { ref } from "vue";
 import Button from "primevue/button";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import { tastyStore } from "../../../stores/tasty.js";
+import { useTastyStore } from "../../../stores/tasty.js";
 import CarrotLoader from "../../Reusable/CarrotLoader.vue";
 
-const isLoading = ref(false);
-const useTastyStore = tastyStore();
+const isLoadingLoader = ref(false);
+const tastyStore = useTastyStore();
 const router = useRouter();
 const toast = useToast();
 
 let foodName = ref(null);
 
-const BaseRecipeList = () =>
+const NavigateToBaseRecipeList = () =>
 	router.push({
 		name: "RecipeList",
 		query: {
@@ -47,21 +47,21 @@ const BaseRecipeList = () =>
 	});
 
 async function getRecipe() {
-	isLoading.value = true;
+	isLoadingLoader.value = true;
 	getRandomRecipe();
-	await useTastyStore.getRecipes(0, 5, foodName.display_name);
-	if (useTastyStore.fetchedRecipes.length === 0) {
+	await tastyStore.getRecipes(0, 5, foodName.display_name);
+	if (tastyStore.fetchedRecipes.length === 0) {
 		showError();
-		isLoading.value = false;
+		isLoadingLoader.value = false;
 	} else {
-		BaseRecipeList();
+		NavigateToBaseRecipeList();
 	}
 }
 
 function getRandomRecipe() {
 	const randomIndex = Math.floor(Math.random() * 500);
-	foodName = useTastyStore.fetchedTags[randomIndex];
-	console.log(" getRandomRecipe " + foodName.display_name);
+	foodName = tastyStore.fetchedTags[randomIndex];
+	
 }
 
 const showError = () => {
@@ -71,6 +71,9 @@ const showError = () => {
 		detail: "Sorry, no results found. Try again ",
 		life: 3000,
 	});
+};
+const toggleToGetRecipes = () => {
+	getRecipe();
 };
 </script>
 

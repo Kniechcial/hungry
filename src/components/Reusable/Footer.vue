@@ -11,8 +11,7 @@
 		<p>
 			@2024 Niechciał Karol Hungry
 			<span class="icon-box">
-				<a
-					href="https://www.instagram.com/traveler_karol/profilecard/?igsh=eGZkZ3AwcnRkaWd3"
+				<a href="https://www.instagram.com/traveler_karol/"
 					><i class="fa-brands fa-instagram"></i
 				></a>
 				<a href="https://github.com/Kniechcial"

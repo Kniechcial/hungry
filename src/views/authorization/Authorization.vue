@@ -38,7 +38,7 @@ const currentComponent = computed(() => {
 const changeComponent = (newFindBy) => {
 	findBy.value = newFindBy;
 	router.push(`/authorization/${findBy.value}`);
-	console.log(findBy.value);
+	
 };
 
 defineComponent({

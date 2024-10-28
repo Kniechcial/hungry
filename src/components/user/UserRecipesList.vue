@@ -108,7 +108,7 @@ import { useRoute } from "vue-router";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "../find_recipe/recipe_details/RecipeDetails.vue";
-import { recipesStore } from "../../stores/recipesStore.js";
+import { useRecipesStore } from "../../stores/recipesStore.js";
 import { useRouter } from "vue-router";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
@@ -116,7 +116,7 @@ const toast = useToast();
 
 const router = useRouter();
 const route = useRoute();
-const useRecipesStore = recipesStore();
+const recipesStore = useRecipesStore();
 const recipeVisible = ref(false);
 const confirmDeleteRecipe = ref(false);
 const activeRecipe = ref(null);
@@ -133,9 +133,9 @@ const showConfirmDeleteRecipe = (recipe) => {
 };
 
 const fetchedRecipes = computed(() => {
-	if (useRecipesStore.userRecipes.length > 0) {
+	if (recipesStore.userRecipes.length > 0) {
 		displayBaseDescription.value = false;
-		return useRecipesStore.userRecipes;
+		return recipesStore.userRecipes;
 	} else {
 		displayBaseDescription.value = true;
 		return [];
@@ -152,7 +152,6 @@ const showRecipe = (recipe) => {
 
 const setVisible = (visible) => {
 	recipeVisible.value = visible;
-	console.log("RecipeList");
 };
 
 const getItemClass = (index) => {
@@ -161,11 +160,11 @@ const getItemClass = (index) => {
 
 const handlerDeleteRecipe = async (recipe) => {
 	try {
-		await useRecipesStore.deleteRecipe(recipe);
+		await recipesStore.deleteRecipe(recipe);
 		confirmDeleteRecipe.value = false;
 		showSuccess();
 	} catch (error) {
-		console.error("Failed to delete recipe:", error);
+		console.error(error);
 	}
 };
 
@@ -178,7 +177,7 @@ const showSuccess = () => {
 	});
 };
 onMounted(() => {
-	useRecipesStore.addRecipesListener();
+	recipesStore.addRecipesListener();
 });
 </script>
 
