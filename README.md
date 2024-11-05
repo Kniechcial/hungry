@@ -1,35 +1,66 @@
-# Hungry
+# Hungry 🍲
 
-This template should help get you started developing with Vue 3 in Vite.
+Hungry is a recipe search and management app that allows users to easily search for recipes by ingredients, name, tags or by randomly selecting any recipe. With Firebase integration, users can register, log in and add their favorite recipes to their own list for quick access.
 
-## Recommended IDE Setup
+## Tools and technologies 🛠️
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+The application was created using front-end tools and Firebase to handle authorization and data storage:
 
-## Customize configuration
+- **Frontend**: Vue.js (Composition API), Pinia (state management), PrimeVue (components UI), CSS, HTML
+- **Backend i Database**: Firebase (authorization and storage of favorite recipe data)
+- **Additional tools**:
+  - Figma (interface design)
+  - Responsible Web Design (adaptation to mobile and desktop devices)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Application featuers 📋
 
-## Project Setup
+- **Recipe Serch**:
+  - Search by dish name, ingredients, or tag
+  - Random recipe option for culinary inspiration
+- **Recipes overview**:
+  - After selecting a recipe, its detailed information is displayed (e.g. photo, ingredients, instructions, calories, preparation time).
+  - A dedicated loader (animated carrot) informs about loading results.
+- **User acount**:
+  - Register and log in using Firebase
+  - Ability to add recipes to your favorites
+  - Manage your favorite recipes (add and remove)
 
-```sh
-npm install
-```
+## Application interface 🎨
 
-### Compile and Hot-Reload for Development
+The app is fully responsive, which means it runs smoothly on mobile devices, tablets, and desktop computers.
 
-```sh
-npm run dev
-```
+### Application View Examples
 
-### Compile and Minify for Production
+1. **Home View**  
+   ![Home View](./src/assets/readme/home-view.jpg)
 
-```sh
-npm run build
-```
+2. **Recipe Finder**  
+   ![Recipe Finder](./src/assets/readme/recipe-finder.jpg)
 
-### Lint with [ESLint](https://eslint.org/)
+   **E.g. By Tags**  
+   ![Recipe Finder](./src/assets/readme/recipe-finder-tags.jpg)
 
-```sh
-npm run lint
-```
+3. **Loader (Animated carrot)**  
+   ![Loader](./src/assets/readme/carrot-loader.jpg)
+
+4. **Recipe Search Results**  
+   ![Search Results](./src/assets/readme/recipe-list.jpg)
+
+5. **Recipe Details**  
+   ![Recipe Details](./src/assets/readme/recipe-details.jpg)
+
+6. **List of favorite recipes**  
+   ![Favorite Recipes](./ścieżka/do/grafiki-ulubione.png)
+
+7. **Login View**  
+   ![Login](./src/assets/readme/login.jpg)
+
+## Launching the app 🚀
+
+The **Hungry** app is hosted online and available to users without having to run it locally. Simply open the app link in your browser.
+
+## Autorisation 🔒
+
+The login and registration system is powered by Firebase. Users can create an account and log in to add recipes to their favorites and easily manage their cooking resources.
+
+---
