@@ -2,6 +2,8 @@
 
 Hungry is a recipe search and management app that allows users to easily search for recipes by ingredients, name, tags or by randomly selecting any recipe. With Firebase integration, users can register, log in and add their favorite recipes to their own list for quick access.
 
+Link to app: https://hungry-19f55.web.app/
+
 ## Tools and technologies 🛠️
 
 The application was created using front-end tools and Firebase to handle authorization and data storage:
