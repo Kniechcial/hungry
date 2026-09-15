@@ -69,7 +69,7 @@ async function getRecipe() {
 	await tastyStore.getRecipes(0, 100, foodName.value);
 	isLoadingLoader.value = false;
 
-	if (foodName) {
+	if (foodName.value) {
 		if (tastyStore.fetchedRecipes.length === 0) {
 			showError();
 			displayError.value = true;
@@ -96,59 +96,42 @@ const showError = () => {
 
 <style scoped>
 .content {
-	position: relative;
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	padding: 1rem;
-	margin-top: 12rem;
-	width: calc(30rem - 2rem);
-	left: 50%;
-	transform: translate(-50%, -50%);
-	font-size: 22px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
+	border-radius: var(--radius-card);
+	background-color: var(--color-surface);
+	padding: 2rem;
+	margin: 2rem auto;
+	max-width: 30rem;
+	box-shadow: var(--shadow-card);
+	color: var(--color-text);
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
 }
-
-.input-text {
-	width: 350px;
-	margin-bottom: 1rem;
-}
-
-.button-box {
-	margin-top: 2rem;
-	margin-left: 18rem;
-}
-
 .content label {
-	padding: 1rem;
+	font-weight: 600;
+	font-size: 1rem;
 }
-
+.input-text {
+	width: 100%;
+}
+.button-box {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 0.75rem;
+}
 .description-input {
+	color: var(--color-text-muted);
 	font-style: italic;
 }
-
 .p-invalid {
-	border-color: red;
-	background-color: #fdd;
-	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
+	border-color: var(--color-danger) !important;
+	background-color: rgba(158, 59, 52, 0.08);
 }
 
 @media (max-width: 650px) {
 	.content {
-		flex-direction: column;
-		align-items: center;
-		font-size: 14px;
-		width: calc(100% - 2rem);
-		max-width: 300px;
-	}
-	.button-box {
-		scale: 0.8;
-		margin-left: 7rem;
-	}
-	.input-text {
-		width: 200px;
+		margin: 1rem;
+		padding: 1.25rem;
 	}
 }
 </style>

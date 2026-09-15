@@ -1,53 +1,49 @@
 <template>
 	<div class="description-component">
-		<div class="description">
-			<h3>Select how you want to search for a recipe</h3>
-		</div>
+		<h3 class="description-title">Pick a way to find your next recipe</h3>
 		<p>
-			If you want to search by dish name or type of dish, select the first
-			option "Name or Tag". However, if you want to search for the dish you are
-			interested in by ingredients, select the second option "Ingridients".
+			Search by dish name, add the ingredients sitting in your fridge, browse by
+			tag, or roll the dice for a surprise. Whatever you pick, we'll take you
+			straight to the results.
 		</p>
-		<strong>ENJOY YOUR MEAL!</strong>
+		<strong class="cta">Enjoy your meal!</strong>
 	</div>
 </template>
 
 <style scoped>
 .description-component {
-	position: relative;
-	padding: 1rem;
-	border: 1px solid;
-	border-color: aliceblue;
-	max-width: 55rem;
-	margin-top: 4rem;
-	margin-left: auto;
-	margin-right: auto;
-	border-radius: 10px;
-	background-color: #fcffff;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
+	max-width: 42rem;
+	margin: 2rem auto;
+	padding: 2rem;
+	border-radius: var(--radius-card);
+	background-color: var(--color-surface);
+	box-shadow: var(--shadow-card);
+	color: var(--color-text);
+	text-align: center;
 }
-.description {
-	font-size: 22px;
-	margin-left: auto;
-	margin-right: auto;
+.description-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: 1.5rem;
+	margin: 0 0 1rem;
 }
 p {
-	margin-top: 1rem;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 0 0 1.25rem;
+	color: var(--color-text-muted);
+	line-height: 1.55;
 }
+.cta {
+	color: var(--color-primary);
+	letter-spacing: 0.02em;
+}
+
 @media (max-width: 900px) {
 	.description-component {
-		margin-top: 1rem;
-		margin-left: 1rem;
-		margin-right: 1rem;
+		margin: 1rem;
+		padding: 1.5rem;
 	}
-	.description {
-		font-size: 15px;
-	}
-	.p {
-		font-size: 14px;
+	.description-title {
+		font-size: 1.25rem;
 	}
 }
 </style>

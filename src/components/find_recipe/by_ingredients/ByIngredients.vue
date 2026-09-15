@@ -1,76 +1,66 @@
 <template>
-	<div class="main-component">
-		<div class="left-box box-content">
-			<div class="box-property-left">
-				<strong class="paragraph">
-					Enter the name of the ingredient from which you want to create a dish
-					test
-				</strong>
-			</div>
-			<div class="content">
-				<div class="card flex justify-content-center">
-					<div class="flex flex-column gap-2">
-						<label for="ingredient">Ingredient name:</label>
-						<InputText
-							class="input-text"
-							id="ingredient"
-							v-model="ingredientName"
-							@keydown.enter="getChosedIngredient"
-							:feedback="false"
-							aria-describedby="recipe-help" />
-						<small id="recipe-help">Enter the ingredient</small>
-					</div>
-				</div>
-				<div class="button-box-left">
-					<div class="card flex justify-content-center">
-						<Button
-							@click="getChosedIngredient"
-							label="Add ingredient" />
-					</div>
-				</div>
+	<div class="ingredients-page">
+		<div class="panel">
+			<h3 class="panel-title">Add an ingredient</h3>
+			<p class="panel-hint">
+				Type what you've got in the fridge — up to five ingredients — then find a
+				dish that uses them.
+			</p>
+			<div class="input-row">
+				<InputText
+					id="ingredient"
+					v-model="ingredientName"
+					class="input"
+					placeholder="e.g. tomato"
+					@keydown.enter="getChosedIngredient" />
+				<Button
+					label="Add"
+					icon="pi pi-plus"
+					@click="getChosedIngredient" />
 			</div>
 		</div>
-		<div class="right-box box-content">
-			<div class="box-property-right">
-				<p>
-					<strong class="paragraph">Your selected ingredients: </strong>
-				</p>
-				<div v-if="userChosed.length === 0">
-					<p class="description">
-						You haven't selected any ingredient yet. Enter the ingredient you
-						are interested in and add it to the search. You can serve up to five
-						ingredients at a time.
-					</p>
-				</div>
 
-				<div v-if="userChosed.length > 0">
-					<button
-						class="button-chose show-less"
-						v-for="(ingredient, index) in userChosed"
-						:key="index"
-						@click="toggleToDeleteSelectedIngredient(index)">
-						{{ ingredient }}
-					</button>
-				</div>
-				<div class="button-box-right">
-					<div class="card flex">
-						<Button
-							:disabled="disabledButtonFindRecipe"
-							@click="toggleToGetRecipes"
-							label="Find recipe" />
-					</div>
-				</div>
+		<div class="panel">
+			<h3 class="panel-title">Your ingredients</h3>
+			<p
+				v-if="userChosed.length === 0"
+				class="panel-hint">
+				Nothing selected yet. Add ingredients on the left — click a pill to
+				remove it.
+			</p>
+			<div
+				v-else
+				class="chip-list">
+				<span
+					v-for="(ingredient, index) in userChosed"
+					:key="index"
+					class="chip"
+					role="button"
+					@click="toggleToDeleteSelectedIngredient(index)"
+					:title="`Remove ${ingredient}`">
+					{{ ingredient }}
+					<i class="pi pi-times chip-remove"></i>
+				</span>
+			</div>
+			<div class="panel-actions">
+				<span class="chip-count">{{ userChosed.length }} / 5</span>
+				<Button
+					:disabled="disabledButtonFindRecipe"
+					@click="toggleToGetRecipes"
+					label="Find recipes"
+					icon="pi pi-search" />
 			</div>
 		</div>
+
+		<div
+			v-if="isLoadingLoader"
+			class="loader">
+			<CarrotLoader></CarrotLoader>
+		</div>
+		<Toast
+			class="w-18rem md:w-4"
+			position="top-right" />
 	</div>
-	<div
-		v-if="isLoadingLoader"
-		class="loader">
-		<CarrotLoader></CarrotLoader>
-	</div>
-	<Toast
-		class="w-18rem md:w-4"
-		position="top-right" />
 </template>
 
 <script setup>
@@ -90,25 +80,27 @@ const toast = useToast();
 
 const userChosed = ref([]);
 const foodName = ref(null);
-let ingredientName = ref(null);
+const ingredientName = ref("");
 const isLoadingLoader = ref(false);
 
 const getChosedIngredient = () => {
-	if (ingredientName.value) {
-		if (userChosed.value.length < 5) {
-			const checkDuplicate = userChosed.value.some(
-				(ingredient) => ingredient === ingredientName.value
-			);
-			if (!checkDuplicate) {
-				userChosed.value.push(ingredientName.value);
-			} else {
-				showErrorItemExist();
-			}
-		} else {
-			showErrorOverFiveElements();
-		}
-	} else {
+	const value = ingredientName.value.trim();
+	if (!value) {
 		showErrorEmptyInput();
+		ingredientName.value = "";
+		return;
+	}
+	if (userChosed.value.length >= 5) {
+		showErrorOverFiveElements();
+		return;
+	}
+	const duplicate = userChosed.value.some(
+		(item) => item.toLowerCase() === value.toLowerCase()
+	);
+	if (duplicate) {
+		showErrorItemExist();
+	} else {
+		userChosed.value.push(value);
 	}
 	ingredientName.value = "";
 };
@@ -117,9 +109,9 @@ const toggleToDeleteSelectedIngredient = (index) => {
 	userChosed.value.splice(index, 1);
 };
 
-const disabledButtonFindRecipe = computed(() => {
-	return userChosed.value.length === 0;
-});
+const disabledButtonFindRecipe = computed(
+	() => userChosed.value.length === 0
+);
 
 const NavigateToBaseRecipeList = () =>
 	router.push({
@@ -137,10 +129,9 @@ const toggleToGetRecipes = () => {
 
 async function getRecipe() {
 	isLoadingLoader.value = true;
-	const selectedIngredients = ref(userChosed.value.join(","));
-	await tastyStore.getRecipes(0, 100, selectedIngredients.value);
+	const selectedIngredients = userChosed.value.join(",");
+	await tastyStore.getRecipes(0, 100, selectedIngredients);
 	foodName.value = selectedIngredients;
-	
 	isLoadingLoader.value = false;
 
 	if (tastyStore.fetchedRecipes.length === 0) {
@@ -152,213 +143,132 @@ async function getRecipe() {
 
 const showErrorItemExist = () => {
 	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: "This item is already selected ",
-		life: 3000,
+		severity: "warn",
+		detail: "This ingredient is already on the list.",
+		life: 2500,
 	});
 };
 const showErrorOverFiveElements = () => {
 	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: "You have already selected five items ",
-		life: 3000,
+		severity: "warn",
+		detail: "You can add up to five ingredients.",
+		life: 2500,
 	});
 };
 const showErrorEmptyInput = () => {
 	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: "Ingredient name not provided. Enter the ingredient name",
-		life: 3000,
+		severity: "warn",
+		detail: "Type an ingredient name first.",
+		life: 2500,
 	});
 };
 const showError = () => {
 	toast.add({
 		severity: "error",
-		summary: "Error Message",
-		detail: "Sorry, no results found. Try again ",
+		detail: "Sorry, no results. Try different ingredients.",
 		life: 3000,
 	});
 };
 </script>
 
 <style scoped>
-.main-component {
+.ingredients-page {
+	max-width: 60rem;
+	margin: 2rem auto;
+	padding: 0 1rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.25rem;
+}
+
+.panel {
+	background: var(--color-surface);
+	color: var(--color-text);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
+	padding: 1.5rem 1.5rem 1.25rem;
 	display: flex;
-	justify-content: space-between;
-	margin: 0 2rem;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.panel-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: 1.25rem;
+	margin: 0;
+}
+
+.panel-hint {
+	color: var(--color-text-muted);
+	margin: 0;
+	line-height: 1.5;
+}
+
+.input-row {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	margin-top: 0.5rem;
 	flex-wrap: wrap;
 }
-.input-text {
-	width: 350px;
-	margin-bottom: 1rem;
+.input {
+	flex: 1;
+	min-width: 0;
 }
-
-.box-content {
-	position: relative;
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	z-index: 0;
-	color: #44424d;
-}
-
-.left-box {
-	height: 19rem;
-	width: 37%;
-	margin-top: 2rem;
-	z-index: 1;
-	max-width: 37%;
-}
-.right-box {
-	height: 19rem;
-	width: 37%;
-	margin-top: 2rem;
-	max-width: 37%;
-}
-
-.description {
-	font-size: 18px;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-p {
-	margin-top: 1rem;
-	margin-left: auto;
-	margin-right: auto;
-}
-.paragraph {
-	font-size: 22px;
-}
-.button-box-left {
-	position: absolute;
-	bottom: 1rem;
-	right: 2rem !important;
-}
-.button-box-right {
-	position: absolute;
-	bottom: 1rem;
-}
-.box-property-left,
-.box-property-right {
+.input :deep(.p-inputtext) {
 	width: 100%;
-	margin: 0;
-	padding: 2rem;
-	box-sizing: border-box;
 }
 
-.button-chose {
-	font-size: 16px;
-	font-weight: 200;
-	letter-spacing: 1px;
-	padding: 0.7rem;
-	margin: 0.4rem;
-	outline: 0;
-	border: 1px solid black;
+.chip-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.25rem;
+}
+
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.4rem 0.85rem;
+	background: var(--color-surface-alt);
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	color: var(--color-text);
+	font-weight: 500;
 	cursor: pointer;
-	position: relative;
-	background-color: rgba(0, 0, 0, 0);
-	user-select: none;
-	-webkit-user-select: none;
-	touch-action: manipulation;
+	transition: background 0.15s, transform 0.15s;
 }
-.button-chose:after {
-	content: "";
-	background-color: #ffe54c;
-	width: 100%;
-	z-index: -1;
-	position: absolute;
-	height: 100%;
-	top: 7px;
-	left: 7px;
-	transition: 0.2s;
+.chip:hover {
+	background: var(--color-border);
+	transform: translateY(-1px);
+}
+.chip-remove {
+	font-size: 0.75rem;
+	color: var(--color-danger);
 }
 
-.show-less:after {
-	background-color: #3dd1e7;
+.panel-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: auto;
+	padding-top: 0.75rem;
+	gap: 0.75rem;
 }
-.button-chose:hover:after {
-	top: 0px;
-	left: 0px;
+.chip-count {
+	color: var(--color-text-muted);
+	font-size: 0.875rem;
+	font-weight: 600;
 }
 
-@keyframes moveUpDown {
-	from {
-		top: -30px;
+@media (max-width: 640px) {
+	.ingredients-page {
+		grid-template-columns: 1fr;
 	}
-	to {
-		top: 0px;
-	}
-}
-@media (max-width: 1250px) {
-	.main-component {
-		flex-direction: column;
-		align-items: center;
-		margin: 0 1rem;
-	}
-	.left-box,
-	.right-box {
-		width: 100%;
-		max-width: 65%;
-		margin: 1rem 0;
-	}
-	.input-text {
-		width: 250px;
-		margin-bottom: 1rem;
-	}
-	.button-box-left,
-	.button-box-right {
-		margin-bottom: 1rem;
-	}
-	.carrot {
-		left: 50%;
-		transform: translateX(-50%);
-	}
-}
-@media (max-width: 1000px) {
-	.left-box,
-	.right-box {
-		width: 100%;
-		max-width: 65%;
-		margin: 1rem 0;
-	}
-	.input-text {
-		width: 250px;
-		margin-bottom: 1rem;
-	}
-	.description {
-		font-size: 13px;
-	}
-	.paragraph {
-		font-size: 15px;
-	}
-	.button-box-left,
-	.button-box-right {
-		scale: 0.8;
-		margin-bottom: 1rem;
-	}
-	.button-box-right {
-		right: 2rem !important;
-	}
-}
-@media (max-width: 650px) {
-	.left-box,
-	.right-box {
-		width: 100%;
-		max-width: none;
-		margin: 1rem 0;
-	}
-	.button-box-left,
-	.button-box-right {
-		bottom: 0.2rem;
-	}
-	.input-text {
-		width: 200px;
+	.panel {
+		padding: 1.25rem;
 	}
 }
 </style>

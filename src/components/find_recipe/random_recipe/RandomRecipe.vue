@@ -33,7 +33,7 @@ const tastyStore = useTastyStore();
 const router = useRouter();
 const toast = useToast();
 
-let foodName = ref(null);
+const foodName = ref(null);
 
 const NavigateToBaseRecipeList = () =>
 	router.push({
@@ -41,7 +41,7 @@ const NavigateToBaseRecipeList = () =>
 		query: {
 			storeType: "tasty",
 			headerMessage: "Your delicious random recipes. Enjoy!",
-			foodName: foodName.display_name,
+			foodName: foodName.value?.display_name,
 			buttonType: false,
 		},
 	});
@@ -49,7 +49,7 @@ const NavigateToBaseRecipeList = () =>
 async function getRecipe() {
 	isLoadingLoader.value = true;
 	getRandomRecipe();
-	await tastyStore.getRecipes(0, 5, foodName.display_name);
+	await tastyStore.getRecipes(0, 5, foodName.value?.display_name);
 	if (tastyStore.fetchedRecipes.length === 0) {
 		showError();
 		isLoadingLoader.value = false;
@@ -60,8 +60,7 @@ async function getRecipe() {
 
 function getRandomRecipe() {
 	const randomIndex = Math.floor(Math.random() * 500);
-	foodName = tastyStore.fetchedTags[randomIndex];
-	
+	foodName.value = tastyStore.fetchedTags[randomIndex];
 }
 
 const showError = () => {
@@ -79,45 +78,31 @@ const toggleToGetRecipes = () => {
 
 <style scoped>
 .content {
-	position: relative;
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	padding: 1rem;
-	margin-top: 10rem;
-	width: 30rem;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	font-size: 22px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
+	border-radius: var(--radius-card);
+	background-color: var(--color-surface);
+	padding: 2rem;
+	margin: 2rem auto;
+	max-width: 30rem;
+	text-align: center;
+	box-shadow: var(--shadow-card);
+	color: var(--color-text);
 }
 .description {
-	font-size: 18px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 1rem;
-}
-p {
-	margin-left: auto;
-	margin-right: auto;
+	font-size: 1.125rem;
+	margin: 0 0 1.25rem;
 }
 .button-box {
-	margin-top: 2rem;
+	display: flex;
+	justify-content: center;
 }
 
 @media (max-width: 650px) {
 	.content {
-		flex-direction: column;
-		align-items: center;
-		font-size: 14px;
-		width: calc(100% - 2rem);
-		max-width: 300px;
+		margin: 1rem;
+		padding: 1.5rem;
 	}
-	.button-box {
-		scale: 0.8;
-		margin-bottom: 1rem;
+	.description {
+		font-size: 1rem;
 	}
 }
 </style>

@@ -1,65 +1,65 @@
 <template>
 	<Dialog
-		class="dialog-class"
+		class="recipe-dialog"
 		v-model:visible="recipeVisible"
 		modal
 		:style="{ width: '70rem' }"
-		:breakpoints="{ '650px': '90vw' }"
+		:breakpoints="{ '900px': '92vw' }"
 		:closable="true"
 		:dismissableMask="true"
-		@setVisible="setVisible()"
 		:showHeader="false">
 		<RecipeDetails
 			:recipe="activeRecipe"
 			@setVisible="setVisible(false)"></RecipeDetails>
 	</Dialog>
-	<div class="header-text">{{ headerMessage }}</div>
-	<div>
-		<ul>
+
+	<section class="results">
+		<h2 class="results-title">{{ headerMessage }}</h2>
+		<p class="results-subtitle">
+			{{ visibleRecipes.length }} of {{ fetchedRecipes.length }} shown
+		</p>
+
+		<ul class="recipe-grid">
 			<li
 				v-for="(recipe, index) in visibleRecipes"
-				:key="index">
+				:key="index"
+				class="recipe-card"
+				@click="toggleToShowRecipe(recipe)">
 				<div
-					class="container"
-					:class="[getItemClass(index)]">
-					<div class="recipe-name">
-						<strong>{{ index + 1 }}. {{ recipe.name || "no data" }}</strong>
-					</div>
-					<div class="right-elements">
-						<div
-							v-if="recipe.Time"
-							class="set-time">
-							<p class="time">
-								<strong>Time: {{ recipe.Time }}<strong> min</strong></strong>
-							</p>
-						</div>
-						<div class="button-show">
-							<Button
-								@click="toggleToShowRecipe(recipe)"
-								class="button-class"
-								type="button"
-								label="Show recipe"
-								icon="pi pi-chevron-down" />
-						</div>
-					</div>
+					class="recipe-thumb"
+					:style="recipeBackground(recipe)">
+					<span
+						v-if="recipe.Time"
+						class="time-badge">
+						<i class="pi pi-clock"></i>
+						{{ recipe.Time }} min
+					</span>
+				</div>
+				<div class="recipe-body">
+					<h3 class="recipe-name">
+						{{ recipe.name || "Unnamed recipe" }}
+					</h3>
+					<span class="recipe-cta">
+						Show recipe
+						<i class="pi pi-arrow-right"></i>
+					</span>
 				</div>
 			</li>
 		</ul>
-		<div
-			class="button-show-more-recipes"
-			v-if="buttonType">
+
+		<div class="results-actions">
 			<Button
-				v-if="visibleRecipes.length < fetchedRecipes.length"
+				v-if="buttonType && visibleRecipes.length < fetchedRecipes.length"
 				@click="toggleToLoadMoreRecipes"
-				>Show five more</Button
-			>
+				label="Show five more"
+				icon="pi pi-chevron-down" />
+			<Button
+				v-if="!buttonType"
+				@click="navigateToRandomRecipe()"
+				label="Try another recipe"
+				icon="pi pi-refresh" />
 		</div>
-		<div
-			class="button-show-more-recipes"
-			v-if="!buttonType">
-			<Button @click="navigateToRandomRecipe()">Find another recipes</Button>
-		</div>
-	</div>
+	</section>
 </template>
 
 <script setup>
@@ -84,12 +84,14 @@ const currentIndex = ref(5);
 const headerMessage = ref(
 	route.query.headerMessage || "Your five delicious recipes. Enjoy!"
 );
+
 const navigateToRandomRecipe = () => {
 	router.push({
 		name: "FindRecipe",
 		params: { findBy: "random" },
 	});
 };
+
 const toggleToLoadMoreRecipes = () => {
 	const nextRecipes = fetchedRecipes.value.slice(
 		currentIndex.value,
@@ -98,6 +100,7 @@ const toggleToLoadMoreRecipes = () => {
 	visibleRecipes.value.push(...nextRecipes);
 	currentIndex.value += 5;
 };
+
 if (fetchedRecipes.value.length > 0) {
 	visibleRecipes.value = fetchedRecipes.value.slice(0, 5);
 }
@@ -110,172 +113,118 @@ const setVisible = (visible) => {
 	recipeVisible.value = visible;
 };
 
-const getItemClass = (index) => {
-	return (index + 1) % 2 === 0 ? "even" : "odd";
+const recipeBackground = (recipe) => {
+	if (!recipe?.image) {
+		return { background: "var(--color-surface-alt)" };
+	}
+	return { backgroundImage: `url(${recipe.image})` };
 };
 </script>
 
 <style scoped>
-* {
-	box-sizing: border-box;
-}
-
-.button-class {
-	padding: 1rem;
-}
-
-.button-delete {
-	background-color: #f92222;
-	margin-left: 0.5rem;
-}
-
-.button-show {
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 1rem;
-	padding: 1rem;
-}
-
-.button-show-more-recipes {
-	display: flex;
-	position: relative;
-	justify-content: flex-end;
-	margin-right: 2rem;
-	margin-top: 20px;
-	z-index: 999 !important;
-}
-
-.container {
-	display: block;
-	position: relative;
+.results {
+	max-width: 64rem;
 	margin: 2rem auto;
-	max-width: 65rem;
-	width: 100%;
-	border-color: aliceblue;
-	border-radius: 10px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	padding: 1rem;
-	z-index: 1;
+	padding: 0 1rem 3rem;
 }
 
-.dialog-class {
+.results-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: clamp(1.5rem, 3vw, 2rem);
+	color: var(--color-text);
 	margin: 0;
+	text-align: center;
+}
+.results-subtitle {
+	text-align: center;
+	color: var(--color-text-muted);
+	margin: 0.25rem 0 1.75rem;
+	font-size: 0.9375rem;
+}
+
+.recipe-grid {
+	list-style: none;
 	padding: 0;
-}
-
-.even {
-	background-color: #fcffffa6;
-}
-
-.header-text {
-	margin: 2rem auto 0 auto;
-	padding-left: 1rem;
-	padding-right: 1rem;
-	display: block;
-	width: fit-content;
-	font-size: 26px;
-	font-weight: bold;
-	font-style: italic;
-	color: #44424d;
-}
-
-.odd {
-	background-color: #a6ffea8c;
-}
-
-.recipe-name {
-	display: inline-block;
-	vertical-align: middle;
-	width: 55%;
-	font-size: 18px;
-	padding: 1rem;
-	box-sizing: border-box;
-	word-wrap: break-word;
-}
-
-.right-elements {
-	display: inline-block;
-	vertical-align: middle;
-	width: 45%;
-	text-align: right;
-	padding-right: 1rem;
-	box-sizing: border-box;
-	white-space: nowrap;
-}
-
-.set-time {
-	display: inline-block;
-	vertical-align: middle;
-	background-color: #ffeb99;
-	text-align: right;
-	padding: 1rem;
-	margin-left: 1rem;
-	border-radius: 8px;
-	font-size: 16px;
-}
-
-.time {
-	font-size: 16px;
 	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 1.25rem;
 }
 
-ul,
-li {
-	list-style: none !important;
+.recipe-card {
+	background: var(--color-surface);
+	color: var(--color-text);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
+	overflow: hidden;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.recipe-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 28px rgba(58, 42, 32, 0.18);
 }
 
-@media (max-width: 650px) {
-	ul,
-	li {
-		padding: 0.5rem;
-		margin: 0;
-	}
-	.container {
-		width: 100%;
-		max-width: 100%;
-		margin-left: 0;
-		margin-right: 0;
-		padding-left: 0;
-		padding-right: 0;
-		padding-top: 0.5rem;
-		padding-bottom: 0.5rem;
-	}
-	.set-time {
-		display: none;
-	}
-	.recipe-name {
-		width: 100%;
-		font-size: 16px;
-		padding: 0.5rem;
-	}
-	.recipe-box {
-		flex-direction: column;
-		align-items: flex-start;
-	}
+.recipe-thumb {
+	position: relative;
+	height: 170px;
+	background-size: cover;
+	background-position: center;
+	background-color: var(--color-surface-alt);
+}
+.time-badge {
+	position: absolute;
+	inset: auto 0.75rem 0.75rem auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	background: rgba(58, 42, 32, 0.85);
+	color: #fff;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	padding: 0.3rem 0.65rem;
+	border-radius: 999px;
+}
 
-	.button-location {
-		transform: scale(0.7);
-		margin-left: 0;
-		margin-right: 0;
-		padding: 0.6rem;
-		float: none;
+.recipe-body {
+	padding: 1rem 1.15rem 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	flex: 1;
+}
+.recipe-name {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: 1.125rem;
+	margin: 0;
+	line-height: 1.3;
+}
+.recipe-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	color: var(--color-primary);
+	font-weight: 600;
+	font-size: 0.9375rem;
+	margin-top: auto;
+}
+
+.results-actions {
+	display: flex;
+	justify-content: center;
+	margin-top: 2rem;
+}
+
+@media (max-width: 640px) {
+	.results {
+		padding: 0 0.75rem 2rem;
 	}
-	.button-class {
-		padding: 0.5rem;
-	}
-	.right-elements {
-		width: 100%;
-		text-align: left;
-		padding-right: 0;
-		display: flex;
-		justify-content: flex-end;
-		gap: 1rem;
-	}
-	.button-show {
-		display: inline-flex;
-		margin: 0;
-		padding: 0.5rem 0.75rem;
-		width: auto;
+	.recipe-thumb {
+		height: 150px;
 	}
 }
 </style>

@@ -48,9 +48,9 @@ const currentComponent = computed(() => {
 			indexId.value = 3;
 			return Random;
 		case "tags":
+			indexId.value = 2;
 			return ByTags;
 		case "base-description":
-			indexId.value = 4;
 			return BaseDescription;
 		default:
 			return null;

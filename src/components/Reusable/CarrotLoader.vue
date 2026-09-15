@@ -20,7 +20,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: rgba(255, 255, 255, 0.8);
+	background-color: rgba(251, 243, 234, 0.9);
 	z-index: 9999;
 }
 
@@ -39,7 +39,7 @@
 .loading-text {
 	font-size: 1.2rem;
 	margin-top: 30px;
-	color: #333;
+	color: var(--color-text);
 }
 
 @keyframes moveUpDown {

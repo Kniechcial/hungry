@@ -1,495 +1,436 @@
 <template>
-	<div class="container">
-		<div class="recipe-box">
-			<div class="top-row">
-				<div class="recipe-name">
-					<ul>
-						<li>
-							<strong>Nazwa dnia</strong>
-						</li>
-					</ul>
-				</div>
-				<div>
-					<ul>
-						<div class="get-time">
-							<p><strong>Czas:</strong></p>
-							<div class="input-details-calories">
-								<div class="card flex justify-content-center">
-									<InputNumber
-										v-model="time"
-										cols="5"
-										class="select-time-allergy" />
-								</div>
-								<span
-									class="showError"
-									v-if="errorTime"
-									>Błędnie wpowadzony czas!</span
-								>
-							</div>
-						</div>
-						<div class="get-time">
-							<p><strong>Alergie:</strong></p>
-							<div class="card flex justify-content-center">
-								<Dropdown
-									v-model="alergy"
-									:options="alergys"
-									optionLabel="name"
-									checkmark
-									cols="8"
-									:highlightOnSelect="false"
-									class="select-time-allergy" />
-							</div>
-							<span
-								class="showError"
-								v-if="errorAlergy"
-								>Błędnie wpowadzony alergie!</span
-							>
-						</div>
-					</ul>
-				</div>
-			</div>
-			<div class="bottom-row">
-				<div>
-					<img
-						class="recipe-image"
-						:src="image"
-						alt="Zdjęcie" />
-				</div>
+	<div class="wizard-card">
+		<h2 class="section-title">Numbers & ingredients</h2>
 
-				<div class="details">
-					<div class="left-part-description-recipe">
-						<div class="calories-recipe">
-							<strong>Kalorie:</strong>
-							<ul class="calories-specific">
-								<li>
-									<div class="input-details">
-										<strong>Tłuszcze:</strong>
-										<div class="input-details-calories">
-											<form @submit="onSubmit">
-												<div class="card">
-													<Textarea
-														v-model="fat"
-														autoResize
-														rows="1"
-														cols="8" />
-												</div>
-											</form>
-										</div>
-										<p>kcal</p>
-									</div>
-								</li>
-								<li>
-									<div class="input-details">
-										<strong>Cukry:</strong>
-										<div class="input-details-calories">
-											<form @submit="onSubmit">
-												<div class="card">
-													<Textarea
-														v-model="sugar"
-														autoResize
-														rows="1"
-														cols="8" />
-												</div>
-											</form>
-										</div>
-										<p>kcal</p>
-									</div>
-								</li>
-								<li>
-									<div class="input-details">
-										<strong>Węglowodany:</strong>
-										<div class="input-details-calories">
-											<form @submit="onSubmit">
-												<div class="card">
-													<Textarea
-														v-model="carbohydrates"
-														autoResize
-														rows="1"
-														cols="8" />
-												</div>
-											</form>
-										</div>
-										<p>kcal</p>
-									</div>
-								</li>
-								<span
-									class="showError"
-									v-if="errorCalories"
-									>Błędnie wpowadzone kalorie!</span
-								>
-							</ul>
-						</div>
-						<div class="ingridiens-recipe">
-							<ul class="ingredients-specific">
-								<strong>Składniki:</strong>
-								<li>
-									<div class="input-details">
-										<p>Składnik 1</p>
-										<div class="input-details-calories">
-											<form @submit="onSubmit">
-												<div class="card">
-													<Textarea
-														v-model="ingridientValue"
-														autoResize
-														rows="1"
-														cols="8" />
-												</div>
-											</form>
-										</div>
-										<div class="card flex justify-content-center">
-											<Dropdown
-												v-model="ingridientQuantity"
-												:options="quantity"
-												optionLabel="name"
-												checkmark
-												:highlightOnSelect="false"
-												class="select-quantity" />
-										</div>
-									</div>
-									<span
-										class="showError"
-										v-if="errorIngridient"
-										>Błędnie wpowadzony składnik!</span
-									>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="right-part-description-recipe">
-						<div class="description-recipe">
-							<div>
-								<p>
-									Opis potrawy Lorem ipsum dolor sit amet, consectetur
-									adipisicing elit. Esse, delectus dolorem sunt corrupti ipsam
-									impedit. Repellat, eveniet itaque dolores eius aliquam
-									exercitationem, non sit praesentium quam temporibus corporis!
-									Alias, dolorum!
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
+		<div class="row-two">
+			<div class="field">
+				<label
+					class="field-label"
+					for="time"
+					>Preparation time</label
+				>
+				<InputNumber
+					id="time"
+					v-model="time"
+					:min="1"
+					suffix=" min"
+					class="w-full"
+					@input="clearError('time')" />
+				<span
+					class="show-error"
+					v-if="errors.time"
+					>Enter a valid preparation time.</span
+				>
 			</div>
-			<div class="down-bar">
-				<div class="button-location">
-					<div class="card">
-						<Toast />
-						<Button
-							type="button"
-							label="Dodaj przepis"
-							icon="pi pi-check"
-							:loading="loading"
-							@click="addFinalyRecipe" />
-					</div>
-				</div>
-				<div class="button-location">
-					<div class="card">
-						<Toast />
-						<Button
-							type="button"
-							label=" Cofnij "
-							icon="pi pi-arrow-left"
-							:loading="loading"
-							@click="backToNewRecip1" />
-					</div>
-				</div>
+
+			<div class="field">
+				<div class="field-label">Add calorie info?</div>
+				<SelectButton
+					v-model="hasCalories"
+					:options="[
+						{ label: 'No', value: false },
+						{ label: 'Yes', value: true },
+					]"
+					option-label="label"
+					option-value="value" />
 			</div>
+		</div>
+
+		<div
+			v-if="hasCalories"
+			class="calorie-grid">
+			<div class="field">
+				<label
+					class="field-label"
+					for="calTotal"
+					>Total</label
+				>
+				<InputNumber
+					id="calTotal"
+					v-model="calorieTotal"
+					:min="0"
+					suffix=" kcal"
+					class="w-full" />
+			</div>
+			<div class="field">
+				<label
+					class="field-label"
+					for="calFat"
+					>Fat</label
+				>
+				<InputNumber
+					id="calFat"
+					v-model="calorieFat"
+					:min="0"
+					suffix=" kcal"
+					class="w-full" />
+			</div>
+			<div class="field">
+				<label
+					class="field-label"
+					for="calSugar"
+					>Sugar</label
+				>
+				<InputNumber
+					id="calSugar"
+					v-model="calorieSugar"
+					:min="0"
+					suffix=" kcal"
+					class="w-full" />
+			</div>
+			<div class="field">
+				<label
+					class="field-label"
+					for="calCarbs"
+					>Carbohydrates</label
+				>
+				<InputNumber
+					id="calCarbs"
+					v-model="calorieCarbs"
+					:min="0"
+					suffix=" kcal"
+					class="w-full" />
+			</div>
+		</div>
+		<span
+			class="show-error"
+			v-if="errors.calories"
+			>Fill in all calorie values or turn calorie info off.</span
+		>
+
+		<div class="field">
+			<div class="field-label">Ingredients</div>
+			<div class="ingredient-input-row">
+				<InputText
+					v-model="ingredientDraftName"
+					placeholder="Name"
+					class="ingredient-name"
+					@keydown.enter.prevent="addIngredient" />
+				<InputNumber
+					v-model="ingredientDraftValue"
+					:min="0"
+					placeholder="Amount"
+					class="ingredient-value" />
+				<Dropdown
+					v-model="ingredientDraftUnit"
+					:options="unitOptions"
+					placeholder="Unit"
+					class="ingredient-unit" />
+				<Button
+					label="Add"
+					icon="pi pi-plus"
+					@click="addIngredient" />
+			</div>
+			<div
+				v-if="ingredients.length"
+				class="ingredient-list">
+				<span
+					v-for="(item, index) in ingredients"
+					:key="index"
+					class="ingredient-pill"
+					@click="removeIngredient(index)"
+					role="button"
+					:title="`Remove ${item.name}`">
+					{{ item.name }}
+					<strong>{{ item.value }}</strong>
+					<span class="ingredient-unit-text">{{ item.unit }}</span>
+					<i class="pi pi-times ingredient-remove"></i>
+				</span>
+			</div>
+			<span
+				class="show-error"
+				v-if="errors.ingredients"
+				>Add at least one ingredient.</span
+			>
+		</div>
+
+		<div
+			v-if="recap"
+			class="recap">
+			<div class="recap-title">Recipe so far</div>
+			<div class="recap-row">
+				<strong>Name:</strong>
+				<span>{{ recap.name }}</span>
+			</div>
+			<div
+				v-if="recap.dietTags?.length || recap.containsTags?.length"
+				class="recap-row">
+				<strong>Tags:</strong>
+				<span>{{ recapTags }}</span>
+			</div>
+			<div class="recap-row">
+				<strong>Steps:</strong>
+				<span>{{ recap.steps?.length ?? 0 }}</span>
+			</div>
+		</div>
+
+		<div class="wizard-actions">
+			<Button
+				label="Back"
+				icon="pi pi-arrow-left"
+				severity="secondary"
+				outlined
+				@click="$emit('back')" />
+			<Button
+				label="Add recipe"
+				icon="pi pi-check"
+				:loading="loading"
+				@click="onSubmit" />
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import image from "../../assets/photo/backgroundHeader.jpg";
-
-import Button from "primevue/button";
-import Toast from "primevue/toast";
-import { useToast } from "primevue/usetoast";
+import { ref, computed, reactive } from "vue";
+import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
-import { useRouter } from "vue-router";
-const router = useRouter();
 import Dropdown from "primevue/dropdown";
-import Textarea from "primevue/textarea";
+import SelectButton from "primevue/selectbutton";
+import Button from "primevue/button";
+import { useToast } from "primevue/usetoast";
 
+const props = defineProps({
+	initial: { type: Object, default: () => null },
+	recap: { type: Object, default: () => null },
+	loading: { type: Boolean, default: false },
+});
+const emit = defineEmits(["back", "submit"]);
 const toast = useToast();
 
-const time = ref();
-const alergy = ref();
-const fat = ref();
-const sugar = ref();
-const carbohydrates = ref();
-const ingridientValue = ref();
-const ingridientQuantity = ref();
-const errorTime = ref(false);
-const errorCalories = ref(false);
-const errorIngridient = ref(false);
-const errorAlergy = ref(false);
-const loading = ref(false);
+const time = ref(props.initial?.Time ?? null);
+const hasCalories = ref(props.initial?.hasCalories ?? false);
+const calorieTotal = ref(props.initial?.calories?.calories ?? null);
+const calorieFat = ref(props.initial?.calories?.fat ?? null);
+const calorieSugar = ref(props.initial?.calories?.sugar ?? null);
+const calorieCarbs = ref(props.initial?.calories?.carbohydrates ?? null);
 
-const showIngridients = ref(false);
-const hiddenButton = ref(false);
+const unitOptions = ["pcs", "g", "kg", "ml", "l", "tbsp", "tsp", "cup"];
+const ingredients = ref(
+	(props.initial?.ingridients ?? []).map((item) => ({ ...item }))
+);
+const ingredientDraftName = ref("");
+const ingredientDraftValue = ref(null);
+const ingredientDraftUnit = ref(null);
 
-const displayIngridients = () => {
-	showIngridients.value = true;
-	hiddenButton.value = true;
-};
-const quantity = ref([{ name: " szt." }, { name: " ml" }, { name: " g" }]);
-const alergys = ref([
-	{ name: "Brak" },
-	{ name: "Gluten" },
-	{ name: "Mięso" },
-	{ name: "Ryby" },
-	{ name: "Laktoza" },
-]);
+const errors = reactive({
+	time: false,
+	calories: false,
+	ingredients: false,
+});
 
-const checkTime = () => {
-	if (!time.value) {
-		errorTime.value = true;
-	} else {
-		errorTime.value = false;
+const clearError = (key) => {
+	errors[key] = false;
+};
+
+const recapTags = computed(() =>
+	[...(props.recap?.dietTags ?? []), ...(props.recap?.containsTags ?? [])].join(
+		", "
+	)
+);
+
+const addIngredient = () => {
+	const name = ingredientDraftName.value.trim();
+	if (!name || ingredientDraftValue.value == null || !ingredientDraftUnit.value) {
+		toast.add({
+			severity: "warn",
+			detail: "Fill name, amount and unit before adding.",
+			life: 2500,
+		});
+		return;
 	}
-};
-const checkAlergys = () => {
-	if (!alergy.value) {
-		errorAlergy.value = true;
-	} else {
-		errorAlergy.value = false;
+	const duplicate = ingredients.value.some(
+		(item) => item.name.toLowerCase() === name.toLowerCase()
+	);
+	if (duplicate) {
+		toast.add({
+			severity: "warn",
+			detail: "This ingredient is already on the list.",
+			life: 2500,
+		});
+		return;
 	}
-};
-const checkCalories = () => {
-	if (!fat.value || !sugar.value || !carbohydrates.value) {
-		errorCalories.value = true;
-	} else errorCalories.value = false;
-};
-const checkIngridients = () => {
-	if (!ingridientValue.value || !ingridientQuantity.value) {
-		errorIngridient.value = true;
-	} else {
-		errorIngridient.value = false;
-	}
-};
-const showError = () => {
-	toast.add({
-		severity: "error",
-		detail: "Danie nie zostało dodane!",
-		life: 3000,
+	ingredients.value.push({
+		name,
+		value: ingredientDraftValue.value,
+		unit: ingredientDraftUnit.value,
 	});
-};
-const addFinalyRecipe = () => {
-	checkTime();
-	checkAlergys();
-	checkCalories();
-	checkIngridients();
-	if (
-		time.value &&
-		alergy.value &&
-		fat.value &&
-		sugar.value &&
-		carbohydrates.value &&
-		ingridientValue.value &&
-		ingridientQuantity.value
-	) {
-		loading.value = true;
-		setTimeout(() => {
-			loading.value = false;
-		}, 2000);
-		console.log("przepis dodany");
-	} else {
-		showError();
-	}
+	ingredientDraftName.value = "";
+	ingredientDraftValue.value = null;
+	ingredientDraftUnit.value = null;
+	errors.ingredients = false;
 };
 
-const backToNewRecip1 = () => {
-	router.push({ name: "addRecipe" });
+const removeIngredient = (index) => {
+	ingredients.value.splice(index, 1);
+};
+
+const validate = () => {
+	errors.time = !time.value || time.value <= 0;
+	errors.ingredients = ingredients.value.length === 0;
+	if (hasCalories.value) {
+		errors.calories =
+			calorieTotal.value == null ||
+			calorieFat.value == null ||
+			calorieSugar.value == null ||
+			calorieCarbs.value == null;
+	} else {
+		errors.calories = false;
+	}
+	return !errors.time && !errors.ingredients && !errors.calories;
+};
+
+const buildCalories = () => {
+	if (hasCalories.value) {
+		return {
+			calories: calorieTotal.value,
+			fat: calorieFat.value,
+			sugar: calorieSugar.value,
+			carbohydrates: calorieCarbs.value,
+		};
+	}
+	return {
+		calories: null,
+		fat: null,
+		sugar: null,
+		carbohydrates: null,
+	};
+};
+
+const onSubmit = () => {
+	if (!validate()) {
+		toast.add({
+			severity: "error",
+			detail: "Please complete the highlighted fields.",
+			life: 3000,
+		});
+		return;
+	}
+	emit("submit", {
+		Time: time.value,
+		hasCalories: hasCalories.value,
+		calories: buildCalories(),
+		ingridients: ingredients.value.map((item) => ({ ...item })),
+	});
 };
 </script>
 
 <style scoped>
-* {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-}
-
-.container {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 2rem;
-	max-width: 65rem;
-	width: 100%;
-	color: #261474;
-}
-.recipe-box {
-	display: flex;
-	flex-wrap: wrap;
-	overflow: auto;
-	max-width: 65rem;
-	border: 1px solid black;
-	border-radius: 10px;
-}
-.top-row {
-	position: relative;
-	display: block;
-	width: 100%;
-	min-height: 1px;
-	padding-right: 15px;
-	padding-left: 15px;
-	max-width: 100%;
-	border-radius: 10px;
-	background-color: #faf8f7;
-}
-.recipe-name {
-	float: left;
-	max-height: 100%;
-	font-size: 20px;
-	margin-top: 0.5rem !important;
-}
-.recipe-tags {
-	float: right;
-	font-size: 20px;
-	max-height: 100%;
-	margin-top: 0.5rem !important;
-}
-.bottom-row {
-	position: relative;
-	display: block;
-	margin-right: 1rem;
-	margin-left: -1rem;
-	width: 100%;
-	min-height: 1px;
-	padding-right: 15px;
-	padding-left: 15px;
-	max-width: 100%;
-	background-color: #fff;
-}
-
-img {
-	border-radius: 3rem;
-}
-.recipe-image {
-	float: left;
+.wizard-card {
+	background: var(--color-surface);
+	color: var(--color-text);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
 	padding: 2rem;
-	padding-right: 1rem;
-	/* border: 3px solid black;
-	border-radius: 10px; */
-	overflow: hidden;
-	width: 400px;
-	height: 400px;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center;
+	max-width: 46rem;
+	margin: 2rem auto;
 }
-.details {
+.section-title {
+	margin: 0 0 1.5rem;
+	font-family: var(--font-heading);
+	font-weight: 600;
+}
+.row-two {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1.5rem;
+}
+.field {
+	margin-bottom: 1.25rem;
+}
+.field-label {
 	display: block;
-	position: relative;
-	width: 60%;
-	float: left;
-	max-height: 100%;
-	font-size: 20px;
-	margin-top: 2rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
 }
-.ingridiens-recipe {
-	max-width: 20rem;
+.w-full {
+	width: 100%;
 }
-.description-recipe {
-	display: block;
+.calorie-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1rem;
+	background: var(--color-surface-alt);
+	border-radius: 12px;
 	padding: 1rem;
-	padding-top: 2rem;
-	height: 100%;
-	font-size: 16px;
+	margin-bottom: 1rem;
 }
-.calories-recipe {
-	display: block;
-	max-width: 20rem;
-	font-size: 16px;
+.calorie-grid .field {
+	margin-bottom: 0;
 }
-
-.left-part-description-recipe {
-	width: 45%;
-	float: left;
+.ingredient-input-row {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr auto;
+	gap: 0.5rem;
+	align-items: center;
 }
-.right-part-description-recipe {
-	width: 55%;
-	float: right;
-}
-.details ul {
-	font-size: 16px;
-}
-.details li {
-	display: block;
-	padding: 5px;
-	font-size: 16px;
-	border-bottom: 1px solid #ccc;
-}
-ul {
-	list-style: none;
-	display: block;
-	margin-block-start: 1em;
-	margin-block-end: 1em;
-	margin-inline-start: 0px;
-	margin-inline-end: 0px;
-}
-li {
-	display: inline-block;
-	margin-left: 10px;
-	font-size: 20px;
-	line-height: 20px;
-}
-button {
-	padding-left: 1rem;
-	padding-right: 1rem;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-}
-.input-details {
-	position: relative;
+.ingredient-list {
 	display: flex;
 	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.75rem;
 }
-.input-details-calories {
-	margin-inline-start: auto;
-	padding-right: 5px;
-}
-
-.select-quantity {
-	width: 60px;
-	height: 20px;
-	padding: none;
-	text-align: center;
-	justify-content: baseline;
-}
-.get-time {
-	position: relative;
-	flex-wrap: wrap;
-	/* border: 1px solid black; */
-	/* border-radius: 10px; */
+.ingredient-pill {
 	display: inline-flex;
-	font-style: italic;
-	float: right;
-	font-size: 20px;
-	height: 100%;
-	padding: 1rem;
-	width: auto;
+	align-items: center;
+	gap: 0.4rem;
+	background: var(--color-surface-alt);
+	color: var(--color-text);
+	padding: 0.4rem 0.75rem;
+	border-radius: 999px;
+	border: 1px solid var(--color-border);
+	cursor: pointer;
+	transition: background 0.15s;
+}
+.ingredient-pill:hover {
+	background: var(--color-border);
+}
+.ingredient-unit-text {
+	color: var(--color-text-muted);
+}
+.ingredient-remove {
+	color: var(--color-danger);
+	font-size: 0.8rem;
+	margin-left: 0.25rem;
+}
+.recap {
+	background: var(--color-surface-alt);
+	border-radius: 12px;
+	padding: 1rem 1.25rem;
+	margin-bottom: 1.25rem;
+}
+.recap-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+.recap-row {
+	display: flex;
+	gap: 0.5rem;
+	font-size: 0.9375rem;
+	padding: 0.15rem 0;
+}
+.wizard-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+}
+.show-error {
+	display: block;
+	color: var(--color-danger);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	margin-top: 0.375rem;
 }
 
-.select-time-allergy {
-	height: 25px;
-}
-
-.down-bar {
-	width: 100%;
-	position: relative;
-	margin-top: 1rem;
-}
-.button-location {
-	float: right;
-	margin-bottom: 1rem;
-	margin-right: 1rem;
-}
-.showError {
-	color: red;
-	font-size: 12px;
-	font-weight: bold;
+@media (max-width: 650px) {
+	.wizard-card {
+		padding: 1.25rem;
+		margin: 1rem;
+	}
+	.row-two,
+	.calorie-grid,
+	.ingredient-input-row {
+		grid-template-columns: 1fr;
+	}
 }
 </style>

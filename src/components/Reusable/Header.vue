@@ -1,9 +1,11 @@
 <template>
-	<header>
-		<div
-			class="header-img"
-			@click="toggleToHomeView()">
-			<div class="header-bg"></div>
+	<header
+		class="site-header"
+		@click="toggleToHomeView()">
+		<div class="site-header-overlay"></div>
+		<div class="site-header-content">
+			<span class="wordmark">Hungry</span>
+			<span class="tagline">Recipes, saved and shared.</span>
 		</div>
 	</header>
 </template>
@@ -17,19 +19,53 @@ const toggleToHomeView = () => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Bungee&family=Comfortaa:wght@500&family=Nunito:wght@300;400&family=Open+Sans:wght@400;600&family=Raleway:wght@100;400;700&family=Titillium+Web:wght@200&display=swap");
-
-.header-img {
+.site-header {
 	position: relative;
-	height: 150px;
+	height: 180px;
 	background-image: url("../../assets/photo/backgroundHeader.jpg");
 	background-size: cover;
-	background-position: 0 100%;
+	background-position: center;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
 }
-.header-bg {
+.site-header-overlay {
 	position: absolute;
-	height: 100%;
-	width: 100%;
+	inset: 0;
+	background: linear-gradient(
+		to bottom,
+		rgba(58, 42, 32, 0.45),
+		rgba(58, 42, 32, 0.7)
+	);
+}
+.site-header-content {
+	position: relative;
+	text-align: center;
+	color: #fff;
+	padding: 0 1rem;
+}
+.wordmark {
+	display: block;
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: clamp(2.5rem, 6vw, 4rem);
+	letter-spacing: 0.02em;
+	line-height: 1;
+}
+.tagline {
+	display: block;
+	margin-top: 0.5rem;
+	font-family: var(--font-body);
+	font-size: 1rem;
+	color: rgba(255, 255, 255, 0.85);
+	font-style: italic;
+}
+
+@media (max-width: 650px) {
+	.site-header {
+		height: 140px;
+	}
 }
 </style>

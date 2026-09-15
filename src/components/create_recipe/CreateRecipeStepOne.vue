@@ -1,284 +1,328 @@
 <template>
-	<div class="container">
-		<div class="recipe-box">
-			<div class="left-side-bar">
-				<div class="input-conteiner">
-					<label class="label"><strong>Wprowadź nazwę dania:</strong></label>
-				</div>
-				<div class="input">
-					<div class="card">
-						<InputText
-							id="dishName"
-							v-model.trim="dishName"
-							placeholder="Nazwa dania" />
-					</div>
-					<span
-						class="showError"
-						v-if="errorDishName"
-						>Nazwa nie może być pusta!</span
-					>
-				</div>
-				<div class="input-conteiner">
-					<label class="label"><strong>Składniki:</strong></label>
-				</div>
-				<div class="input">
-					<div class="card">
-						<MultiSelect
-							v-model="Ingridient"
-							:options="Ingridients"
-							filter
-							optionLabel="name"
-							placeholder="Wybierz składniki"
-							:maxSelectedLabels="3"
-							class="w-full md:w-20rem" />
-					</div>
-					<span
-						class="showError"
-						v-if="errorIngridients"
-						>Składniki muszą zostać wybrane!</span
-					>
-				</div>
-				<div class="input-conteiner">
-					<label class="label"><strong>Wklej link do zdjęcia:</strong></label>
-				</div>
-				<div class="input">
-					<div class="card">
-						<InputText
-							id="adresURL"
-							v-model="adresURL"
-							placeholder="Link..." />
-					</div>
-				</div>
+	<div class="wizard-card">
+		<h2 class="section-title">Basics & method</h2>
+
+		<div class="field">
+			<label
+				class="field-label"
+				for="dishName"
+				>Dish name</label
+			>
+			<InputText
+				id="dishName"
+				v-model.trim="name"
+				placeholder="e.g. Roasted tomato pasta"
+				class="w-full"
+				@input="clearError('name')" />
+			<span
+				class="show-error"
+				v-if="errors.name"
+				>Dish name cannot be empty.</span
+			>
+		</div>
+
+		<div class="field">
+			<label
+				class="field-label"
+				for="imageUrl"
+				>Photo link</label
+			>
+			<InputText
+				id="imageUrl"
+				v-model.trim="imageUrl"
+				placeholder="https://…"
+				class="w-full"
+				@input="clearError('image')" />
+			<span
+				class="show-error"
+				v-if="errors.image"
+				>Paste a valid image link (http/https).</span
+			>
+			<div
+				v-if="isValidUrl(imageUrl)"
+				class="image-preview">
+				<img
+					:src="imageUrl"
+					alt="Recipe photo preview"
+					@error="onImageError = true" />
 			</div>
-			<div class="right-side-bar">
-				<div class="input-conteiner">
-					<label class="label"><strong>Wprowadź tagi:</strong></label>
-				</div>
-				<div class="input">
-					<div class="card">
-						<MultiSelect
-							v-model="Tag"
-							:options="Tags"
-							filter
-							optionLabel="name"
-							placeholder="Oznacz danie"
-							:maxSelectedLabels="3"
-							class="w-full md:w-20rem" />
-					</div>
-				</div>
-				<div class="input-conteiner">
-					<label class="label"
-						><strong>Czy chcesz wprowadzić kalorie do potrawy?</strong></label
-					>
-				</div>
-				<div class="card pt-2">
-					<SelectButton
-						v-model="isNutrition"
-						:options="isNutritionOptions"
-						option-label="label"
-						option-value="value"
-						aria-labelledby="basic" />
-				</div>
+		</div>
+
+		<div class="field">
+			<div class="field-label">This recipe is</div>
+			<div class="checkbox-row">
+				<label
+					v-for="tag in dietOptions"
+					:key="tag"
+					class="checkbox-item">
+					<Checkbox
+						v-model="dietTags"
+						:input-id="`diet-${tag}`"
+						:value="tag" />
+					<span>{{ tag }}</span>
+				</label>
 			</div>
-			<div class="center-bar">
-				<div class="input-conteiner">
-					<label class="label"
-						><strong>Podaj plan przygotowania dania:</strong></label
-					>
-					<div class="input">
-						<div class="card">
-							<form @submit="onSubmit">
-								<div class="card flex justify-content-center">
-									<Textarea
-										v-model="description"
-										autoResize
-										rows="10"
-										cols="90" />
-								</div>
-							</form>
-							<span
-								class="showError"
-								v-if="errorDescription"
-								>Opis dania musi zostać podany!</span
-							>
-						</div>
-					</div>
-				</div>
+
+			<div class="field-label field-label-secondary">Contains</div>
+			<div class="checkbox-row">
+				<label
+					v-for="tag in containsOptions"
+					:key="tag.value"
+					class="checkbox-item">
+					<Checkbox
+						v-model="containsTags"
+						:input-id="`contains-${tag.value}`"
+						:value="tag.value" />
+					<span>{{ tag.label }}</span>
+				</label>
 			</div>
-			<div class="down-bar">
-				<div class="button-location">
-					<div class="card">
-						<Toast />
-						<Button
-							type="button"
-							label="Dodaj przepis"
-							icon="pi pi-check"
-							:loading="loading"
-							@click="load" />
-					</div>
-				</div>
+			<p class="field-hint">
+				Marking allergens keeps the recipe from being labelled "free" of them.
+			</p>
+		</div>
+
+		<div class="field">
+			<label
+				class="field-label"
+				for="stepInput"
+				>Preparation steps</label
+			>
+			<div class="step-input-row">
+				<Textarea
+					id="stepInput"
+					v-model="stepDraft"
+					auto-resize
+					rows="2"
+					placeholder="Describe one step, then click Add step."
+					class="step-textarea" />
+				<Button
+					label="Add step"
+					icon="pi pi-plus"
+					@click="addStep" />
 			</div>
+			<ol
+				v-if="steps.length"
+				class="step-list">
+				<li
+					v-for="(step, index) in steps"
+					:key="index">
+					<span class="step-text">{{ step }}</span>
+					<Button
+						icon="pi pi-times"
+						text
+						rounded
+						aria-label="Remove step"
+						@click="removeStep(index)" />
+				</li>
+			</ol>
+			<span
+				class="show-error"
+				v-if="errors.steps"
+				>Add at least one preparation step.</span
+			>
+		</div>
+
+		<div class="wizard-actions">
+			<Button
+				label="Next"
+				icon="pi pi-arrow-right"
+				icon-pos="right"
+				@click="onNext" />
 		</div>
 	</div>
 </template>
+
 <script setup>
+import { ref, reactive } from "vue";
 import InputText from "primevue/inputtext";
-import SelectButton from "primevue/selectbutton";
-import MultiSelect from "primevue/multiselect";
 import Textarea from "primevue/textarea";
+import Checkbox from "primevue/checkbox";
 import Button from "primevue/button";
-import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-const router = useRouter();
+
+const props = defineProps({
+	initial: { type: Object, default: () => null },
+});
+const emit = defineEmits(["next"]);
 const toast = useToast();
-const CreateRecipeStepTwo = () => router.push({ name: "CreateRecipeStepTwo" });
-const dishName = ref(null);
-const adresURL = ref(null);
-const description = ref();
 
-const newRecipe = ref({});
+const name = ref(props.initial?.name ?? "");
+const imageUrl = ref(props.initial?.image ?? "");
+const dietTags = ref([...(props.initial?.dietTags ?? [])]);
+const containsTags = ref([...(props.initial?.containsTags ?? [])]);
+const steps = ref([...(props.initial?.steps ?? [])]);
+const stepDraft = ref("");
 
-const Ingridients = ref([
-	{ name: "Chicken" },
-	{ name: "Tomato" },
-	{ name: "Cheese" },
-	{ name: "Butter" },
-	{ name: "Bread" },
-]);
+const dietOptions = ["Gluten-Free", "Dairy-Free", "Vegetarian", "Vegan"];
+const containsOptions = [
+	{ value: "Fish", label: "Fish / seafood / shellfish" },
+	{ value: "Tree nuts", label: "Tree nuts / peanuts" },
+];
 
-const Tags = ref([
-	{ name: "Chicken" },
-	{ name: "Tomato" },
-	{ name: "Cheese" },
-	{ name: "Butter" },
-	{ name: "Bread" },
-]);
+const errors = reactive({
+	name: false,
+	image: false,
+	steps: false,
+});
 
-const errorDishName = ref(false);
-const errorIngridients = ref(false);
-const errorDescription = ref(false);
-
-const Tag = ref();
-const Ingridient = ref();
-const isNutrition = ref(false);
-const isNutritionOptions = ref([
-	{ label: "NO", value: false },
-	{ label: "YES", value: true },
-]);
-
-const loading = ref(false);
-
-const checkDishName = () => {
-	if (!dishName.value) {
-		errorDishName.value = true;
-	}
-};
-const checkIngridients = () => {
-	if (!Ingridient.value) {
-		errorIngridients.value = true;
-	}
-};
-const checkDescription = () => {
-	if (!description.value) {
-		errorDescription.value = true;
-	}
+const clearError = (key) => {
+	errors[key] = false;
 };
 
-const load = () => {
-	checkDishName();
-	checkDescription();
-	checkIngridients();
-	if (dishName.value && Ingridient.value && description.value) {
-		loading.value = true;
-		setTimeout(() => {
-			loading.value = false;
-		}, 2000);
-		newRecipe.value = {
-			name: dishName.value,
-			ingridients: Ingridient.value,
-			calories: isNutrition.value,
-			tag: Tag.value,
-			description: description.value,
-			url: adresURL.value,
-		};
-		CreateRecipeStepTwo();
-	} else {
-		showError();
+const isValidUrl = (value) => /^https?:\/\/\S+/i.test(value);
+
+const addStep = () => {
+	const value = stepDraft.value.trim();
+	if (!value) {
+		toast.add({
+			severity: "warn",
+			detail: "Step text cannot be empty.",
+			life: 2500,
+		});
+		return;
 	}
+	steps.value.push(value);
+	stepDraft.value = "";
+	errors.steps = false;
 };
-const showError = () => {
-	toast.add({
-		severity: "error",
-		detail: "Danie nie zostało dodane!",
-		life: 3000,
+
+const removeStep = (index) => {
+	steps.value.splice(index, 1);
+};
+
+const validate = () => {
+	errors.name = name.value.length === 0;
+	errors.image = !isValidUrl(imageUrl.value);
+	errors.steps = steps.value.length === 0;
+	return !errors.name && !errors.image && !errors.steps;
+};
+
+const onNext = () => {
+	if (!validate()) {
+		toast.add({
+			severity: "error",
+			detail: "Please complete the highlighted fields.",
+			life: 3000,
+		});
+		return;
+	}
+	emit("next", {
+		name: name.value,
+		image: imageUrl.value,
+		dietTags: [...dietTags.value],
+		containsTags: [...containsTags.value],
+		steps: [...steps.value],
 	});
 };
 </script>
+
 <style scoped>
-.container {
+.wizard-card {
+	background: var(--color-surface);
+	color: var(--color-text);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
+	padding: 2rem;
+	max-width: 46rem;
+	margin: 2rem auto;
+}
+.section-title {
+	margin: 0 0 1.5rem;
+	font-family: var(--font-heading);
+	font-weight: 600;
+}
+.field {
+	margin-bottom: 1.5rem;
+}
+.field-label {
 	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 2rem;
-	max-width: 65rem;
-	width: 100%;
-	color: #261474;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
 }
-.recipe-box {
-	position: relative;
-	display: flex;
-	flex-wrap: wrap;
-	overflow: auto;
-	max-width: 65rem;
-	border: 1px solid black;
-	border-radius: 10px;
-	background-color: #faf8f7;
-	padding: 1rem;
-}
-.left-side-bar {
-	width: 50%;
-	float: left;
-}
-.right-side-bar {
-	width: 50%;
-	float: right;
-}
-.center-bar {
-	margin-left: auto;
-	margin-right: auto;
-}
-.down-bar {
-	width: 100%;
-	position: relative;
+.field-label-secondary {
 	margin-top: 1rem;
 }
-.input-conteiner {
-	padding: 1rem;
-	/* border: 2px solid blue; */
+.field-hint {
+	color: var(--color-text-muted);
+	font-size: 0.875rem;
+	margin: 0.5rem 0 0;
 }
-.label {
-	text-align: center;
-	margin-bottom: 0.5rem;
-	width: auto;
-}
-.input {
+.w-full {
 	width: 100%;
-	padding: 0.5rem;
-	box-sizing: border-box;
-	font-style: italic;
+}
+.image-preview {
+	margin-top: 0.75rem;
+	border: 1px solid var(--color-border);
+	border-radius: 12px;
+	overflow: hidden;
+	max-height: 240px;
+	display: flex;
+	justify-content: center;
+	background: var(--color-surface-alt);
+}
+.image-preview img {
+	max-width: 100%;
+	max-height: 240px;
+	object-fit: cover;
+}
+.checkbox-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 1.5rem;
+}
+.checkbox-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+.step-input-row {
+	display: flex;
+	gap: 0.75rem;
+	align-items: flex-start;
+}
+.step-textarea {
+	flex: 1;
+}
+.step-list {
+	margin: 1rem 0 0;
+	padding-left: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+.step-list li {
+	display: flex;
+	gap: 0.75rem;
+	align-items: flex-start;
+}
+.step-text {
+	flex: 1;
+	background: var(--color-surface-alt);
+	padding: 0.5rem 0.75rem;
+	border-radius: 8px;
+}
+.wizard-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 1rem;
+}
+.show-error {
+	display: block;
+	color: var(--color-danger);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	margin-top: 0.375rem;
 }
 
-.button-location {
-	float: right;
-}
-
-/* Błędy */
-
-.showError {
-	color: red;
-	font-size: 12px;
-	font-weight: bold;
+@media (max-width: 650px) {
+	.wizard-card {
+		padding: 1.25rem;
+		margin: 1rem;
+	}
+	.step-input-row {
+		flex-direction: column;
+	}
 }
 </style>

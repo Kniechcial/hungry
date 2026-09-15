@@ -1,14 +1,15 @@
 <template>
-	<div class="main-box">
-		<div class="left-box box-content">
+	<div class="tags-page">
+		<div class="panel">
 			<div v-if="!selectedCategory">
-				<strong class="paragraph"
-					>Select the category you would like to choose tags to describe the
-					dish</strong
-				>
-				<div class="category-box">
+				<h3 class="panel-title">Pick a category</h3>
+				<p class="panel-hint">
+					Choose a category, then narrow it down with specific tags. You can pick
+					up to five.
+				</p>
+				<div class="pill-row scrollable">
 					<button
-						class="button-chose"
+						class="pill"
 						v-for="item in tastyStore.categorys"
 						:key="item"
 						@click="toggleShowCategory(item)">
@@ -17,62 +18,64 @@
 				</div>
 			</div>
 			<div v-else>
-				<strong class="paragraph"
-					>Select the tags you would like to choose to describe the dish</strong
-				>
-				<div class="tag-box">
-					<span
+				<div class="panel-header">
+					<h3 class="panel-title">Tags in {{ formatTagName(selectedCategory) }}</h3>
+					<button
+						class="text-button"
+						@click="toggleShowCategory(null)">
+						<i class="pi pi-arrow-left"></i>
+						All categories
+					</button>
+				</div>
+				<div class="pill-row scrollable">
+					<template
 						v-for="(item, index) in filteredTags"
 						:key="index">
 						<button
-							v-if="showAllCategory || (!showAllCategory && index < 5)"
-							class="button-chose"
+							v-if="showAllCategory || index < 8"
+							class="pill"
 							@click="getChosedTag(item)">
 							{{ item.display_name }}
 						</button>
-					</span>
+					</template>
 				</div>
 				<button
-					class="button-chose show-less"
+					v-if="filteredTags.length > 8"
+					class="text-button"
 					@click="toggleShow">
-					{{ showAllCategory ? "Show less" : "Show more" }}
-				</button>
-				<button
-					class="button-chose show-less"
-					@click="toggleShowCategory(null)">
-					Show Category
+					{{ showAllCategory ? "Show less" : `Show ${filteredTags.length - 8} more` }}
 				</button>
 			</div>
 		</div>
-		<div class="right-box box-content">
-			<div>
-				<strong class="paragraph">Your selected tags: </strong>
-				<div v-if="userChosed.length === 0">
-					<p class="description">
-						You haven't selected any tag yet. Click on the tag you are
-						interested in to add it to your search. You can select a maximum of
-						five tags at a time.
-					</p>
-				</div>
+
+		<div class="panel">
+			<h3 class="panel-title">Your tags</h3>
+			<p
+				v-if="userChosed.length === 0"
+				class="panel-hint">
+				Nothing selected yet. Pick tags on the left — click a pill to remove it.
+			</p>
+			<div
+				v-else
+				class="chip-list">
+				<span
+					v-for="(item, index) in userChosed"
+					:key="index"
+					class="chip"
+					role="button"
+					@click="deleteSelectedTag(index)"
+					:title="`Remove ${item.display_name}`">
+					{{ item.display_name }}
+					<i class="pi pi-times chip-remove"></i>
+				</span>
 			</div>
-			<div v-if="userChosed">
-				<div>
-					<button
-						class="button-chose show-less"
-						v-for="(item, index) in userChosed"
-						:key="index"
-						@click="deleteSelectedTag(index)">
-						{{ item.display_name }}
-					</button>
-				</div>
-			</div>
-			<div class="button-box">
-				<div class="card flex justify-content-center">
-					<Button
-						:disabled="disabledBUttonFindRecipe"
-						@click="toggleToGetRecipes()"
-						label="Find recipe" />
-				</div>
+			<div class="panel-actions">
+				<span class="chip-count">{{ userChosed.length }} / 5</span>
+				<Button
+					:disabled="disabledBUttonFindRecipe"
+					@click="toggleToGetRecipes()"
+					label="Find recipes"
+					icon="pi pi-search" />
 			</div>
 		</div>
 	</div>
@@ -99,7 +102,6 @@ const tastyStore = useTastyStore();
 const toast = useToast();
 const router = useRouter();
 
-const numberOfItemsToShow = ref(6);
 const userChosed = ref([]);
 const selectedCategory = ref(null);
 const foodName = ref(null);
@@ -107,12 +109,10 @@ const showAllCategory = ref(false);
 const isLoadingLoader = ref(false);
 
 const formatTagName = (name) => {
-	let nameA = name.replaceAll("_", " ");
-	let nameB = nameA.charAt(0).toUpperCase() + nameA.slice(1);
-	return nameB;
+	const clean = name.replaceAll("_", " ");
+	return clean.charAt(0).toUpperCase() + clean.slice(1);
 };
 
-// Category List
 const toggleShowCategory = (category) => {
 	selectedCategory.value = category;
 	showAllCategory.value = false;
@@ -124,45 +124,39 @@ const filteredTags = computed(() =>
 	)
 );
 
-// Chosen Tag
 const getChosedTag = (item) => {
-	if (userChosed.value.length < 5) {
-		const checkDuplicate = userChosed.value.some(
-			(tag) => tag.display_name === item.display_name
-		);
-		if (!checkDuplicate) {
-			userChosed.value.push(item);
-		} else {
-			showError("That tag is already chose");
-		}
+	if (userChosed.value.length >= 5) {
+		showError("You already have five tags");
+		return;
+	}
+	const duplicate = userChosed.value.some(
+		(tag) => tag.display_name === item.display_name
+	);
+	if (duplicate) {
+		showError("That tag is already selected");
 	} else {
-		showError("You have already five tags");
+		userChosed.value.push(item);
 	}
 };
 
 const deleteSelectedTag = (index) => {
 	userChosed.value.splice(index, 1);
 };
-const disabledBUttonFindRecipe = computed(() => {
-	return userChosed.value.length === 0;
-});
+
+const disabledBUttonFindRecipe = computed(
+	() => userChosed.value.length === 0
+);
 
 const toggleShow = () => {
 	showAllCategory.value = !showAllCategory.value;
 };
-
-const displayedItems = computed(() => {
-	return tastyStore.fetchedTags.filter((item, index) => {
-		return showAllCategory.value || index < numberOfItemsToShow.value;
-	});
-});
 
 const NavigateToBaseRecipeList = () =>
 	router.push({
 		name: "RecipeList",
 		query: {
 			storeType: "tasty",
-			foodName: foodName,
+			foodName: foodName.value,
 			buttonType: true,
 		},
 	});
@@ -179,7 +173,6 @@ async function getRecipe() {
 
 	await tastyStore.getRecipes(0, 100, selectedTags);
 	foodName.value = selectedTags;
-	console.log(tastyStore.fetchedRecipes);
 	isLoadingLoader.value = false;
 	if (tastyStore.fetchedRecipes.length === 0) {
 		showError();
@@ -190,143 +183,150 @@ async function getRecipe() {
 
 const showError = (message) => {
 	toast.add({
-		severity: "error",
-		summary: "Error Message",
-		detail: message || "Sorry, no results found. Try again",
+		severity: "warn",
+		detail: message || "Sorry, no results found. Try again.",
 		life: 3000,
 	});
 };
 </script>
 
 <style scoped>
-.main-box {
+.tags-page {
+	max-width: 60rem;
+	margin: 2rem auto;
+	padding: 0 1rem;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1.25rem;
+}
+
+.panel {
+	background: var(--color-surface);
+	color: var(--color-text);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
+	padding: 1.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.panel-header {
 	display: flex;
 	justify-content: space-between;
-	margin: 0 2rem;
+	align-items: center;
+	gap: 0.75rem;
 	flex-wrap: wrap;
 }
 
-.box-content {
-	position: relative;
-	padding: 1rem;
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	z-index: 0;
-	color: #44424d;
-}
-
-.left-box {
-	height: 24rem;
-	width: 37%;
-	margin-top: 2rem;
-	z-index: 1;
-	max-width: 37%;
-}
-.right-box {
-	height: 24rem;
-	width: 37%;
-	margin-top: 2rem;
-	max-width: 37%;
-}
-
-.category-box {
-	margin: 2rem 1rem;
-	max-height: 14rem;
-	overflow: auto;
-}
-.tag-box {
-	margin: 2rem 1rem;
-	max-height: 12rem;
-	overflow: auto;
-}
-
-p {
-	margin-top: 1rem;
-	margin-left: auto;
-	margin-right: auto;
-}
-.paragraph {
-	font-size: 22px;
-	width: 100%;
+.panel-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: 1.25rem;
 	margin: 0;
-	box-sizing: border-box;
 }
 
-.button-box {
-	margin-top: 1rem;
-	margin-left: 7rem;
+.panel-hint {
+	color: var(--color-text-muted);
+	margin: 0;
+	line-height: 1.5;
 }
 
-.button-chose {
-	font-size: 16px;
-	font-weight: 200;
-	letter-spacing: 1px;
-	padding: 0.7rem;
-	margin: 0.4rem;
-	outline: 0;
-	border: 1px solid black;
+.pill-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+.scrollable {
+	max-height: 16rem;
+	overflow-y: auto;
+	padding-right: 0.25rem;
+}
+
+.pill {
+	padding: 0.5rem 0.9rem;
+	background: var(--color-surface-alt);
+	color: var(--color-text);
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	font-family: var(--font-body);
+	font-size: 0.9375rem;
 	cursor: pointer;
-	position: relative;
-	background-color: rgba(0, 0, 0, 0);
-	user-select: none;
-	-webkit-user-select: none;
-	touch-action: manipulation;
+	transition: background 0.15s, transform 0.15s, border-color 0.15s;
 }
-.button-chose:after {
-	content: "";
-	background-color: #ffe54c;
-	width: 100%;
-	z-index: -1;
-	position: absolute;
-	height: 100%;
-	top: 7px;
-	left: 7px;
-	transition: 0.2s;
+.pill:hover {
+	background: var(--color-accent);
+	border-color: var(--color-accent);
+	color: var(--color-text);
+	transform: translateY(-1px);
 }
 
-.show-less:after {
-	background-color: #3dd1e7;
+.text-button {
+	align-self: flex-start;
+	background: none;
+	border: 0;
+	padding: 0.25rem 0;
+	color: var(--color-primary);
+	font-weight: 600;
+	font-family: var(--font-body);
+	font-size: 0.9375rem;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
 }
-.button-chose:hover:after {
-	top: 0px;
-	left: 0px;
+.text-button:hover {
+	color: var(--color-primary-hover);
 }
-@media (max-width: 1250px) {
-	.main-box {
-		flex-direction: column;
-		align-items: center;
-		margin: 0 1rem;
-	}
-	.left-box,
-	.right-box {
-		width: 100%;
-		max-width: 65%;
-		margin: 1rem 0;
-	}
+
+.chip-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.25rem;
 }
-@media (max-width: 1000px) {
-	.left-box,
-	.right-box {
-		width: 100%;
-		max-width: 65%;
-		margin: 1rem 0;
-	}
-	.description {
-		font-size: 14px;
-	}
-	.paragraph {
-		font-size: 16px;
-	}
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.4rem 0.85rem;
+	background: var(--color-surface-alt);
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	color: var(--color-text);
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.15s, transform 0.15s;
 }
-@media (max-width: 650px) {
-	.left-box,
-	.right-box {
-		width: 100%;
-		max-width: none;
-		margin: 1rem 0;
+.chip:hover {
+	background: var(--color-border);
+	transform: translateY(-1px);
+}
+.chip-remove {
+	font-size: 0.75rem;
+	color: var(--color-danger);
+}
+
+.panel-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: auto;
+	padding-top: 0.75rem;
+	gap: 0.75rem;
+}
+.chip-count {
+	color: var(--color-text-muted);
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+@media (max-width: 640px) {
+	.tags-page {
+		grid-template-columns: 1fr;
+	}
+	.panel {
+		padding: 1.25rem;
 	}
 }
 </style>

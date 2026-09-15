@@ -1,387 +1,232 @@
 <template>
-	<main>
-		<div class="default-box">
-			<div
-				:class="[
-					'about-us-box',
-					'first',
-					authStore.user ? 'pointer-cursor' : 'default-cursor',
-				]"
-				@click="authStore.user && navigateToFindByName()">
+	<main class="home">
+		<section class="hero">
+			<h1 class="hero-title">Cook something you'll love tonight.</h1>
+			<p class="hero-subtitle">
+				Browse thousands of recipes, keep favourites in your own book, or make one
+				of your own.
+			</p>
+		</section>
+
+		<section class="cards">
+			<article
+				v-for="card in cards"
+				:key="card.key"
+				class="card"
+				:class="{ 'card-locked': card.requiresAuth && !authStore.user }"
+				@click="onCardClick(card)">
 				<div
-					v-if="authStore.user"
-					class="lets-go-try">
-					Let's go try!
+					class="card-media"
+					:style="{ backgroundImage: `url(${card.image})` }">
+					<span
+						v-if="card.requiresAuth && !authStore.user"
+						class="card-lock">
+						<i class="pi pi-lock"></i>
+						Log in to unlock
+					</span>
 				</div>
-				<div
-					v-else
-					class="disable"></div>
-				<div class="about-us-text">
-					<p class="head-description">Create a list of your favorite dishes</p>
-					<p class="add-description">
-						Thanks to this website, you are able to create a list of your
-						favorite dishes. Edit their ingredients, add calories, showcase a
-						photo of your dish, and much more!
-					</p>
+				<div class="card-body">
+					<h2 class="card-title">{{ card.title }}</h2>
+					<p class="card-text">{{ card.text }}</p>
+					<span class="card-cta">
+						{{ card.cta }}
+						<i class="pi pi-arrow-right"></i>
+					</span>
 				</div>
-			</div>
-			<div
-				@click="navigateToFindByName()"
-				class="about-us-box second">
-				<div class="lets-go-try">Let's go try!</div>
-				<div class="about-us-text">
-					<p class="head-description">
-						You have idea for a dinner but don't have a recipe
-					</p>
-					<p class="add-description">
-						Hungry will help you find a recipe for whatever you're craving.
-						Pizza, pasta, ramen? Use the built-in search function to find
-						exactly what you're in the mood for.
-					</p>
-				</div>
-			</div>
-			<div
-				:class="[
-					'about-us-box',
-					'third',
-					authStore.user ? 'pointer-cursor' : 'default-cursor',
-				]"
-				@click="authStore.user && navigateToCreateNewRecipe()">
-				<div
-					v-if="authStore.user"
-					class="lets-go-try">
-					Let's go try!
-				</div>
-				<div
-					v-else
-					class="disable"></div>
-				<div class="about-us-text">
-					<p class="head-description">Create your own recipe</p>
-					<p class="add-description">
-						If you already have a recipe for your favorite dish, you can input
-						it and have it on hand whenever you want to use it.
-					</p>
-				</div>
-			</div>
-			<div
-				@click="navigateToFindByTags()"
-				class="about-us-box fourth">
-				<div class="lets-go-try">Let's go try!</div>
-				<div class="about-us-text">
-					<p class="head-description">
-						Find a recipe using what you have on hand
-					</p>
-					<p class="add-description">
-						You have ingredients that you'd like to use, but you're not sure how
-						to combine them? Use the special component in Hungry to create
-						dishes you can prepare with them.
-					</p>
-				</div>
-			</div>
-			<div
-				@click="navigateToRandomRecipe()"
-				class="about-us-box five">
-				<div class="lets-go-try">Let's go try!</div>
-				<div class="about-us-text">
-					<p class="head-description">
-						Randomly choose a recipe for a delicious dish
-					</p>
-					<p class="add-description">
-						You don't have any idea for a dish? Longer than that is no longer a
-						problem. Just click and draw a recipe for a delicious dish."
-					</p>
-				</div>
-			</div>
-		</div>
+			</article>
+		</section>
 	</main>
 </template>
+
 <script setup>
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
-import { onMounted } from "vue";
 import { useRecipesStore } from "@/stores/recipesStore";
 
-const recipesStore = useRecipesStore();
+import pizzaImg from "@/assets/photo/pizza.jpg";
+import spagettiImg from "@/assets/photo/spagetti.jpg";
+import soupImg from "@/assets/photo/soup.jpg";
+import sushiImg from "@/assets/photo/sushi.jpg";
+import sandwichImg from "@/assets/photo/kanapka_z_jajkiem.png";
+
 const router = useRouter();
 const authStore = useAuthStore();
+const recipesStore = useRecipesStore();
 
-const navigateToFindByName = () => {
-	router.push({ name: "FindRecipe", params: { findBy: "name" } });
+const cards = [
+	{
+		key: "list",
+		title: "Your favourites, in one place",
+		text: "Build a personal recipe book. Save the dishes you love and come back to them any time.",
+		cta: "Open my book",
+		image: pizzaImg,
+		requiresAuth: true,
+		go: () =>
+			router.push({
+				name: "UserRecipesList",
+				query: {
+					storeType: "recipes",
+					headerMessage: "Your list of delicious recipes. Enjoy!",
+				},
+			}),
+	},
+	{
+		key: "search",
+		title: "Search by dish or ingredient",
+		text: "Pizza, pasta, ramen — find exactly what you're in the mood for.",
+		cta: "Find a recipe",
+		image: spagettiImg,
+		requiresAuth: false,
+		go: () => router.push({ name: "FindRecipe", params: { findBy: "name" } }),
+	},
+	{
+		key: "create",
+		title: "Write your own recipe",
+		text: "Have a favourite of your own? Save it here and it's always one click away.",
+		cta: "Create recipe",
+		image: soupImg,
+		requiresAuth: true,
+		go: () => router.push({ name: "CreateRecipe" }),
+	},
+	{
+		key: "ingredients",
+		title: "Use what you already have",
+		text: "Type the ingredients in your fridge and let Hungry pick the dishes you can cook.",
+		cta: "Search by ingredients",
+		image: sushiImg,
+		requiresAuth: false,
+		go: () =>
+			router.push({ name: "FindRecipe", params: { findBy: "ingredients" } }),
+	},
+	{
+		key: "random",
+		title: "Not sure? Roll the dice.",
+		text: "One click and Hungry serves you a random recipe worth trying.",
+		cta: "Surprise me",
+		image: sandwichImg,
+		requiresAuth: false,
+		go: () => router.push({ name: "FindRecipe", params: { findBy: "random" } }),
+	},
+];
+
+const onCardClick = (card) => {
+	if (card.requiresAuth && !authStore.user) {
+		router.push({
+			name: "Authorization",
+			params: { findBy: "login" },
+		});
+		return;
+	}
+	card.go();
 };
-const navigateToFindByTags = () => {
-	router.push({
-		name: "FindRecipe",
-		params: { findBy: "ingredients" },
-	});
-};
-const navigateToRandomRecipe = () => {
-	router.push({
-		name: "FindRecipe",
-		params: { findBy: "random" },
-	});
-};
-const navigateToCreateNewRecipe = () => {
-	router.push({
-		name: "CreateRecipe",
-	});
-};
+
 onMounted(() => {
 	if (authStore.user) {
 		recipesStore.getRecipe();
 	}
 });
 </script>
+
 <style scoped>
-main {
-	margin: 50px auto;
-	max-width: 65rem;
+.home {
+	max-width: 68rem;
+	margin: 0 auto;
+	padding: 2.5rem 1.25rem 3rem;
 }
-.default-box {
+.hero {
+	text-align: center;
+	max-width: 42rem;
+	margin: 0 auto 2.5rem;
+}
+.hero-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: clamp(2rem, 4vw, 2.75rem);
+	line-height: 1.15;
+	margin: 0 0 0.75rem;
+	color: var(--color-text);
+}
+.hero-subtitle {
+	color: var(--color-text-muted);
+	font-size: 1.0625rem;
+	margin: 0;
+}
+.cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	gap: 1.25rem;
+}
+.card {
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
-}
-
-.about-us-text {
-	padding: 20px 40px;
-	text-align: center;
-	color: white;
-}
-
-.about-us-text {
-	margin-top: auto;
-	z-index: 1;
-	height: 45%;
-	width: 100%;
-	background-color: rgba(0, 0, 0, 0.8);
-}
-
-.head-description {
-	text-transform: uppercase;
-	padding-bottom: 20px;
-	font-size: 20px;
-	font-weight: bold;
-}
-.about-us-box .head-description {
-	padding-bottom: 20px;
-}
-
-.butons-log-in-sing-in {
-	margin-inline-start: 80%;
-	margin-top: 1rem;
-}
-
-.first::before {
-	content: "";
-	background-image: url("../../assets/photo/pizza.jpg");
-	background-attachment: fixed;
-	background-position: center;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	transition: 0.3s filter;
-}
-.first:hover::before {
-	filter: brightness(0.6);
-}
-
-.second::before {
-	content: "";
-	background-image: url("../../assets/photo/spagetti.jpg");
-	background-attachment: fixed;
-	background-position: center;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	transition: 0.3s filter;
-	cursor: pointer;
-}
-
-.third::before {
-	content: "";
-	background-image: url("../../assets/photo/soup.jpg");
-	background-attachment: fixed;
-	background-position: center;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	transition: 0.3s filter;
-}
-.third:hover::before {
-	filter: brightness(0.6);
-}
-
-.fourth::before {
-	content: "";
-	background-image: url("../../assets/photo/sushi.jpg");
-	background-attachment: fixed;
-	background-position: center;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	transition: 0.3s filter;
-	cursor: pointer;
-}
-
-.five::before {
-	content: "";
-	background-image: url("../../assets/photo/kanapka_z_jajkiem.png");
-	background-attachment: fixed;
-	background-position: center;
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
-	transition: 0.3s filter;
-	cursor: pointer;
-}
-
-.about-us-box {
-	position: relative;
-	display: flex;
-	height: 300px;
-	background-attachment: fixed;
-	background-position: center;
-	border-top-left-radius: 50px;
-	border-bottom-right-radius: 50px;
+	background: var(--color-surface);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
 	overflow: hidden;
-	box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
-		rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
-	transition: 0.3s all;
+	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
-.disable {
-	height: 230px;
-	width: 150px;
-	display: none;
-	background-image: url("../../assets/icon/loock.png");
-	background-position: center;
-	position: absolute;
-	top: 2rem;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 1;
+.card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 32px rgba(58, 42, 32, 0.18);
+}
+.card-locked {
+	opacity: 0.85;
+}
+.card-media {
+	position: relative;
+	height: 180px;
 	background-size: cover;
 	background-position: center;
-	background-repeat: no-repeat;
 }
-
-.lets-go-try {
+.card-lock {
 	position: absolute;
-	display: none;
-	margin-top: 4rem;
-	left: 50%;
-	z-index: 1;
-	transform: translateX(-50%);
-	font-size: 50px;
-	font-weight: bold;
-	font-style: italic;
-	color: blanchedalmond;
+	inset: auto 0.75rem 0.75rem auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background: rgba(58, 42, 32, 0.85);
+	color: #fff;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	padding: 0.35rem 0.7rem;
+	border-radius: 999px;
 }
-.about-us-box:hover {
-	height: 360px;
-}
-
-.first:hover .disable {
+.card-body {
+	padding: 1.25rem 1.25rem 1.5rem;
 	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	flex: 1;
+}
+.card-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: 1.25rem;
+	margin: 0;
+}
+.card-text {
+	color: var(--color-text-muted);
+	margin: 0;
+	flex: 1;
+	line-height: 1.5;
+}
+.card-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: var(--color-primary);
+	font-weight: 600;
+	margin-top: 0.5rem;
 }
 
-.first:hover .lets-go-try {
-	display: flex;
-}
-
-.second:hover {
-	cursor: pointer;
-}
-
-.second:hover .lets-go-try {
-	display: flex;
-}
-
-.third:hover .disable {
-	display: flex;
-}
-.third:hover .lets-go-try {
-	display: flex;
-}
-
-.fourth:hover {
-	cursor: pointer;
-}
-
-.fourth:hover .lets-go-try {
-	display: flex;
-}
-.five:hover {
-	cursor: pointer;
-}
-
-.five:hover .lets-go-try {
-	display: flex;
-}
-
-.pointer-cursor {
-	cursor: pointer;
-}
-
-.default-cursor {
-	cursor: auto;
-}
-
-@media (max-width: 1100px) {
-	main {
-		margin-right: 2rem;
-		margin-left: 2rem;
+@media (max-width: 640px) {
+	.home {
+		padding: 1.5rem 1rem 2rem;
 	}
-}
-
-@media (max-width: 768px) {
-	.image-small {
-		display: none;
-	}
-	.head-description {
-		font-size: 14px;
-	}
-	.image-medium {
-		display: none;
-	}
-	.add-description {
-		display: none;
-	}
-	.disable {
-		height: 180px;
-		width: 120px;
-	}
-	.icon-box a {
-		display: none;
-	}
-	.about-us-text {
-		height: 45%;
-	}
-	.about-us-box {
-		height: 190px;
-	}
-	.about-us-box:hover {
-		height: 190px;
-	}
-	.disable {
-		background-size: 70%;
-		top: calc(2rem - 20%);
-	}
-	.first .disable {
-		display: flex;
-	}
-	.third .disable {
-		display: flex;
+	.hero {
+		margin-bottom: 1.5rem;
 	}
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<footer class="bg-green-500">
+	<footer class="site-footer">
 		<img
 			class="image-small"
 			src="../../assets/icon/carrot-leaves-medium.png"
@@ -42,13 +42,14 @@
 	z-index: 0;
 }
 
-footer {
+.site-footer {
 	position: relative;
 	bottom: 0;
 	height: 80px;
 	line-height: 80px;
 	font-size: 20px;
 	color: white;
+	background: var(--color-text);
 	text-align: center;
 	margin-top: 2rem;
 }
@@ -77,7 +78,7 @@ footer {
 	.image-small {
 		display: none;
 	}
-	footer {
+	.site-footer {
 		font-size: 18px;
 	}
 

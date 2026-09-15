@@ -125,56 +125,42 @@ const showError = (message) => {
 
 <style scoped>
 .p-invalid {
-	border-color: red;
-	background-color: #fdd;
-	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
+	border-color: var(--color-danger) !important;
+	background-color: rgba(158, 59, 52, 0.08);
 }
 .content {
-	position: relative;
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	padding: 1rem;
-	width: 27rem;
-	left: 50%;
-	transform: translate(-50%, 5%);
-	font-size: 18px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
-}
-button {
-	margin-left: auto;
-	margin-right: auto;
-	padding: 4rem;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
+	max-width: 24rem;
+	margin: 2rem auto;
+	padding: 1.5rem 1.75rem 2rem;
+	border-radius: var(--radius-card);
+	background-color: var(--color-surface);
+	box-shadow: var(--shadow-card);
+	color: var(--color-text);
+	text-align: center;
 }
 .log-icon {
-	margin-top: 3rem;
-	position: relative;
-	margin-bottom: -4rem;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
+	width: 72px;
+	height: 72px;
+	object-fit: contain;
+	margin-bottom: 0.5rem;
+}
+.content :deep(.p-inputtext) {
+	width: 100%;
+}
+.content p {
+	text-align: left;
+	margin: 0.75rem 0 0.35rem;
+	font-weight: 600;
+	color: var(--color-text);
+}
+.content :deep(.p-button) {
+	margin: 1rem auto 0;
 }
 
 @media (max-width: 650px) {
 	.content {
-		flex-direction: column;
-		align-items: center;
-		font-size: 14px;
-		width: 100%;
-		max-width: 300px;
-		margin-bottom: 1rem;
-		transform: translate(-50%, 3%);
-	}
-	.button-box {
-		margin-left: 8rem;
-		scale: 0.9;
-	}
-	.input-text {
-		width: 230px;
+		margin: 1rem;
+		padding: 1.25rem;
 	}
 }
 </style>

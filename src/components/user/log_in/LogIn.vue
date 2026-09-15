@@ -140,93 +140,56 @@ const showError = (message) => {
 
 <style scoped>
 .p-invalid {
-	border-color: red;
-	background-color: #fdd;
-	box-shadow: rgba(255, 1, 1, 0.2) 0px 8px 24px;
+	border-color: var(--color-danger) !important;
+	background-color: rgba(158, 59, 52, 0.08);
 }
 
 .dialog-class {
 	margin: 0;
 	padding: 0;
 }
+
 .content {
-	position: relative;
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	padding: 1rem;
-	width: 27rem;
-	left: 50%;
-	transform: translate(-50%, 15%);
-	font-size: 18px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
+	max-width: 24rem;
+	margin: 2rem auto;
+	padding: 1.5rem 1.75rem 2rem;
+	border-radius: var(--radius-card);
+	background-color: var(--color-surface);
+	box-shadow: var(--shadow-card);
+	color: var(--color-text);
+	text-align: center;
+}
+
+.log-icon {
+	width: 72px;
+	height: 72px;
+	object-fit: contain;
+	margin-bottom: 0.5rem;
+}
+
+.content :deep(.p-inputtext) {
+	width: 100%;
+}
+
+.content p {
+	text-align: left;
+	margin: 0.75rem 0 0.35rem;
+	font-weight: 600;
+	color: var(--color-text);
 }
 
 .button-box {
 	display: flex;
 	justify-content: center;
-	gap: 1rem;
-}
-
-.button-box .card {
-	width: auto;
-	margin: 0;
-	padding-top: 1rem;
-}
-
-button {
-	padding: 1rem;
-	padding-top: 0.5rem;
-	padding-bottom: 0.5rem;
-}
-
-.log-icon {
-	margin-top: 3rem;
-	position: relative;
-	margin-bottom: -4rem;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.input-text {
-	width: 17rem !important;
+	gap: 0.75rem;
+	margin-top: 1.25rem;
+	flex-wrap: wrap;
 }
 
 @media (max-width: 650px) {
 	.content {
-		flex-direction: column;
-		align-items: center;
-		font-size: 14px;
-		width: calc(100% - 2rem);
-		max-width: 300px;
-		margin-bottom: 1rem;
-		transform: translate(-50%, 5%);
-	}
-
-	.button-box {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-
-		gap: 0.5rem;
-	}
-
-	.button-box .card {
-		width: 45%;
-	}
-
-	.input-text {
-		width: 200px;
-	}
-
-	p {
-		padding-right: 0.5rem;
-		padding-left: 0.5rem;
+		margin: 1rem;
+		padding: 1.25rem;
 	}
 }
 </style>

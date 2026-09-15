@@ -99,7 +99,7 @@
 
 								<div
 									v-if="recipe.Time"
-									class="set-time bg-yellow-200">
+									class="set-time">
 									<p class="time">
 										<strong
 											>Time: {{ recipe.Time }}<strong> min</strong></strong
@@ -113,14 +113,14 @@
 								<img
 									class="recipe-image"
 									:src="recipe.image"
-									alt="Zdjęcie" />
+									alt="Recipe photo" />
 							</div>
 
 							<div class="details">
 								<div class="left-part-description-recipe">
 									<div class="calories-recipe">
 										<div class="header-description">
-											Kalorie:
+											Calories:
 											{{ recipe.calories.calories || "no data" }} kcal
 										</div>
 										<ul class="calories-specific">
@@ -146,10 +146,10 @@
 											class="card flex justify-content-center mt-4 pl-5 cursor-pointer">
 											<Button
 												@click="toggleToDisplayIngridients"
-												label="Show Ingridiens" />
+												label="Show ingredients" />
 										</div>
 										<ul v-if="displayIngridients">
-											<div class="header-description">Ingridients:</div>
+											<div class="header-description">Ingredients:</div>
 											<div
 												v-for="name in recipe.ingridients"
 												:key="name">
@@ -338,11 +338,11 @@ const showSuccess = (message) => {
 	margin-right: auto;
 	margin-top: 2rem;
 	max-width: 65rem;
-	border-color: aliceblue;
+	border-color: var(--color-border);
 	border-radius: 10px;
-	background-color: #fcffff;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
+	background-color: var(--color-surface);
+	box-shadow: var(--shadow-card);
+	color: var(--color-text);
 }
 
 .header-description {
@@ -354,7 +354,7 @@ const showSuccess = (message) => {
 	flex-wrap: wrap;
 	overflow: auto;
 	max-width: 65rem;
-	border-color: aliceblue;
+	border-color: var(--color-border);
 	border-radius: 10px;
 }
 .top-row {
@@ -379,7 +379,7 @@ const showSuccess = (message) => {
 	height: 4rem;
 	text-wrap: nowrap;
 	width: fit-content;
-	border: 1px solid black;
+	border: 1px solid var(--color-border);
 	border-radius: 10px;
 	padding-top: 1.5rem;
 	padding-bottom: 1.5rem;
@@ -465,7 +465,7 @@ img {
 	display: block;
 	padding: 5px;
 	font-size: 16px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid var(--color-border);
 }
 .details li p {
 	float: right;
@@ -476,7 +476,7 @@ li .ingredients {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid var(--color-border);
 	padding: 10px 0;
 }
 .ingredients-name {
@@ -538,7 +538,7 @@ button {
 .button-tooltip {
 	display: none;
 	position: absolute;
-	background-color: #333;
+	background-color: var(--color-text);
 	color: #fff;
 	padding: 0.5rem;
 	border-radius: 0.3rem;

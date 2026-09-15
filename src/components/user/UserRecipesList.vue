@@ -1,10 +1,10 @@
 <template>
 	<Dialog
-		class="dialog-class"
+		class="recipe-dialog"
 		v-model:visible="recipeVisible"
 		modal
 		:style="{ width: '70rem' }"
-		:breakpoints="{ '650px': '90vw' }"
+		:breakpoints="{ '900px': '92vw' }"
 		:closable="true"
 		:dismissableMask="true"
 		@setVisible="setVisible()"
@@ -18,110 +18,121 @@
 		class="confirm-delete-dialog"
 		v-model:visible="confirmDeleteRecipe"
 		modal
-		:style="{ width: '30rem' }"
+		:style="{ width: '28rem' }"
 		:breakpoints="{ '650px': '80vw' }"
 		:closable="true"
 		:dismissableMask="true"
-		:showHeader="true">
-		<div class="card flex mt-3">
-			<div class="flex flex-column p-3 gap-2">
-				Are you sure you want to delete this recipe?
-			</div>
-		</div>
-
-		<div class="button-box">
-			<div class="card flex">
-				<Button
-					@click="handlerDeleteRecipe(activeRecipe)"
-					label="Confirm" />
-			</div>
+		header="Delete recipe">
+		<p class="confirm-body">
+			Are you sure you want to remove
+			<strong>{{ activeRecipe?.name || "this recipe" }}</strong> from your book?
+		</p>
+		<div class="confirm-actions">
+			<Button
+				severity="secondary"
+				outlined
+				label="Cancel"
+				@click="confirmDeleteRecipe = false" />
+			<Button
+				severity="danger"
+				icon="pi pi-trash"
+				label="Delete"
+				@click="handlerDeleteRecipe(activeRecipe)" />
 		</div>
 	</Dialog>
 
-	<div class="header-text">Your list of delicious recipes. Enjoy!</div>
-	<div>
-		<ul>
+	<section class="results">
+		<h2 class="results-title">{{ headerMessage }}</h2>
+		<p
+			v-if="fetchedRecipes.length"
+			class="results-subtitle">
+			{{ fetchedRecipes.length }}
+			{{ fetchedRecipes.length === 1 ? "recipe" : "recipes" }} saved
+		</p>
+
+		<ul
+			v-if="fetchedRecipes.length"
+			class="recipe-grid">
 			<li
 				v-for="(recipe, index) in fetchedRecipes"
-				:key="index">
+				:key="index"
+				class="recipe-card">
 				<div
-					class="container"
-					:class="[getItemClass(index)]">
-					<div class="recipe-name">
-						<strong>{{ index + 1 }}. {{ recipe.name || "no data" }}</strong>
-					</div>
-					<div class="right-elements">
-						<div
-							v-if="recipe.Time"
-							class="set-time">
-							<p class="time">
-								<strong>Time: {{ recipe.Time }}<strong> min</strong></strong>
-							</p>
-						</div>
-						<div class="button-show">
-							<Button
-								@click="showRecipe(recipe)"
-								class="button-class"
-								type="button"
-								label="Show recipe"
-								icon="pi pi-chevron-down" />
-						</div>
-						<div class="button-delete">
-							<Button
-								icon="pi pi-trash"
-								severity="danger"
-								aria-label="Cancel"
-								@click="showConfirmDeleteRecipe(recipe)" />
-						</div>
+					class="recipe-thumb"
+					:style="recipeBackground(recipe)"
+					@click="showRecipe(recipe)">
+					<span
+						v-if="recipe.Time"
+						class="time-badge">
+						<i class="pi pi-clock"></i>
+						{{ recipe.Time }} min
+					</span>
+				</div>
+				<div class="recipe-body">
+					<h3 class="recipe-name">
+						{{ recipe.name || "Unnamed recipe" }}
+					</h3>
+					<div class="recipe-actions">
+						<Button
+							@click="showRecipe(recipe)"
+							label="Open"
+							icon="pi pi-chevron-right"
+							icon-pos="right" />
+						<Button
+							icon="pi pi-trash"
+							severity="danger"
+							outlined
+							aria-label="Delete recipe"
+							@click="showConfirmDeleteRecipe(recipe)" />
 					</div>
 				</div>
 			</li>
 		</ul>
-	</div>
-	<div
-		v-if="displayBaseDescription"
-		class="content">
-		<div class="card flex mt-3">
-			<div class="flex flex-column p-3 gap-2">
-				<label><strong>Your list is empty</strong></label>
-				<small class="description"
-					>You haven't added any recipes yet. Add your first recipe and save it
-					for future use.</small
-				>
+
+		<div
+			v-else
+			class="empty-state">
+			<i class="pi pi-book empty-icon"></i>
+			<h3 class="empty-title">Your book is empty</h3>
+			<p class="empty-text">
+				Save recipes you find, or write your own — they'll show up here.
+			</p>
+			<div class="empty-actions">
+				<Button
+					@click="addFirstRecipe()"
+					label="Find a recipe"
+					icon="pi pi-search"
+					outlined />
+				<Button
+					@click="createOwnRecipe()"
+					label="Create your own"
+					icon="pi pi-plus" />
 			</div>
 		</div>
-		<div class="button-box">
-			<Button
-				class="card flex"
-				@click="addFirstRecipe()"
-				label="Add first recipe" />
-		</div>
-	</div>
-	<Toast
-		class="w-18rem md:w-4"
-		position="top-right" />
+
+		<Toast
+			class="w-18rem md:w-4"
+			position="top-right" />
+	</section>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import RecipeDetails from "../find_recipe/recipe_details/RecipeDetails.vue";
 import { useRecipesStore } from "../../stores/recipesStore.js";
-import { useRouter } from "vue-router";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
-const toast = useToast();
 
+const toast = useToast();
 const router = useRouter();
 const route = useRoute();
 const recipesStore = useRecipesStore();
 const recipeVisible = ref(false);
 const confirmDeleteRecipe = ref(false);
 const activeRecipe = ref(null);
-const storeType = route.query.storeType;
-const displayBaseDescription = ref(false);
 
 const headerMessage = ref(
 	route.query.headerMessage || "Your delicious recipes. Enjoy!"
@@ -132,18 +143,12 @@ const showConfirmDeleteRecipe = (recipe) => {
 	confirmDeleteRecipe.value = true;
 };
 
-const fetchedRecipes = computed(() => {
-	if (recipesStore.userRecipes.length > 0) {
-		displayBaseDescription.value = false;
-		return recipesStore.userRecipes;
-	} else {
-		displayBaseDescription.value = true;
-		return [];
-	}
-});
+const fetchedRecipes = computed(() => recipesStore.userRecipes);
 
 const addFirstRecipe = () =>
-	router.push({ name: "FindRecipe", params: { findBy: "base-description" } });
+	router.push({ name: "FindRecipe", params: { findBy: "name" } });
+
+const createOwnRecipe = () => router.push({ name: "CreateRecipe" });
 
 const showRecipe = (recipe) => {
 	recipeVisible.value = true;
@@ -154,8 +159,11 @@ const setVisible = (visible) => {
 	recipeVisible.value = visible;
 };
 
-const getItemClass = (index) => {
-	return (index + 1) % 2 === 0 ? "even" : "odd";
+const recipeBackground = (recipe) => {
+	if (!recipe?.image) {
+		return { background: "var(--color-surface-alt)" };
+	}
+	return { backgroundImage: `url(${recipe.image})` };
 };
 
 const handlerDeleteRecipe = async (recipe) => {
@@ -171,238 +179,157 @@ const handlerDeleteRecipe = async (recipe) => {
 const showSuccess = () => {
 	toast.add({
 		severity: "success",
-		summary: "Success Message",
-		detail: "The recipe has been deleted",
-		life: 3000,
+		detail: "The recipe has been deleted.",
+		life: 2500,
 	});
 };
+
 onMounted(() => {
 	recipesStore.addRecipesListener();
 });
 </script>
 
 <style scoped>
-.confirm-delete-dialog {
-	background-color: transparent;
+.results {
+	max-width: 64rem;
+	margin: 2rem auto;
+	padding: 0 1rem 3rem;
 }
 
-.content {
+.results-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: clamp(1.5rem, 3vw, 2rem);
+	color: var(--color-text);
+	margin: 0;
+	text-align: center;
+}
+.results-subtitle {
+	text-align: center;
+	color: var(--color-text-muted);
+	margin: 0.25rem 0 1.75rem;
+	font-size: 0.9375rem;
+}
+
+.recipe-grid {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 1.25rem;
+}
+
+.recipe-card {
+	background: var(--color-surface);
+	color: var(--color-text);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.recipe-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 28px rgba(58, 42, 32, 0.18);
+}
+
+.recipe-thumb {
+	position: relative;
+	height: 170px;
+	background-size: cover;
+	background-position: center;
+	background-color: var(--color-surface-alt);
+	cursor: pointer;
+}
+.time-badge {
+	position: absolute;
+	inset: auto 0.75rem 0.75rem auto;
+	display: inline-flex;
 	align-items: center;
+	gap: 0.35rem;
+	background: rgba(58, 42, 32, 0.85);
+	color: #fff;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	padding: 0.3rem 0.65rem;
+	border-radius: 999px;
 }
 
-.button-box .p-button {
-	width: 100%;
-	margin-top: 10px;
+.recipe-body {
+	padding: 1rem 1.15rem 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	flex: 1;
 }
-
-* {
-	box-sizing: border-box;
-}
-
-.even {
-	background-color: #fcffff;
-}
-
-.odd {
-	background-color: #a6ffea8c;
-}
-
-.header-text {
-	margin: 2rem auto 0 auto;
-	padding-left: 1rem;
-	padding-right: 1rem;
-	display: block;
-	width: fit-content;
-	font-size: 26px;
-	font-weight: bold;
-	font-style: italic;
-	color: #44424d;
-}
-
-ul,
-li {
-	list-style: none !important;
-}
-
-.dialog-class {
-	margin: 0;
-	padding: 0;
-}
-
-.description {
-	font-size: 20px;
-	margin-left: auto;
-	margin-right: auto;
-	font-style: italic;
-}
-
-.container {
-	display: block;
-	position: relative;
-	margin: 2rem auto;
-	max-width: 65rem;
-	width: 100%;
-	border-color: aliceblue;
-	border-radius: 10px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	padding: 1rem;
-	z-index: 1;
-}
-
 .recipe-name {
-	display: inline-block;
-	vertical-align: middle;
-	width: 55%;
-	font-size: 18px;
-	padding: 1rem;
-	box-sizing: border-box;
-	word-wrap: break-word;
-}
-
-.right-elements {
-	display: inline-block;
-	vertical-align: middle;
-	width: 45%;
-	text-align: right;
-	padding-right: 1rem;
-	box-sizing: border-box;
-	white-space: nowrap;
-}
-
-.set-time {
-	display: inline-block;
-	vertical-align: middle;
-	background-color: #ffeb99;
-	text-align: right;
-	padding: 1rem;
-	margin-left: 1rem;
-	border-radius: 8px;
-	font-size: 16px;
-}
-
-.time {
-	font-size: 16px;
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: 1.125rem;
 	margin: 0;
+	line-height: 1.3;
+}
+.recipe-actions {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: auto;
+}
+.recipe-actions :deep(.p-button):first-child {
+	flex: 1;
 }
 
-.button-show {
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 1rem;
-	padding: 1rem;
+.empty-state {
+	max-width: 32rem;
+	margin: 2rem auto;
+	padding: 2.5rem 2rem;
+	text-align: center;
+	background: var(--color-surface);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
+	color: var(--color-text);
 }
-.p-button.p-button-icon-only {
-	padding: 1rem;
+.empty-icon {
+	font-size: 2.75rem;
+	color: var(--color-primary);
+	margin-bottom: 0.75rem;
+	display: block;
 }
-
-.button-delete {
-	display: inline-block;
-	vertical-align: middle;
-	border-radius: 4px;
+.empty-title {
+	font-family: var(--font-heading);
+	font-weight: 600;
+	font-size: 1.5rem;
+	margin: 0 0 0.5rem;
 }
-
-.button-class {
-	padding: 1rem;
+.empty-text {
+	color: var(--color-text-muted);
+	margin: 0 0 1.5rem;
+	line-height: 1.55;
 }
-
-.content {
-	position: relative;
-	border: 1px solid;
-	border-color: aliceblue;
-	border-radius: 10px;
-	background-color: #fcffff;
-	padding: 1rem;
-	margin-top: 12rem;
-	width: 30rem;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	font-size: 22px;
-	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-	color: #44424d;
-	z-index: 1;
+.empty-actions {
+	display: flex;
+	gap: 0.75rem;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 
-.button-box {
-	margin-top: 2rem;
-	margin-left: 18rem;
+.confirm-body {
+	margin: 0 0 1.25rem;
+	line-height: 1.55;
+}
+.confirm-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
 }
 
-@media (max-width: 650px) {
-	ul,
-	li {
-		padding: 0.5rem;
-		margin: 0;
+@media (max-width: 640px) {
+	.results {
+		padding: 0 0.75rem 2rem;
 	}
-
-	.container {
-		width: 100%;
-		max-width: 100%;
-		margin-left: 0;
-		margin-right: 0;
-		padding-left: 0;
-		padding-right: 0;
-		padding-top: 0.5rem;
-		padding-bottom: 0.5rem;
-	}
-	.set-time {
-		display: none;
-	}
-
-	.recipe-name {
-		width: 100%;
-		font-size: 16px;
-		padding: 0.5rem;
-	}
-
-	.right-elements {
-		width: 100%;
-		text-align: left;
-		padding-right: 0;
-		display: flex;
-		justify-content: flex-end;
-		gap: 1rem;
-	}
-
-	.button-show,
-	.button-delete {
-		display: inline-flex;
-		margin: 0;
-		padding: 0.5rem 0.75rem;
-		width: auto;
-	}
-
-	.button-delete {
-		margin-right: 0.5rem;
-		padding: 0.25rem;
-		width: auto;
-		height: auto;
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-	}
-	.button-box {
-		justify-content: center;
-		margin-left: 0;
-	}
-	.confirm-delete-dialog .flex-column {
-		font-size: calc(1rem + 5px);
-	}
-	.content {
-		width: 90%;
-		margin: 2rem auto;
-		left: auto;
-		transform: none;
-		font-size: 18px;
-	}
-
-	.description {
-		font-size: 20px;
-		margin-left: auto;
-		margin-right: auto;
-		font-style: italic;
+	.recipe-thumb {
+		height: 150px;
 	}
 }
 </style>

@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import PrimeVue from "primevue/config";
 
-import "primevue/resources/themes/lara-light-green/theme.css";
+import "primevue/resources/themes/lara-light-amber/theme.css";
 import "/node_modules/primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import ToastService from "primevue/toastservice";
